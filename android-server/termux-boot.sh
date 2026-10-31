@@ -9,7 +9,8 @@
 termux-wake-lock
 sleep 10
 
-PROJECT_DIR="/data/data/com.termux/files/home/hyundai"
-if [ -d "$PROJECT_DIR" ]; then
-    bash "$PROJECT_DIR/android-server/start.sh"
+if [ -d "$HOME/ProjectSales-main" ]; then
+    bash "$HOME/ProjectSales-main/android-server/start.sh"
+elif [ -d "$HOME/hyundai" ]; then
+    bash "$HOME/hyundai/android-server/start.sh"
 fi
