@@ -68,6 +68,18 @@ class TestDriveForm extends Component
         ]);
 
         $car = Car::find($this->car_id);
+
+        // Send instant notification via Telegram bot
+        \App\Services\TelegramNotificationService::sendAlert('Booking Test Drive', [
+            'Nama Pemesan' => $this->name,
+            'No. WhatsApp' => $this->phone,
+            'Email' => $this->email ?: '-',
+            'Unit Mobil' => $car?->name ?? 'Semua Unit',
+            'Rencana Tanggal' => date('d M Y', strtotime($this->booking_date)),
+            'Wilayah/IP' => "{$region} ({$ip})",
+            'Catatan' => $this->notes ?: '-',
+        ]);
+
         $consultant = Consultant::first();
         $whatsappNumber = $consultant?->formatted_phone ?? '6281236046363';
 

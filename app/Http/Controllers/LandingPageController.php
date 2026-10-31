@@ -178,6 +178,17 @@ class LandingPageController extends Controller
             'created_at' => now(),
         ]);
 
+        // Send instant Telegram Lead Alert
+        \App\Services\TelegramNotificationService::sendAlert('Prospek Baru (Promo Form)', [
+            'Nama' => $validated['name'],
+            'WhatsApp' => $validated['whatsapp'],
+            'Unit Pilihan' => $carName,
+            'Rencana Pembelian' => strtoupper($validated['purchase_type'] ?? 'Kredit'),
+            'Sumber Trafik' => $lead->utm_source ?: 'Direct',
+            'Wilayah/IP' => "{$region} ({$ip})",
+            'Catatan' => $validated['notes'] ?? '-',
+        ]);
+
         $consultant = Consultant::first();
         $phone = $consultant?->formatted_phone ?? '6281330135013';
         
@@ -235,6 +246,17 @@ class LandingPageController extends Controller
         ]);
 
         $targetCar = $tradeIn->interestedCar?->name ?? 'mobil baru Hyundai';
+
+        // Send instant Telegram Trade-in Alert
+        \App\Services\TelegramNotificationService::sendAlert('Pengajuan Tukar Tambah (Trade-In)', [
+            'Nama Pemohon' => $validated['name'],
+            'WhatsApp' => $validated['phone'],
+            'Mobil Lama' => "{$validated['old_car_brand']} {$validated['old_car_model']} ({$validated['old_car_year']})",
+            'Transmisi' => ucfirst($validated['old_car_transmission'] ?? 'Automatic'),
+            'Ekspektasi Harga' => $validated['expected_price'] ? 'Rp ' . number_format($validated['expected_price'], 0, ',', '.') : '-',
+            'Tertarik ke Unit' => $targetCar,
+            'Catatan' => $validated['notes'] ?? '-',
+        ]);
         $consultant = Consultant::first();
         $phone = $consultant?->formatted_phone ?? '6281330135013';
         $msg = "Halo Nico (Sales Hyundai Surabaya), saya *{$validated['name']}* ingin mengajukan program Tukar Tambah mobil lama saya *{$validated['old_car_brand']} {$validated['old_car_model']} ({$validated['old_car_year']})* ke unit *{$targetCar}*. Mohon info taksiran harga dan promo terbarunya.";

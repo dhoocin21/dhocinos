@@ -84,9 +84,14 @@
             <a href="{{ url('/#virtual-360') }}" class="hover:text-[#002c5f] transition-colors flex items-center gap-1">
                 <span>360° Studio</span>
             </a>
+            <a href="{{ url('/#ev-savings') }}" class="hover:text-cyan-600 transition-colors flex items-center gap-1 font-bold">
+                <span class="text-cyan-500">⚡</span>
+                <span>Hemat EV</span>
+            </a>
             <a href="{{ url('/#trade-in') }}" class="hover:text-[#002c5f] transition-colors">Tukar Tambah</a>
             <a href="{{ url('/#comparator') }}" class="hover:text-[#002c5f] transition-colors">Komparasi</a>
             <a href="{{ route('pricelist') }}" class="hover:text-[#002c5f] transition-colors {{ request()->routeIs('pricelist') ? 'text-[#002c5f] font-bold' : '' }}">Pricelist</a>
+            <a href="{{ url('/#faq') }}" class="hover:text-[#002c5f] transition-colors">FAQ</a>
             <a href="{{ url('/#consultant') }}" class="hover:text-[#002c5f] transition-colors">Consultant</a>
         </div>
 
@@ -158,7 +163,15 @@
                      </div>
                  </div>
 
+                  <a href="{{ url('/#virtual-360') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50">360° Studio</a>
+                  <a href="{{ url('/#ev-savings') }}" @click="mobileOpen = false" class="text-cyan-600 font-bold hover:text-cyan-700 transition-colors py-2 border-b border-gray-50 flex items-center justify-between">
+                      <span class="flex items-center gap-1.5"><span class="text-cyan-500">⚡</span> Simulasi Hemat EV</span>
+                      <span class="text-[9px] bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded-full font-black uppercase">Hemat s/d 80%</span>
+                  </a>
+                  <a href="{{ url('/#trade-in') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50">Tukar Tambah</a>
+                  <a href="{{ url('/#comparator') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50">Komparasi Mobil</a>
                   <a href="{{ route('pricelist') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50 {{ request()->routeIs('pricelist') ? 'text-[#002c5f] font-bold' : '' }}">Pricelist</a>
+                  <a href="{{ url('/#faq') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50">FAQ Mobil Listrik</a> @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50 {{ request()->routeIs('pricelist') ? 'text-[#002c5f] font-bold' : '' }}">Pricelist</a>
                   <a href="{{ url('/#gallery') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50">Gallery</a>
                  <a href="{{ route('posts.index') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2 border-b border-gray-50 {{ request()->routeIs('posts.*') ? 'text-[#002c5f] font-bold' : '' }}">News</a>
                  <a href="{{ url('/#consultant') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] transition-colors py-2">Consultant</a>

@@ -27,6 +27,14 @@
     <link rel="canonical" href="{{ url('/') }}">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
+    <!-- PWA Web App Manifest & Mobile App Experience -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#002c5f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hyundai Pro">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/hyundai_logo.png') }}">
+
     @if($siteVerification)
         @php
             $cleanVerification = $siteVerification;
@@ -564,6 +572,13 @@
         </div>
     </section>
 
+    <!-- EV Savings Calculator Section -->
+    <section id="ev-savings" class="py-12 md:py-20 bg-[#001026] text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <livewire:ev-savings-calculator />
+        </div>
+    </section>
+
     <!-- Consultant Profile -->
     @if($consultant)
     <section id="consultant" class="py-12 md:py-16 bg-white">
@@ -843,6 +858,115 @@
                 @else
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.6919013583567!2d112.6967817748402!3d-7.275883692731089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fc6778f8447d%3A0x6794680879612f0f!2sHyundai%20Gowa%20Surabaya!5e0!3m2!1sid!2sid!4v1714876800000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 @endif
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Khusus Mobil Listrik & Garansi Resmi Hyundai -->
+    <section id="faq" class="py-16 md:py-24 bg-white border-t border-gray-100" x-data="{ activeFaq: 1 }">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-black text-blue-600 uppercase tracking-[0.25em] block mb-2">Panduan Calon Pembeli</span>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
+                    Pertanyaan Seputar <span class="text-[#002c5f]">Mobil Listrik & Garansi Hyundai</span>
+                </h2>
+                <div class="h-1.5 w-20 bg-[#002c5f] rounded-full mx-auto mt-4"></div>
+                <p class="text-gray-500 text-sm mt-4">
+                    Semua yang perlu Anda ketahui tentang kemudahan memiliki mobil listrik (EV), garansi baterai 8 tahun, dan pengisian daya di rumah.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 1 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                    <button @click="activeFaq = (activeFaq === 1 ? null : 1)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Berapa lama garansi baterai mobil listrik (EV) Hyundai?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 1 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </button>
+                    <div x-show="activeFaq === 1" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        Baterai tegangan tinggi (<em>High Voltage Battery</em>) pada semua lini mobil listrik Hyundai (seperti <strong>IONIQ 5, IONIQ 6, dan All New KONA Electric</strong>) dilindungi garansi resmi selama <strong>8 Tahun atau 160.000 KM</strong> (mana yang tercapai lebih dulu). Selain itu, kendaraan juga dilindungi garansi dasar manufaktur hingga 3-4 tahun dan gratis servis suku cadang.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 2 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                    <button @click="activeFaq = (activeFaq === 2 ? null : 2)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Bagaimana cara mengisi daya (charging) di rumah? Apakah sulit?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 2 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </button>
+                    <div x-show="activeFaq === 2" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        Sangat mudah dan praktis! Setiap pembelian mobil listrik Hyundai, Anda mendapatkan fasilitas <strong>Gratis AC Home Wallbox Charger 7.4 kW / 11 kW</strong> lengkap dengan survei dan pemasangan teknisi berlisensi langsung di rumah Anda. Anda juga mendapatkan kabel <em>Portable Emergency Charger</em> yang dapat langsung dicolok ke stopkontak rumah biasa (schuko).
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 3 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                    <button @click="activeFaq = (activeFaq === 3 ? null : 3)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Apakah ada diskon tarif listrik khusus dari PLN untuk pemilik EV?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 3 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </button>
+                    <div x-show="activeFaq === 3" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        <strong>Ya, benar!</strong> PLN memiliki program insentif resmi diskon tarif listrik sebesar <strong>30% setiap hari pada pukul 22.00 s/d 05.00 WIB</strong> khusus untuk pengisian daya kendaraan listrik di rumah melalui Home Charging Wallbox. Biaya pengisian menjadi sangat murah, hanya sekitar Rp 1.187 per kWh!
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 4 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                    <button @click="activeFaq = (activeFaq === 4 ? null : 4)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Berapa lama waktu pengisian daya di SPKLU Fast Charging luar kota?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 4 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </button>
+                    <div x-show="activeFaq === 4" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        Didukung arsitektur <em>E-GMP 800V Ultra-Fast Charging</em>, pengisian dari kapasitas 10% hingga 80% pada IONIQ 5 & IONIQ 6 hanya membutuhkan waktu <strong>kurang lebih 18 menit</strong> di SPKLU Ultra Fast DC 350 kW, atau sekitar 45-55 menit di SPKLU Fast DC 50 kW yang telah tersedia di mall, rest area tol Trans Jawa, dan dealer resmi Hyundai Surabaya.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 5 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                    <button @click="activeFaq = (activeFaq === 5 ? null : 5)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Berapa biaya servis & perawatan berkala mobil listrik?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 5 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </button>
+                    <div x-show="activeFaq === 5" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        <strong>Bebas Biaya Jasa Servis & Suku Cadang hingga 5 Tahun atau 75.000 KM!</strong> Mobil listrik memiliki komponen mekanis bergerak yang jauh lebih sedikit dibanding mesin konvensional (tidak perlu ganti oli mesin, busi, timing belt, atau filter bahan bakar), sehingga biaya perawatan rutin tahunan praktis mendekati nol rupiah.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 6 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                    <button @click="activeFaq = (activeFaq === 6 ? null : 6)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Apakah saya bisa tukar tambah (Trade-In) mobil bensin lama saya?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 6 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </button>
+                    <div x-show="activeFaq === 6" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        <strong>Tentu saja bisa!</strong> Melalui layanan resmi Tukar Tambah Hyundai, kami menerima semua merek mobil lama (Toyota, Honda, Mitsubishi, Suzuki, dll) dengan penilaian harga pasar yang transparan dan kompetitif. Nilai tukar tambah mobil lama Anda dapat langsung dialokasikan sebagai Uang Muka (DP) unit Hyundai baru Anda.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still Have Questions CTA -->
+            <div class="mt-12 text-center p-8 bg-blue-50 rounded-3xl border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div class="text-center sm:text-left">
+                    <h4 class="text-lg font-black text-[#002c5f]">Masih punya pertanyaan seputar promo atau mobil listrik?</h4>
+                    <p class="text-xs text-gray-600 mt-1">Konsultasikan kebutuhan mobilitas Anda langsung dengan Sales Consultant resmi kami.</p>
+                </div>
+                <a href="{{ route('track.wa', ['text' => 'Halo Mas Nico, saya ingin konsultasi mengenai mobil listrik Hyundai dan promo terbarunya.']) }}" target="_blank"
+                    class="px-6 py-3.5 bg-[#002c5f] hover:bg-blue-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-lg shadow-blue-900/20 whitespace-nowrap flex items-center gap-2">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                    <span>Tanya Sales via WhatsApp</span>
+                </a>
             </div>
         </div>
     </section>
@@ -1226,6 +1350,64 @@
 
     <!-- Floating AI Car Consultant Chatbot -->
     <livewire:ai-chat-widget />
+
+    <!-- PWA Service Worker & Install App Prompt -->
+    <div id="pwa-install-banner" class="fixed bottom-6 left-6 z-40 bg-white/95 backdrop-blur-md border border-gray-200 shadow-2xl rounded-2xl p-4 hidden flex-row items-center gap-4 max-w-sm transition-all duration-300">
+        <div class="w-10 h-10 rounded-xl bg-[#002c5f] text-white flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <div class="flex-grow min-w-0">
+            <div class="text-xs font-black text-gray-900 truncate">Pasang Aplikasi Showroom</div>
+            <div class="text-[10px] text-gray-500">Akses cepat & simulasi langsung di ponsel</div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <button id="pwa-install-btn" class="px-3 py-1.5 bg-[#002c5f] hover:bg-blue-800 text-white rounded-lg text-[10px] font-black uppercase tracking-wider transition cursor-pointer">Install</button>
+            <button id="pwa-close-btn" class="text-gray-400 hover:text-gray-600 text-sm p-1 cursor-pointer">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    console.log('PWA ServiceWorker registered with scope: ', reg.scope);
+                }).catch((err) => {
+                    console.log('PWA ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        let deferredPrompt;
+        const pwaBanner = document.getElementById('pwa-install-banner');
+        const pwaBtn = document.getElementById('pwa-install-btn');
+        const pwaClose = document.getElementById('pwa-close-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (pwaBanner) {
+                pwaBanner.classList.remove('hidden');
+                pwaBanner.classList.add('flex');
+            }
+        });
+
+        if (pwaBtn) {
+            pwaBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    if (pwaBanner) pwaBanner.classList.add('hidden');
+                }
+            });
+        }
+
+        if (pwaClose) {
+            pwaClose.addEventListener('click', () => {
+                if (pwaBanner) pwaBanner.classList.add('hidden');
+            });
+        }
+    </script>
 
     @livewireScripts
 </body>

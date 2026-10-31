@@ -11,6 +11,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { font-family: 'Outfit', sans-serif; }
         @media print {
@@ -42,10 +43,17 @@
             <span>Kembali ke Showroom</span>
         </a>
 
-        <div class="flex items-center gap-3">
-            <button onclick="window.print()" class="px-5 py-2.5 bg-[#002c5f] hover:bg-blue-900 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center gap-2 shadow-lg shadow-blue-900/20">
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- 1-Click Instant PDF Download -->
+            <button onclick="downloadOfficialPDF()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center gap-2 shadow-lg shadow-blue-600/20 cursor-pointer">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Unduh File PDF</span>
+            </button>
+
+            <!-- Standard Print / Browser PDF -->
+            <button onclick="window.print()" class="px-5 py-2.5 bg-[#002c5f] hover:bg-blue-900 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center gap-2 shadow-lg shadow-blue-900/20 cursor-pointer">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 9V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v5"/><rect width="12" height="8" x="6" y="14" rx="1" ry="1"/></svg>
-                <span>Cetak / Simpan PDF</span>
+                <span>Cetak Lembar</span>
             </button>
 
             @if($consultant)
@@ -58,7 +66,7 @@
     </div>
 
     <!-- Official A4 Quotation Sheet Container -->
-    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-200 p-8 sm:p-12 print-shadow-none">
+    <div id="quotation-sheet" class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-200 p-8 sm:p-12 print-shadow-none">
         <!-- Letterhead Header -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b-2 border-[#002c5f] gap-6">
             <div>
@@ -155,14 +163,36 @@
                 <div class="text-[10px] text-gray-400 mt-0.5">{{ $consultant->address ?? 'Hyundai HR Muhammad Surabaya' }}</div>
             </div>
 
-            <div class="text-center sm:text-right border-t sm:border-t-0 sm:border-l border-gray-200 pt-4 sm:pt-0 sm:pl-8">
-                <div class="w-24 h-12 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-[10px] text-gray-400 font-bold uppercase mx-auto sm:ml-auto">
-                    Verified Seal
+            <div class="flex items-center gap-4 text-center sm:text-right border-t sm:border-t-0 sm:border-l border-gray-200 pt-4 sm:pt-0 sm:pl-8">
+                <div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(url('/quotation?car_id='.$car->id)) }}" 
+                         alt="QR Code Penawaran" 
+                         class="w-16 h-16 object-contain mx-auto sm:ml-auto rounded-lg border border-gray-200 p-1">
+                    <span class="text-[8px] text-gray-400 font-mono mt-1 block">Scan Verifikasi</span>
                 </div>
-                <p class="text-[9px] text-gray-400 font-mono mt-1">GOWA AUTOMOTIVE SURABAYA</p>
+                <div>
+                    <div class="px-3 py-1.5 border-2 border-emerald-500 bg-emerald-50 rounded-lg text-emerald-800 font-black text-[10px] uppercase tracking-wider">
+                        ✓ Verified SPH
+                    </div>
+                    <p class="text-[9px] text-gray-400 font-mono mt-1">HYUNDAI SURABAYA</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        function downloadOfficialPDF() {
+            const element = document.getElementById('quotation-sheet');
+            const carName = "{{ Str::slug($car->name) }}";
+            const opt = {
+                margin: [8, 8, 8, 8],
+                filename: `Surat_Penawaran_Hyundai_${carName}_{{ date('Ymd') }}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
 </body>
 </html>
