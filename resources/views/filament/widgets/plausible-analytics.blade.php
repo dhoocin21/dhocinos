@@ -8,8 +8,8 @@
             .chart-left, .chart-right { width: 100% !important; max-width: 100% !important; border-right: none !important; }
         }
         @media (min-width: 769px) {
-            .chart-left { flex: 0 0 70% !important; width: 70% !important; border-right: 1px solid #f3f4f6 !important; }
-            .chart-right { flex: 0 0 30% !important; width: 30% !important; }
+            .chart-left { flex: 0 0 68% !important; width: 68% !important; border-right: 1px solid #f3f4f6 !important; }
+            .chart-right { flex: 0 0 32% !important; width: 32% !important; }
         }
     </style>
 
@@ -22,43 +22,63 @@
                 </div>
                 <div class="flex gap-2">
                     <x-filament::button wire:click="populateDummyData" size="xs" color="gray" icon="heroicon-o-arrow-path" class="text-xs">
-                        Isi Data Dummy
+                        Isi Data Dummy (Kota, Device & Durasi)
                     </x-filament::button>
                     <x-filament::button wire:click="resetToRealData" size="xs" color="danger" icon="heroicon-o-trash" class="text-xs">
-                        Reset Data Real (Kosong)
+                        Reset Data Real
                     </x-filament::button>
                 </div>
             </div>
         @endif
         
-        <!-- Stats Header -->
+        <!-- Stats Header (Now with Avg Duration & Peak Hour) -->
         <div class="flex flex-wrap items-center border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
             @php
                 $statItems = [
-                    ['label' => 'Total Visits', 'data' => $stats['visits']],
-                    ['label' => 'Klik WhatsApp', 'data' => $stats['wa']],
-                    ['label' => 'Total Booking', 'data' => $stats['bookings']],
-                    ['label' => 'Conversion Rate', 'data' => $stats['conversion']],
-                    ['label' => 'Bounce Rate', 'data' => $stats['bounce']],
+                    ['label' => 'Total Visits', 'data' => $stats['visits'], 'icon' => 'heroicon-o-user-group'],
+                    ['label' => 'Rata-rata Durasi', 'data' => $stats['duration'], 'icon' => 'heroicon-o-clock'],
+                    ['label' => 'Klik WhatsApp', 'data' => $stats['wa'], 'icon' => 'heroicon-o-chat-bubble-left-ellipsis'],
+                    ['label' => 'Total Booking', 'data' => $stats['bookings'], 'icon' => 'heroicon-o-calendar-days'],
+                    ['label' => 'Conversion Rate', 'data' => $stats['conversion'], 'icon' => 'heroicon-o-chart-bar-square'],
                 ];
             @endphp
             
             @foreach($statItems as $index => $item)
-                <div class="stats-item flex-1 p-4">
-                    <h3 class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase mb-1">{{ $item['label'] }}</h3>
+                <div class="stats-item flex-1 p-4 min-w-[150px]">
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-[10px] font-extrabold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{{ $item['label'] }}</h3>
+                    </div>
                     <div class="flex items-baseline gap-2">
                         <span class="text-xl md:text-2xl font-black text-gray-900 dark:text-white">{{ $item['data']['value'] }}</span>
-                        <div class="flex items-center text-xs font-bold {{ $item['data']['trend']['color'] }}">
-                            @if($item['data']['trend']['dir'] === 'up')
-                                <x-heroicon-o-arrow-trending-up class="w-3 h-3 mr-1" />
-                            @else
-                                <x-heroicon-o-arrow-trending-down class="w-3 h-3 mr-1" />
-                            @endif
-                            {{ $item['data']['trend']['pct'] }}
-                        </div>
+                        @if(isset($item['data']['trend']))
+                            <div class="flex items-center text-xs font-bold {{ $item['data']['trend']['color'] }}">
+                                @if($item['data']['trend']['dir'] === 'up')
+                                    <x-heroicon-o-arrow-trending-up class="w-3 h-3 mr-1" />
+                                @else
+                                    <x-heroicon-o-arrow-trending-down class="w-3 h-3 mr-1" />
+                                @endif
+                                {{ $item['data']['trend']['pct'] }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        <!-- Peak Traffic Hour Insight Banner -->
+        <div class="px-5 py-2.5 bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-white dark:from-gray-800 dark:to-gray-900 border-b border-gray-100 dark:border-gray-800 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 text-xs">
+                <span class="p-1 rounded-md bg-blue-600 text-white flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </span>
+                <span class="text-gray-600 dark:text-gray-300 font-medium">Jam Paling Ramai Dikunjungi:</span>
+                <span class="font-black text-[#002c5f] dark:text-blue-400 text-xs px-2 py-0.5 rounded-full bg-blue-100/70 dark:bg-blue-900/40">
+                    {{ $peakHour }}
+                </span>
+            </div>
+            <span class="text-[11px] text-gray-400 font-medium italic">
+                *Waktu terbaik untuk follow-up leads & tayang promo
+            </span>
         </div>
 
         <!-- Main Content -->
@@ -103,44 +123,65 @@
                     }
                 }"
             >
-                <div x-ref="lineChart" style="width: 100%; height: 320px;"></div>
+                <div x-ref="lineChart" style="width: 100%; height: 340px;"></div>
             </div>
 
-            <!-- Sidebar Area -->
-            <div class="chart-right flex flex-col bg-white dark:bg-gray-900">
-                <div class="p-4 border-b border-gray-100 dark:border-gray-800">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xs font-bold tracking-wider text-gray-500 uppercase">Top Sources</h2>
-                        <span class="text-xs text-gray-400">Visitors</span>
+            <!-- Sidebar Area: Sources, Cities, Device Brands -->
+            <div class="chart-right flex flex-col bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
+                <!-- Top Cities (Kota Asal Pengunjung) -->
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <h2 class="text-xs font-black tracking-wider text-gray-700 dark:text-gray-200 uppercase">Top Kota Asal</h2>
+                        </div>
+                        <span class="text-[11px] font-bold text-gray-400">Pengunjung</span>
+                    </div>
+                    @forelse($cities as $c)
+                        <div class="relative flex items-center justify-between p-1.5 mb-1 rounded text-xs">
+                            <div class="absolute left-0 top-0 bottom-0 bg-emerald-50 dark:bg-emerald-950/30 rounded" style="width: {{ $c->percentage }}%; z-index: 0;"></div>
+                            <span class="relative z-10 font-medium text-gray-700 dark:text-gray-300 truncate max-w-[170px]">{{ $c->city }}</span>
+                            <span class="relative z-10 font-bold text-gray-900 dark:text-white">{{ $c->total }}</span>
+                        </div>
+                    @empty
+                        <div class="text-xs text-gray-400 italic py-2">Belum ada data kota</div>
+                    @endforelse
+                </div>
+
+                <!-- Detailed Devices (Merk & Model Perangkat) -->
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                            <h2 class="text-xs font-black tracking-wider text-gray-700 dark:text-gray-200 uppercase">Perangkat (Devices)</h2>
+                        </div>
+                        <span class="text-[11px] font-bold text-gray-400">Total</span>
+                    </div>
+                    @forelse($deviceBrands as $d)
+                        <div class="relative flex items-center justify-between p-1.5 mb-1 rounded text-xs">
+                            <div class="absolute left-0 top-0 bottom-0 bg-cyan-50 dark:bg-cyan-950/30 rounded" style="width: {{ $d->percentage }}%; z-index: 0;"></div>
+                            <span class="relative z-10 font-medium text-gray-700 dark:text-gray-300 truncate max-w-[170px]">{{ $d->device_brand }}</span>
+                            <span class="relative z-10 font-bold text-gray-900 dark:text-white">{{ $d->total }}</span>
+                        </div>
+                    @empty
+                        <div class="text-xs text-gray-400 italic py-2">Belum ada data device</div>
+                    @endforelse
+                </div>
+
+                <!-- Top Sources -->
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <h2 class="text-xs font-black tracking-wider text-gray-700 dark:text-gray-200 uppercase">Sumber Trafik</h2>
+                        </div>
+                        <span class="text-[11px] font-bold text-gray-400">Pengunjung</span>
                     </div>
                     @foreach($sources as $s)
-                        <div class="relative flex items-center justify-between p-1.5 mb-1 rounded text-sm">
-                            <div class="absolute left-0 top-0 bottom-0 bg-indigo-50 dark:bg-indigo-900/30 rounded" style="width: {{ $s->percentage }}%; z-index: 0;"></div>
-                            <span class="relative z-10 text-gray-700 dark:text-gray-300">{{ ucfirst($s->source ?: 'Direct') }}</span>
-                            <span class="relative z-10 font-bold">{{ $s->total }}</span>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="p-4 border-b border-gray-100 dark:border-gray-800">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xs font-bold tracking-wider text-gray-500 uppercase">Top Locations</h2>
-                        <span class="text-xs text-gray-400">Visitors</span>
-                    </div>
-                    @foreach($locations as $l)
-                        <div class="relative flex items-center justify-between p-1.5 mb-1 rounded text-sm">
-                            <div class="absolute left-0 top-0 bottom-0 bg-amber-50 dark:bg-amber-900/20 rounded" style="width: {{ $l->percentage }}%; z-index: 0;"></div>
-                            <span class="relative z-10 text-gray-700 dark:text-gray-300">{{ $l->region_name }}</span>
-                            <span class="relative z-10 font-bold">{{ $l->total }}</span>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="p-4">
-                    <h2 class="text-xs font-bold tracking-wider text-gray-500 uppercase mb-4">Devices</h2>
-                    @foreach($devices as $d)
-                        <div class="relative flex items-center justify-between p-1.5 mb-2 rounded text-sm">
-                            <div class="absolute left-0 top-0 bottom-0 bg-emerald-50 dark:bg-emerald-900/20 rounded" style="width: {{ $d->percentage }}%; z-index: 0;"></div>
-                            <span class="relative z-10 text-gray-700 dark:text-gray-300">{{ $d->name }}</span>
-                            <span class="relative z-10 font-bold">{{ $d->total }}</span>
+                        <div class="relative flex items-center justify-between p-1.5 mb-1 rounded text-xs">
+                            <div class="absolute left-0 top-0 bottom-0 bg-indigo-50 dark:bg-indigo-950/30 rounded" style="width: {{ $s->percentage }}%; z-index: 0;"></div>
+                            <span class="relative z-10 font-medium text-gray-700 dark:text-gray-300">{{ ucfirst($s->source ?: 'Direct') }}</span>
+                            <span class="relative z-10 font-bold text-gray-900 dark:text-white">{{ $s->total }}</span>
                         </div>
                     @endforeach
                 </div>

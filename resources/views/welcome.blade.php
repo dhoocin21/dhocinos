@@ -1409,6 +1409,48 @@
         }
     </script>
 
+    <!-- Real-time Visitor Session Duration Tracker -->
+    <script>
+        (function() {
+            const startTime = Date.now();
+            const visitId = {{ session('current_visit_id') ?? 'null' }};
+
+            function sendDuration() {
+                if (!visitId) return;
+                const durationSeconds = Math.max(5, Math.round((Date.now() - startTime) / 1000));
+
+                const payload = JSON.stringify({
+                    visit_id: visitId,
+                    duration: durationSeconds
+                });
+
+                if (navigator.sendBeacon) {
+                    const blob = new Blob([payload], { type: 'application/json' });
+                    navigator.sendBeacon('{{ route('track.duration') }}', blob);
+                } else {
+                    fetch('{{ route('track.duration') }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: payload,
+                        keepalive: true
+                    }).catch(() => {});
+                }
+            }
+
+            // Ping every 15 seconds while active
+            setInterval(sendDuration, 15000);
+
+            // Record duration on visibility change or page hide
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'hidden') {
+                    sendDuration();
+                }
+            });
+            window.addEventListener('pagehide', sendDuration);
+            window.addEventListener('beforeunload', sendDuration);
+        })();
+    </script>
+
     @livewireScripts
 </body>
 </html>

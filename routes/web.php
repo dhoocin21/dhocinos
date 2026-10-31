@@ -21,6 +21,7 @@ Route::get('/sitemap.xml', [LandingPageController::class, 'sitemap'])->name('sit
 Route::get('/robots.txt', [LandingPageController::class, 'robots'])->name('robots');
 Route::post('/lead/capture', [LandingPageController::class, 'captureLead'])->name('lead.capture');
 Route::post('/trade-in/submit', [LandingPageController::class, 'captureTradeIn'])->name('tradein.submit');
+Route::post('/track/duration', [LandingPageController::class, 'trackDuration'])->name('track.duration');
 
 Route::get('/track-wa', function (\Illuminate\Http\Request $request) {
     $referer = $request->header('referer');

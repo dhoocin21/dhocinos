@@ -273,4 +273,18 @@ class LandingPageController extends Controller
 
         return redirect($waUrl);
     }
+
+    public function trackDuration(Request $request)
+    {
+        $visitId = $request->input('visit_id') ?: session('current_visit_id');
+        $duration = (int) $request->input('duration', 0);
+
+        if ($visitId && $duration > 0) {
+            \App\Models\SiteLog::where('id', $visitId)->update([
+                'duration_seconds' => min(3600, $duration),
+            ]);
+        }
+
+        return response()->json(['status' => 'ok']);
+    }
 }

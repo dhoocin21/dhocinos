@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->validateCsrfTokens(except: [
             'lead/capture',
+            'track/duration',
         ]);
         $middleware->trustProxies(at: '*');
     })

@@ -16,8 +16,8 @@ class TrackVisits
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // HANYA hitung jika akses halaman publik (BUKAN admin, BUKAN ajax, BUKAN livewire)
-        if (!$request->is('admin*') && !$request->ajax() && !$request->hasHeader('X-Livewire')) {
+        // Only track public page visits (not admin, not ajax/livewire, not assets)
+        if (!$request->is('admin*', 'track/*', 'api/*') && !$request->ajax() && !$request->hasHeader('X-Livewire')) {
             
             $referer = $request->header('referer');
             $source = 'direct';
@@ -32,21 +32,33 @@ class TrackVisits
             }
 
             $ip = $request->ip();
-            $region = SiteLog::getRegionFromIp($ip);
+            $loc = SiteLog::getLocationFromIp($ip);
+            $region = $loc['region'] ?? 'Jawa Timur';
+            $city = $loc['city'] ?? 'Surabaya';
             
             // Skip logging for foreign visitors (bots/VPNs outside target ID market)
             if ($region === 'Foreign') {
                 return $next($request);
             }
+
+            $ua = $request->userAgent();
+            $deviceInfo = SiteLog::parseUserAgent($ua);
             
-            SiteLog::create([
+            $log = SiteLog::create([
                 'log_type' => 'visit',
                 'source' => $source,
                 'ip_address' => $ip,
-                'user_agent' => $request->userAgent(),
+                'user_agent' => $ua,
                 'region' => $region,
+                'city' => $city,
+                'device_brand' => $deviceInfo['brand'],
+                'os_platform' => $deviceInfo['os'],
+                'browser_name' => $deviceInfo['browser'],
+                'duration_seconds' => 5, // minimum initial duration
                 'created_at' => now(),
             ]);
+
+            session(['current_visit_id' => $log->id]);
         }
 
         return $next($request);
