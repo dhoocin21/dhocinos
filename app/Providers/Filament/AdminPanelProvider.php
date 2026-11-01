@@ -56,7 +56,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                \App\Http\Middleware\VerifyDeveloperOtp::class,
             ])
             ->renderHook(
                 'panels::head.end',
