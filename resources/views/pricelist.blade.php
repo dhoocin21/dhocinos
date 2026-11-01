@@ -371,11 +371,33 @@
         @endif
     </main>
 
-    <!-- Footer component -->
-    <x-footer />
-
-    <!-- WhatsApp Floating Action Trigger -->
-    <x-whatsapp-button />
+    <!-- Footer -->
+    <footer class="bg-[#002c5f] dark:bg-[#040914] border-t border-transparent dark:border-slate-800 text-white py-16 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center items-center mb-8">
+                @if($logo = \App\Models\Setting::get('site_logo'))
+                    <img src="{{ asset('storage/' . $logo) }}" alt="Hyundai" class="h-6 w-auto brightness-0 invert">
+                @else
+                    <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="h-6 w-auto brightness-0 invert">
+                @endif
+                <span class="ml-3 font-black text-lg tracking-wider uppercase text-white">{{ \App\Models\Setting::get('site_name', 'Hyundai') }}</span>
+                <!-- Verified Badge -->
+                <span class="inline-flex items-center justify-center shrink-0 ml-2" title="Dealer Resmi Terverifikasi">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" fill="#00aad2"/>
+                        <path d="M15.61 9.314a.75.75 0 00-1.22-.872l-3.236 4.53-1.624-1.624a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" fill="#ffffff"/>
+                    </svg>
+                </span>
+            </div>
+            <p class="text-blue-200 dark:text-slate-400 text-[10px] mb-8 tracking-[0.2em] uppercase font-bold">&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'Hyundai Showroom') }}. Semua Hak Dilindungi.</p>
+            <div class="flex justify-center gap-8">
+                <a href="/" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">Home</a>
+                <a href="/#virtual-360" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">360° Studio</a>
+                <a href="{{ route('pricelist') }}" class="text-xs font-bold text-white transition-colors underline underline-offset-8 decoration-2">Pricelist</a>
+                <a href="/#consultant" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">Consultant</a>
+            </div>
+        </div>
+    </footer>
 
     @livewireScripts
 </body>
