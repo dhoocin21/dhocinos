@@ -1,2 +1,5 @@
-*
-!.gitignore
+# Ignore temporary files & livewire uploads
+/livewire-tmp/*
+!/livewire-tmp/.gitkeep
+*.tmp
+

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Tutorial Interaktif - Setting Server Android Hyundai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0072ce;
+            --primary-dark: #002c6c;
+            --bg-dark: #090d16;
+            --card-bg: #131c2e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --border: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 12px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 114, 206, 0.15);
+            border: 1px solid rgba(0, 114, 206, 0.35);
+            color: #38bdf8;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #38bdf8;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #38bdf8;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* VIDEO PLAYER CONTAINER */
+        .video-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stage-wrapper {
+            position: relative;
+            background: radial-gradient(circle at center, #111a2f 0%, #070a12 100%);
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 520px;
+        }
+
+        /* MOCKUP HP ANDROID */
+        .phone-mockup {
+            width: 320px;
+            height: 560px;
+            background: #000;
+            border-radius: 40px;
+            border: 10px solid #222d3d;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NOTCH / CAMERA */
+        .phone-notch {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 18px;
+            background: #222d3d;
+            border-radius: 12px;
+            z-index: 100;
+        }
+
+        /* STATUS BAR */
+        .phone-status-bar {
+            height: 34px;
+            padding: 0 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #cbd5e1;
+            z-index: 90;
+            padding-top: 6px;
+        }
+
+        /* PHONE SCREEN DISPLAY */
+        .phone-screen {
+            flex: 1;
+            background: #0b132b;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SCENE APP SIMULATION */
+        .app-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .app-view.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* TERMUX VIEW */
+        .termux-header {
+            background: #111827;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .termux-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #10b981;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .termux-body {
+            flex: 1;
+            background: #000;
+            color: #4ade80;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            padding: 12px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 7px;
+            height: 13px;
+            background: #4ade80;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* HYUNDAI SERVER VPS APP VIEW */
+        .server-app-header {
+            background: #002c6c;
+            padding: 12px 14px;
+            color: #fff;
+        }
+
+        .server-app-title {
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .server-app-subtitle {
+            font-size: 10px;
+            color: #93c5fd;
+        }
+
+        .server-app-body {
+            flex: 1;
+            padding: 12px;
+            background: #0b132b;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .mini-card {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mini-card-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .mini-card-val {
+            font-size: 14px;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .btn-vps-action {
+            background: #ef4444;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-vps-action:hover {
+            transform: scale(0.98);
+        }
+
+        /* BROWSER RESULT VIEW */
+        .browser-header {
+            background: #1f2937;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .browser-url-bar {
+            flex: 1;
+            background: #111827;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 10px;
+            color: #38bdf8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .browser-body {
+            flex: 1;
+            background: #fff;
+            color: #111;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .web-car-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .web-car-img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            margin: 6px 0;
+            transition: all 0.5s ease;
+        }
+
+        /* TOUCH POINTER SIMULATION */
+        .touch-pointer {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: rgba(56, 189, 248, 0.7);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease, top 0.6s ease, left 0.6s ease;
+            z-index: 200;
+            box-shadow: 0 0 15px #38bdf8;
+        }
+
+        .touch-pointer.click {
+            transform: translate(-50%, -50%) scale(1.4);
+            background: rgba(16, 185, 129, 0.9);
+        }
+
+        /* VIDEO CONTROLS & TIMELINE */
+        .video-controls {
+            background: #0f172a;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* PROGRESS BAR */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 999px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0072ce, #38bdf8);
+            border-radius: 999px;
+            position: relative;
+            transition: width 0.1s linear;
+        }
+
+        .progress-knob {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(0,0,0,0.5);
+        }
+
+        /* CONTROL BUTTONS */
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .left-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-ctrl {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #fff;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-ctrl:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .btn-play-pause {
+            background: var(--primary);
+            width: 44px;
+            height: 44px;
+            font-size: 16px;
+        }
+
+        .time-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .scene-indicator {
+            font-size: 13px;
+            font-weight: 700;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* SCENE INSTRUCTION BOX */
+        .instruction-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .instruction-step {
+            font-size: 12px;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .instruction-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .instruction-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* QUICK COPY COMMAND BOX */
+        .command-strip {
+            background: #000;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .command-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #86efac;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .btn-copy {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: #0284c7;
+        }
+
+        /* SCENE NAVIGATION TABS */
+        .scene-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .scene-nav {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .scene-tab {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scene-tab:hover {
+            background: #27354f;
+        }
+
+        .scene-tab.active {
+            background: rgba(0, 114, 206, 0.2);
+            border-color: #38bdf8;
+        }
+
+        .scene-tab-num {
+            font-size: 10px;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-bottom: 2px;
+        }
+
+        .scene-tab-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                SIMULATOR TUTORIAL ANDROID
+            </div>
+            <h1>Panduan Setting Server Hyundai di HP Android</h1>
+            <p class="subtitle">Animasi visual langkah demi langkah untuk memunculkan gambar mobil yang hilang dan mengaktifkan domain <b>hyundaisurabaya.com</b>.</p>
+        </header>
+
+        <!-- VIDEO PLAYER BOX -->
+        <div class="video-box">
+            <!-- STAGE WITH PHONE MOCKUP -->
+            <div class="stage-wrapper">
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-status-bar">
+                        <span id="phone-clock">20:30</span>
+                        <span>📶 4G &nbsp; 🔋 85%</span>
+                    </div>
+
+                    <div class="phone-screen">
+                        <!-- TOUCH CURSOR -->
+                        <div id="touch-pointer" class="touch-pointer"></div>
+
+                        <!-- SCENE 1: TERMUX FIX STORAGE LINK -->
+                        <div id="view-scene-1" class="app-view active">
+                            <div class="termux-header">
+                                <span class="termux-title">🟢 Termux - Sesi 1</span>
+                                <span style="font-size: 10px; color: #94a3b8;">bash</span>
+                            </div>
+                            <div class="termux-body" id="termux-log-1">
+                                <div style="color: #94a3b8;">~/ProjectSales-main $</div>
+                                <div id="typing-cmd-1"></div>
+                                <div id="output-cmd-1" style="color: #cbd5e1; margin-top: 6px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- SCENE 2: TERMUX RUN CLOUDFLARE TUNNEL -->
+                        <div id="view-scene-2" class="app-view">
+                            <div class="termux-header">
+                                <span class="termux-title">⚡ Termux - Sesi 2 (Tunnel)</span>
+                                <span style="font-size: 10px; color: #94a3b8;">cloudflared</span>
+                            </div>
+                            <div class="termux-body" id="termux-log-2">
+                                <div style="color: #94a3b8;">~ $</div>
+                                <div id="typing-cmd-2"></div>
+                                <div id="output-cmd-2" style="color: #cbd5e1; margin-top: 6px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- SCENE 3: HYUNDAI SERVER VPS APP -->
+                        <div id="view-scene-3" class="app-view">
+                            <div class="server-app-header">
+                                <div class="server-app-title">Hyundai Server VPS</div>
+                                <div class="server-app-subtitle">Gowa Surabaya Web Engine</div>
+                            </div>
+                            <div class="server-app-body">
+                                <div class="mini-card">
+                                    <div class="mini-card-title">Status Server HP</div>
+                                    <div class="mini-card-val" id="mock-vps-status">ONLINE (MODE VPS)</div>
+                                    <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">Anti-Sleep CPU & Wi-Fi: <b style="color: #60a5fa;">AKTIF (24 Jam)</b></div>
+                                </div>
+                                <div class="mini-card">
+                                    <div class="mini-card-title">Domain Publik Terhubung</div>
+                                    <div style="font-size: 11px; font-weight: 700; color: #38bdf8;">hyundaisurabaya.com</div>
+                                    <div style="font-size: 9px; color: #10b981; margin-top: 2px;">● Cloudflare Tunnel Connected</div>
+                                </div>
+                                <div class="btn-vps-action" id="mock-btn-action">
+                                    ✓ SERVER AKTIF NON-STOP
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SCENE 4: CHROME BROWSER HYUNDAISURABAYA.COM -->
+                        <div id="view-scene-4" class="app-view">
+                            <div class="browser-header">
+                                <span style="font-size: 11px;">🔒</span>
+                                <div class="browser-url-bar">https://hyundaisurabaya.com</div>
+                            </div>
+                            <div class="browser-body">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <b style="font-size: 12px; color: #002c6c;">HYUNDAI</b>
+                                    <span style="font-size: 9px; background: #002c6c; color: #fff; padding: 2px 6px; border-radius: 4px;">Hubungi Kami</span>
+                                </div>
+
+                                <div class="web-car-card">
+                                    <b style="font-size: 13px;">The New CRETA</b>
+                                    <div style="font-size: 10px; color: #64748b;">From Rp. 297.300.000</div>
+                                    <img src="/storage/cars/new-creta.png" alt="Creta" class="web-car-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23002c6c\' stroke-width=\'2\'><rect x=\'2\' y=\'6\' width=\'20\' height=\'12\' rx=\'3\'/><circle cx=\'6\' cy=\'15\' r=\'2\'/><circle cx=\'18\' cy=\'15\' r=\'2\'/></svg>'">
+                                    <div style="display: flex; gap: 4px; margin-top: 4px;">
+                                        <div style="flex:1; border: 1px solid #cbd5e1; text-align: center; font-size: 8px; font-weight: 700; padding: 4px;">DETAIL</div>
+                                        <div style="flex:1; border: 1px solid #002c6c; text-align: center; font-size: 8px; font-weight: 700; padding: 4px; color: #002c6c;">GET QUOTE</div>
+                                    </div>
+                                </div>
+
+                                <div class="web-car-card">
+                                    <b style="font-size: 13px;">IONIQ 5</b>
+                                    <div style="font-size: 10px; color: #64748b;">From Rp. 782.000.000</div>
+                                    <img src="/storage/cars/ioniq-5.png" alt="Ioniq 5" class="web-car-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23002c6c\' stroke-width=\'2\'><rect x=\'2\' y=\'6\' width=\'20\' height=\'12\' rx=\'3\'/><circle cx=\'6\' cy=\'15\' r=\'2\'/><circle cx=\'18\' cy=\'15\' r=\'2\'/></svg>'">
+                                    <div style="display: flex; gap: 4px; margin-top: 4px;">
+                                        <div style="flex:1; border: 1px solid #cbd5e1; text-align: center; font-size: 8px; font-weight: 700; padding: 4px;">DETAIL</div>
+                                        <div style="flex:1; border: 1px solid #002c6c; text-align: center; font-size: 8px; font-weight: 700; padding: 4px; color: #002c6c;">GET QUOTE</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTROLS & TIMELINE -->
+            <div class="video-controls">
+                <div class="progress-container" id="timeline-container">
+                    <div class="progress-bar" id="timeline-bar">
+                        <div class="progress-knob"></div>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="left-controls">
+                        <button class="btn-ctrl btn-play-pause" id="btn-play">▶</button>
+                        <button class="btn-ctrl" id="btn-replay" title="Ulang dari awal">↺</button>
+                        <div class="time-display">
+                            <span id="current-time">00:00</span> / <span id="total-time">01:40</span>
+                        </div>
+                    </div>
+                    <div class="scene-indicator" id="scene-indicator">Bagian 1: Perbaikan Gambar</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCENE INSTRUCTION & QUICK COPY BOX -->
+        <div class="instruction-box" id="instruction-panel">
+            <div class="instruction-step" id="inst-step">LANGKAH 1 DARI 4</div>
+            <div class="instruction-title" id="inst-title">Memperbaiki Foto Mobil yang Tidak Muncul</div>
+            <div class="instruction-desc" id="inst-desc">
+                Buka aplikasi <b>Termux</b> di HP Anda. Masuk ke folder project, lalu hubungkan atau salin folder penyimpanan gambar agar foto mobil Creta, Ioniq, dsb. langsung muncul rapi di web.
+            </div>
+            <div class="command-strip">
+                <span class="command-text" id="inst-command">cd ~/ProjectSales-main && cp -r storage/app/public/* public/storage/</span>
+                <button class="btn-copy" onclick="copyCommand()">Salin Perintah</button>
+            </div>
+        </div>
+
+        <!-- SCENE NAVIGATION TABS -->
+        <div class="scene-nav">
+            <div class="scene-tab active" onclick="jumpToScene(0)">
+                <div class="scene-tab-num">01. GAMBAR HP</div>
+                <div class="scene-tab-title">Perbaiki Foto Mobil</div>
+            </div>
+            <div class="scene-tab" onclick="jumpToScene(1)">
+                <div class="scene-tab-num">02. CLOUDFLARE</div>
+                <div class="scene-tab-title">Koneksi Domain</div>
+            </div>
+            <div class="scene-tab" onclick="jumpToScene(2)">
+                <div class="scene-tab-num">03. ANTI-SLEEP</div>
+                <div class="scene-tab-title">Aktifkan VPS 24 Jam</div>
+            </div>
+            <div class="scene-tab" onclick="jumpToScene(3)">
+                <div class="scene-tab-num">04. HASIL WEB</div>
+                <div class="scene-tab-title">Buka Domain Sukses</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // VIDEO STATE & TIMELINE DEFINITIONS
+        const TOTAL_DURATION = 100; // in simulated seconds (1:40)
+        let currentTime = 0;
+        let isPlaying = false;
+        let timerInterval = null;
+
+        const scenes = [
+            {
+                start: 0,
+                end: 25,
+                viewId: 'view-scene-1',
+                title: 'Memperbaiki Foto Mobil yang Tidak Muncul',
+                step: 'LANGKAH 1 DARI 4 (TERMUX)',
+                desc: 'Buka Termux di HP. Jalankan perintah copy storage agar foto Creta & Ioniq langsung muncul:',
+                cmd: 'cd ~/ProjectSales-main && cp -r storage/app/public/* public/storage/',
+                indicator: 'Bagian 1: Perbaikan Gambar'
+            },
+            {
+                start: 25,
+                end: 55,
+                viewId: 'view-scene-2',
+                title: 'Mengaktifkan Cloudflare Tunnel hyundaisurabaya.com',
+                step: 'LANGKAH 2 DARI 4 (CLOUDFLARE TUNNEL)',
+                desc: 'Buka tab baru di Termux (geser kiri -> New Session). Jalankan token Cloudflare Tunnel Anda:',
+                cmd: 'cloudflared tunnel run --token <TOKEN_CLOUDFLARE_ANDA>',
+                indicator: 'Bagian 2: Cloudflare Tunnel'
+            },
+            {
+                start: 55,
+                end: 75,
+                viewId: 'view-scene-3',
+                title: 'Mengaktifkan Mode Server 24 Jam di Aplikasi',
+                step: 'LANGKAH 3 DARI 4 (APLIKASI VPS)',
+                desc: 'Buka aplikasi Hyundai Server VPS di HP Anda. Tekan AKTIFKAN MODE SERVER VPS (24 JAM) agar CPU HP tidak tertidur saat layar mati.',
+                cmd: 'Tekan tombol "AKTIFKAN MODE SERVER VPS" di aplikasi HP',
+                indicator: 'Bagian 3: Mode Anti-Sleep HP'
+            },
+            {
+                start: 75,
+                end: 100,
+                viewId: 'view-scene-4',
+                title: 'Hasil Akhir Website di Android',
+                step: 'LANGKAH 4 DARI 4 (SELESAI & ONLINE)',
+                desc: 'Buka https://hyundaisurabaya.com di Chrome Android. Website showroom Hyundai kini tampil sempurna dengan gambar mobil & SSL HTTPS!',
+                cmd: 'https://hyundaisurabaya.com',
+                indicator: 'Bagian 4: Website Sukses Online'
+            }
+        ];
+
+        const btnPlay = document.getElementById('btn-play');
+        const btnReplay = document.getElementById('btn-replay');
+        const currentTimeEl = document.getElementById('current-time');
+        const timelineBar = document.getElementById('timeline-bar');
+        const timelineContainer = document.getElementById('timeline-container');
+        const sceneIndicator = document.getElementById('scene-indicator');
+
+        const instStep = document.getElementById('inst-step');
+        const instTitle = document.getElementById('inst-title');
+        const instDesc = document.getElementById('inst-desc');
+        const instCommand = document.getElementById('inst-command');
+        const sceneTabs = document.querySelectorAll('.scene-tab');
+
+        // ANIMATED ELEMENTS
+        const typingCmd1 = document.getElementById('typing-cmd-1');
+        const outputCmd1 = document.getElementById('output-cmd-1');
+        const typingCmd2 = document.getElementById('typing-cmd-2');
+        const outputCmd2 = document.getElementById('output-cmd-2');
+        const touchPointer = document.getElementById('touch-pointer');
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = Math.floor(sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateScene() {
+            let activeIdx = 0;
+            for (let i = 0; i < scenes.length; i++) {
+                if (currentTime >= scenes[i].start && currentTime < scenes[i].end) {
+                    activeIdx = i;
+                    break;
+                }
+            }
+
+            const currentScene = scenes[activeIdx];
+
+            // Toggle Phone Screen View
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+            const activeView = document.getElementById(currentScene.viewId);
+            if (activeView) activeView.classList.add('active');
+
+            // Update UI Information
+            instStep.textContent = currentScene.step;
+            instTitle.textContent = currentScene.title;
+            instDesc.textContent = currentScene.desc;
+            instCommand.textContent = currentScene.cmd;
+            sceneIndicator.textContent = currentScene.indicator;
+
+            // Highlight Tab
+            sceneTabs.forEach((tab, idx) => {
+                tab.classList.toggle('active', idx === activeIdx);
+            });
+
+            // SCENE SPECIFIC ANIMATIONS
+            if (activeIdx === 0) {
+                // Scene 1: Termux Typing
+                const cmdText = "cp -r storage/app/public/* public/storage/";
+                const progress = (currentTime - 0) / 25;
+                if (progress < 0.6) {
+                    const charCount = Math.floor((progress / 0.6) * cmdText.length);
+                    typingCmd1.innerHTML = `<span style="color:#fff;">$ ${cmdText.substring(0, charCount)}</span><span class="terminal-cursor"></span>`;
+                    outputCmd1.innerHTML = "";
+                } else {
+                    typingCmd1.innerHTML = `<span style="color:#fff;">$ ${cmdText}</span>`;
+                    outputCmd1.innerHTML = `✅ Gambar Creta & Ioniq berhasil disinkronkan!<br>~/ProjectSales-main $ <span class="terminal-cursor"></span>`;
+                }
+            } else if (activeIdx === 1) {
+                // Scene 2: Cloudflared typing
+                const cmdText = "cloudflared tunnel run --token eyJh...hyundai";
+                const progress = (currentTime - 25) / 30;
+                if (progress < 0.5) {
+                    const charCount = Math.floor((progress / 0.5) * cmdText.length);
+                    typingCmd2.innerHTML = `<span style="color:#fff;">$ ${cmdText.substring(0, charCount)}</span><span class="terminal-cursor"></span>`;
+                    outputCmd2.innerHTML = "";
+                } else {
+                    typingCmd2.innerHTML = `<span style="color:#fff;">$ ${cmdText}</span>`;
+                    outputCmd2.innerHTML = `2026-10-31 INF Starting tunnel id=hyundai-surabaya<br><span style="color:#10b981;">2026-10-31 INF Connection registered at edge (SIN)</span><br><span style="color:#38bdf8;">🌐 hyundaisurabaya.com is NOW ONLINE!</span>`;
+                }
+            } else if (activeIdx === 2) {
+                // Scene 3: Touch click simulation
+                const progress = (currentTime - 55) / 20;
+                if (progress > 0.3 && progress < 0.7) {
+                    touchPointer.style.top = "65%";
+                    touchPointer.style.left = "50%";
+                    touchPointer.classList.add('click');
+                } else {
+                    touchPointer.classList.remove('click');
+                }
+            } else {
+                touchPointer.classList.remove('click');
+            }
+        }
+
+        function tick() {
+            if (currentTime >= TOTAL_DURATION) {
+                pause();
+                currentTime = TOTAL_DURATION;
+                return;
+            }
+            currentTime += 0.5;
+            timelineBar.style.width = `${(currentTime / TOTAL_DURATION) * 100}%`;
+            currentTimeEl.textContent = formatTime(currentTime);
+            updateScene();
+        }
+
+        function play() {
+            if (currentTime >= TOTAL_DURATION) currentTime = 0;
+            isPlaying = true;
+            btnPlay.textContent = "⏸";
+            timerInterval = setInterval(tick, 500);
+        }
+
+        function pause() {
+            isPlaying = false;
+            btnPlay.textContent = "▶";
+            clearInterval(timerInterval);
+        }
+
+        btnPlay.addEventListener('click', () => {
+            if (isPlaying) pause();
+            else play();
+        });
+
+        btnReplay.addEventListener('click', () => {
+            currentTime = 0;
+            timelineBar.style.width = '0%';
+            currentTimeEl.textContent = '00:00';
+            updateScene();
+            play();
+        });
+
+        timelineContainer.addEventListener('click', (e) => {
+            const rect = timelineContainer.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            currentTime = Math.floor(pos * TOTAL_DURATION);
+            timelineBar.style.width = `${pos * 100}%`;
+            currentTimeEl.textContent = formatTime(currentTime);
+            updateScene();
+        });
+
+        function jumpToScene(idx) {
+            currentTime = scenes[idx].start;
+            timelineBar.style.width = `${(currentTime / TOTAL_DURATION) * 100}%`;
+            currentTimeEl.textContent = formatTime(currentTime);
+            updateScene();
+            if (!isPlaying) play();
+        }
+
+        function copyCommand() {
+            const text = instCommand.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                const orig = btn.textContent;
+                btn.textContent = "Tersalin! ✓";
+                setTimeout(() => btn.textContent = orig, 2000);
+            });
+        }
+
+        // AUTO START ON LOAD
+        updateScene();
+        setTimeout(play, 800);
+    </script>
+</body>
+</html>

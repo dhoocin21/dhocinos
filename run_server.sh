@@ -16,8 +16,36 @@ else
     echo "✅ MariaDB Database sudah berjalan."
 fi
 
-# 2. Cek database
+# 2. Cek database & storage link
 mariadb -u root -e "CREATE DATABASE IF NOT EXISTS hyundaisurabayadb;" > /dev/null 2>&1
+
+echo "📁 Menyiapkan folder penyimpanan gambar..."
+# Hapus broken symlink / reparse point jika ada
+if [ -L "public/storage" ] || [ -f "public/storage" ]; then
+    if [ ! -e "public/storage" ] || [ ! -d "public/storage/cars" ]; then
+        rm -rf public/storage
+    fi
+fi
+
+# Pastikan folder penyimpanan gambar terhubung atau disalin
+if [ ! -d "public/storage/cars" ]; then
+    rm -rf public/storage
+    # Coba buat symlink standar Linux
+    php artisan storage:link > /dev/null 2>&1
+    
+    # Jika symlink tidak berhasil (karena storage Android), salin fisik
+    if [ ! -d "public/storage/cars" ]; then
+        rm -rf public/storage
+        mkdir -p public/storage
+        cp -rf storage/app/public/* public/storage/ > /dev/null 2>&1
+    fi
+fi
+
+# Jika public/storage adalah folder fisik biasa (bukan symlink), sinkronkan file terbaru
+if [ -d "public/storage" ] && [ ! -L "public/storage" ]; then
+    cp -rf storage/app/public/* public/storage/ > /dev/null 2>&1
+fi
+
 
 # 3. Jalankan Cloudflare Tunnel di background untuk Domain Publik Gratis
 echo "🌐 Menghubungkan Cloudflare Tunnel (Domain Publik Bebas Akses Tanpa IP Publik)..."
