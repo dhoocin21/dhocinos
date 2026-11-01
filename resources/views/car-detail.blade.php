@@ -65,12 +65,17 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
-            <!-- Gallery Section (Only gallery photos, NOT thumbnail) -->
-            @if($car->images && count($car->images) > 0)
+            <!-- Gallery Section -->
+            @php
+                $detailImages = (!empty($car->images) && is_array($car->images) && count($car->images) > 0)
+                    ? $car->images
+                    : array_values(array_filter([$car->hero_image, $car->image]));
+            @endphp
+            @if(count($detailImages) > 0)
             <div x-data="{ 
                 activeIndex: 0,
                 images: [
-                    @foreach($car->images as $img)
+                    @foreach($detailImages as $img)
                         '{{ asset('storage/' . $img) }}',
                     @endforeach
                 ],
@@ -83,9 +88,10 @@
                     }
                 }
             }">
-                <div class="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50 mb-6 shadow-lg relative group">
-                    <img :src="activeImage" alt="Car Gallery" class="w-full h-full object-cover transition-all duration-700">
+                <div class="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50 mb-6 shadow-lg relative group flex items-center justify-center p-4">
+                    <img :src="activeImage" alt="{{ $car->name }}" class="w-full h-full object-contain transition-all duration-700">
                     
+                    @if(count($detailImages) > 1)
                     <!-- Slide Counter -->
                     <div class="absolute top-6 right-6 bg-black/50 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full border border-white/10 tracking-widest uppercase">
                          <span x-text="activeIndex + 1"></span> / <span x-text="images.length"></span>
@@ -99,22 +105,25 @@
                                     :class="activeIndex === index ? 'w-6 bg-blue-500' : 'w-1.5 bg-white/50 hover:bg-white'"></button>
                         </template>
                     </div>
+                    @endif
                 </div>
                 
+                @if(count($detailImages) > 1)
                 <!-- Thumbnails -->
                 <div class="grid grid-cols-4 sm:grid-cols-5 gap-3">
                     <template x-for="(img, index) in images" :key="index">
                         <button @click="activeIndex = index" 
-                                class="aspect-square rounded-xl overflow-hidden border-2 transition-all"
+                                class="aspect-square rounded-xl overflow-hidden border-2 transition-all p-1 bg-gray-50"
                                 :class="activeIndex === index ? 'border-blue-600 scale-95 shadow-inner' : 'border-transparent opacity-60 hover:opacity-100'">
-                            <img :src="img" class="w-full h-full object-cover">
+                            <img :src="img" class="w-full h-full object-contain">
                         </button>
                     </template>
                 </div>
+                @endif
             </div>
             @else
             <div class="flex items-center justify-center bg-gray-50 rounded-3xl aspect-[4/3]">
-                <p class="text-gray-300 text-lg">Belum ada foto galeri</p>
+                <img src="{{ asset('assets/images/hyundai_logo.png') }}" class="h-12 opacity-30" alt="Hyundai">
             </div>
             @endif
 

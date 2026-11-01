@@ -27,21 +27,13 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        if (env('SEED_MOCK_DATA', false) || app()->environment('local')) {
-            User::updateOrCreate(['email' => 'sales@autoshow.id'], [
-                'name' => 'Sales Demo',
-                'password' => bcrypt('password'),
-                'role' => 'sales',
-                'plan' => 'regular',
-                'email_verified_at' => now(),
-            ]);
+        $this->call([
+            \Database\Seeders\ProjectSeeder::class,
+            \Database\Seeders\UpdateCarSpecificationsSeeder::class,
+            \Database\Seeders\PostSeeder::class,
+            \Database\Seeders\AnalyticsSeeder::class,
+            \Database\Seeders\TestimonialSeeder::class,
+        ]);
 
-            $this->call([
-                \Database\Seeders\ProjectSeeder::class,
-                \Database\Seeders\PostSeeder::class,
-                \Database\Seeders\AnalyticsSeeder::class,
-                \Database\Seeders\TestimonialSeeder::class,
-            ]);
-        }
     }
 }
