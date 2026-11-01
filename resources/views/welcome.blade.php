@@ -573,7 +573,7 @@
     </section>
 
     <!-- EV Savings Calculator Section -->
-    <section id="ev-savings" class="py-12 md:py-20 bg-[#001026] text-white overflow-hidden relative">
+    <section id="ev-savings" class="py-12 md:py-20 text-white overflow-hidden relative" style="background: #020b18;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <livewire:ev-savings-calculator />
         </div>
@@ -583,43 +583,82 @@
     @if($consultant)
     <section id="consultant" class="py-12 md:py-16 bg-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-3xl overflow-hidden shadow-lg flex flex-col md:flex-row border border-gray-100">
-                <div class="md:w-1/2 relative h-80 md:h-auto overflow-hidden">
-                    <img src="{{ $consultant->photo ? asset('storage/'.$consultant->photo) : '' }}" 
-                         alt="Consultant" 
-                         class="w-full h-full object-cover">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-xl flex flex-col md:flex-row border border-gray-100">
+                <div class="md:w-1/2 relative h-80 md:h-auto overflow-hidden bg-slate-900 flex items-center justify-center">
+                    @php
+                        $consultantPhotoUrl = null;
+                        if (!empty($consultant->photo) && file_exists(storage_path('app/public/' . $consultant->photo))) {
+                            $consultantPhotoUrl = asset('storage/' . $consultant->photo);
+                        } elseif (file_exists(storage_path('app/public/consultants/01KQTT088A5H2Y54P3D3V2VSK9.png'))) {
+                            $consultantPhotoUrl = asset('storage/consultants/01KQTT088A5H2Y54P3D3V2VSK9.png');
+                        } elseif (file_exists(storage_path('app/public/consultants/01KRWBT0RARNH4AQSBRWBMGQEB.jpg'))) {
+                            $consultantPhotoUrl = asset('storage/consultants/01KRWBT0RARNH4AQSBRWBMGQEB.jpg');
+                        }
+                    @endphp
+                    @if($consultantPhotoUrl)
+                        <img src="{{ $consultantPhotoUrl }}" 
+                             alt="{{ $consultant->name ?? 'Official Consultant' }}" 
+                             class="w-full h-full object-cover">
+                    @else
+                        <!-- Elegant Official Brand Fallback Card -->
+                        <div class="w-full h-full min-h-[340px] bg-gradient-to-tr from-[#001738] via-[#002c5f] to-[#004080] flex flex-col items-center justify-center p-8 text-white text-center">
+                            <div class="w-24 h-24 rounded-full bg-white/10 border-2 border-cyan-400/50 flex items-center justify-center text-cyan-300 mb-4 shadow-xl shadow-cyan-500/20">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </div>
+                            <span class="text-[11px] font-black uppercase tracking-[0.25em] text-cyan-400 mb-1">Official Sales Consultant</span>
+                            <span class="text-2xl font-black text-white">{{ $consultant->name ?? 'OFFICIAL HYUNDAI SURABAYA' }}</span>
+                            <span class="text-xs text-blue-200/80 mt-1">Dealer Resmi Hyundai Gowa HR Muhammad</span>
+                        </div>
+                    @endif
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white md:hidden">
-                        <h3 class="text-2xl font-bold">{{ $consultant->name ?? 'Sales Consultant' }}</h3>
-                        <p class="text-blue-400 text-sm tracking-widest uppercase">Expert Advisor</p>
+                        <h3 class="text-2xl font-bold flex items-center gap-2">
+                            <span>{{ $consultant->name ?? 'Sales Consultant' }}</span>
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white shrink-0">
+                                <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            </span>
+                        </h3>
+                        <p class="text-blue-400 text-xs tracking-widest uppercase font-bold mt-1">Verified Sales Consultant</p>
                     </div>
                 </div>
-                <div class="md:w-1/2 p-10 md:p-16 flex flex-col justify-center">
-                    <h2 class="text-blue-600 font-bold tracking-widest uppercase mb-4 text-sm">Sales Consultant</h2>
-                    <h3 class="text-4xl font-black mb-6">{{ $consultant->name ?? 'Hubungi Konsultan Kami' }}</h3>
+                <div class="md:w-1/2 p-8 md:p-14 flex flex-col justify-center">
+                    <h2 class="text-blue-600 font-black tracking-widest uppercase mb-3 text-xs flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                        Sales Consultant
+                    </h2>
+                    <h3 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 flex items-center flex-wrap gap-2.5 leading-tight">
+                        <span>{{ $consultant->name ?? 'OFFICIAL HYUNDAI SURABAYA' }}</span>
+                        <!-- Verified Blue Checkmark Badge -->
+                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white shadow-sm ring-4 ring-blue-100 shrink-0" title="Akun Resmi Terverifikasi">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </span>
+                    </h3>
                     
-                    <div class="space-y-6 mb-10">
+                    <div class="space-y-5 mb-8">
                         <div class="flex items-start">
-                            <div class="bg-blue-50 p-3 rounded-xl mr-4 text-blue-600">
+                            <div class="bg-blue-50 p-3 rounded-2xl mr-4 text-blue-600 shrink-0 border border-blue-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold uppercase tracking-wider text-gray-400">Lokasi Dealer</p>
-                                <p class="text-gray-600">{{ $consultant->address ?? 'Jl. Mayjen HR. Muhammad No.35C, Surabaya' }}</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Lokasi Dealer</p>
+                                <p class="text-gray-700 text-sm font-semibold mt-0.5">{{ $consultant->address ?? 'Jl. Mayjen HR. Muhammad No.35C, Kec. Sukomanunggal, Surabaya.' }}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <div class="bg-green-50 p-3 rounded-xl mr-4 text-green-600">
+                            <div class="bg-emerald-50 p-3 rounded-2xl mr-4 text-emerald-600 shrink-0 border border-emerald-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold uppercase tracking-wider text-gray-400">WhatsApp</p>
-                                <p class="text-gray-600">{{ $consultant->phone ?? '0812-3604-6363' }}</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400">WhatsApp</p>
+                                <p class="text-gray-700 text-sm font-semibold mt-0.5">{{ $consultant->phone ?? '0813-3013-5013' }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <a href="{{ route('track.wa') }}" class="bg-[#002c5f] text-white text-center py-4 rounded-xl font-bold text-lg hover:bg-blue-800 transition-all flex items-center justify-center gap-3">
-                         Hubungi {{ explode(' ', $consultant->name ?? 'Konsultan')[0] }}
+                    <a href="{{ route('track.wa') }}" class="bg-[#002c5f] hover:bg-blue-800 text-white text-center py-4 px-6 rounded-2xl font-black text-sm uppercase tracking-wider transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-3">
+                        <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                        Hubungi {{ $consultant->name ?? 'OFFICIAL' }}
                     </a>
                 </div>
             </div>
