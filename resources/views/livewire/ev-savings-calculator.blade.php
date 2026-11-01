@@ -105,14 +105,17 @@
                         @foreach($evModels as $key => $model)
                             <button type="button" 
                                 wire:click="$set('selectedModel', '{{ $key }}')"
-                                class="ev-card-btn relative p-4 rounded-2xl text-left {{ $selectedModel === $key ? 'active' : '' }}">
-                                @if(isset($model['badge']))
-                                    <span class="absolute top-2.5 right-2.5 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full {{ $selectedModel === $key ? 'bg-cyan-400 text-slate-950 shadow-sm' : 'bg-white/15 text-slate-200' }}">
-                                        {{ $model['badge'] }}
-                                    </span>
-                                @endif
-                                <div class="font-black text-sm text-white pr-4 leading-tight">{{ $model['name'] }}</div>
-                                <div class="text-[11px] text-cyan-300 font-bold mt-1.5 flex items-center gap-1">
+                                class="ev-card-btn flex flex-col justify-between p-4 rounded-2xl text-left transition-all duration-200 min-h-[105px] {{ $selectedModel === $key ? 'active' : '' }}">
+                                <div class="flex items-center justify-between gap-1 mb-2">
+                                    <span class="text-[9px] font-extrabold uppercase tracking-widest text-slate-400">HYUNDAI EV</span>
+                                    @if(isset($model['badge']))
+                                        <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 {{ $selectedModel === $key ? 'bg-cyan-400 text-slate-950 shadow-sm' : 'bg-white/10 text-slate-300 border border-white/10' }}">
+                                            {{ $model['badge'] }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="font-black text-sm text-white leading-tight mt-auto">{{ $model['name'] }}</div>
+                                <div class="text-[11px] text-cyan-300 font-bold mt-1.5 flex items-center gap-1.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
                                     {{ $model['range'] }}
                                 </div>

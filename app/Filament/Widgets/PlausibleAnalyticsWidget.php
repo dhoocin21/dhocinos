@@ -77,8 +77,11 @@ class PlausibleAnalyticsWidget extends Widget
         $prevBounce = $prevVisits > 0 ? (($prevVisits - $prevWa) / $prevVisits) * 100 : 0;
 
         // --- PEAK HOURS CALCULATION ---
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
+        $hourExpr = $isSqlite ? "strftime('%H', created_at)" : "HOUR(created_at)";
+
         $hourlyDistribution = SiteLog::where('log_type', 'visit')
-            ->select(DB::raw('HOUR(created_at) as hour_of_day'), DB::raw('count(*) as count'))
+            ->select(DB::raw("{$hourExpr} as hour_of_day"), DB::raw('count(*) as count'))
             ->groupBy('hour_of_day')
             ->orderBy('count', 'desc')
             ->first();

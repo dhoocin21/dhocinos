@@ -38,15 +38,42 @@ class LandingPageController extends Controller
         return view('welcome', compact('cars', 'galleries', 'consultant', 'video', 'popupVideo', 'posts', 'testimonials', 'activeEvent'));
     }
 
-    public function show(Car $car)
+    public function show($slug)
     {
+        if ($slug === 'stargazer-x') {
+            return redirect()->route('car.show', ['slug' => 'stargazer-cartenz-x'], 301);
+        }
+
+        $car = Car::where('slug', $slug)->firstOrFail();
         $consultant = Consultant::first();
         return view('car-detail', compact('car', 'consultant'));
     }
 
     public function pricelist()
     {
-        $cars = Car::where('is_available', true)->get();
+        $orderedSlugs = [
+            'stargazer-cartenz',
+            'stargazer-cartenz-x',
+            'stargazer',
+            'ioniq-9',
+            'the-new-creta',
+            'creta-n-line',
+            'palisade',
+            'palisade-hev',
+            'santa-fe',
+            'staria',
+            'ioniq-5',
+            'kona-electric',
+        ];
+
+        $cars = Car::where('is_available', true)
+            ->get()
+            ->sortBy(function ($car) use ($orderedSlugs) {
+                $pos = array_search($car->slug, $orderedSlugs);
+                return $pos !== false ? $pos : 999;
+            })
+            ->values();
+
         $consultant = Consultant::first();
         return view('pricelist', compact('cars', 'consultant'));
     }

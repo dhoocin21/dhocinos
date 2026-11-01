@@ -10,67 +10,86 @@ class OfficialPricelistSeeder extends Seeder
 {
     public function run(): void
     {
+        // Cleanup old discontinued stargazer-x if present
+        Car::where('slug', 'stargazer-x')->delete();
+
         $pricelist = [
             [
                 'name' => 'STARGAZER Cartenz',
+                'slug' => 'stargazer-cartenz',
                 'category' => 'MPV',
                 'price' => 245800000,
                 'variants' => [
-                    ['name' => 'Trend MT', 'price' => 245800000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Trend IVT', 'price' => 260800000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Style IVT', 'price' => 275550000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Smart Non HSS IVT', 'price' => 289350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Smart HSS IVT', 'price' => 299350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Prime Non HSS IVT', 'price' => 312350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Prime HSS IVT', 'price' => 322350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
+                    ['name' => 'Trend MT', 'price' => 245800000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Trend IVT', 'price' => 260800000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Style IVT', 'price' => 275550000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Smart Non HSS IVT', 'price' => 289350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Smart HSS IVT', 'price' => 299350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Prime Non HSS IVT', 'price' => 312350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Prime HSS IVT', 'price' => 322350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
                 ],
             ],
             [
                 'name' => 'STARGAZER Cartenz X',
-                'category' => 'MPV',
+                'slug' => 'stargazer-cartenz-x',
+                'category' => 'Crossover',
                 'price' => 354400000,
                 'variants' => [
-                    ['name' => 'Style IVT', 'price' => 354400000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Prime Package IVT', 'price' => 389400000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
+                    ['name' => 'Style IVT', 'price' => 354400000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Prime Package IVT', 'price' => 389400000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
                 ],
             ],
             [
                 'name' => 'STARGAZER',
+                'slug' => 'stargazer',
                 'category' => 'MPV',
                 'price' => 260450000,
                 'variants' => [
-                    ['name' => 'Active+ MT Steel Wheel', 'price' => 260450000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Active+ MT', 'price' => 262950000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Active+ IVT Steel Wheel', 'price' => 273800000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Active+ IVT', 'price' => 276300000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Essential MT', 'price' => 275050000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Essential IVT', 'price' => 286750000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
+                    ['name' => 'Active+ MT Steel Wheel', 'price' => 260450000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Active+ MT', 'price' => 262950000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Active+ IVT Steel Wheel', 'price' => 273800000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Active+ IVT', 'price' => 276300000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Essential MT', 'price' => 275050000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Essential IVT', 'price' => 286750000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                ],
+            ],
+            [
+                'name' => 'IONIQ 9',
+                'slug' => 'ioniq-9',
+                'category' => 'EV',
+                'price' => 1547000000,
+                'variants' => [
+                    ['name' => 'Calligraphy AWD 6P Swivel Seat', 'price' => 1547000000, 'transmission' => 'Dual Motor AWD', 'engine' => 'Electric 110.3 kWh Battery'],
+                    ['name' => 'Calligraphy AWD 6P Power Seat', 'price' => 1557000000, 'transmission' => 'Dual Motor AWD', 'engine' => 'Electric 110.3 kWh Battery'],
                 ],
             ],
             [
                 'name' => 'CRETA',
+                'slug' => 'the-new-creta',
                 'category' => 'SUV',
                 'price' => 312650000,
                 'variants' => [
-                    ['name' => 'Active 1.5 MT', 'price' => 312650000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Trend 1.5 MT', 'price' => 345450000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Trend 1.5 IVT', 'price' => 366500000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Style 1.5 IVT', 'price' => 412200000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Prime 1.5 IVT 1 Tone', 'price' => 443350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
-                    ['name' => 'Alpha', 'price' => 459850000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L'],
+                    ['name' => 'Active 1.5 MT', 'price' => 312650000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Trend 1.5 MT', 'price' => 345450000, 'transmission' => 'Manual 6-Speed', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Trend 1.5 IVT', 'price' => 366500000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Style 1.5 IVT', 'price' => 412200000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Prime 1.5 IVT 1 Tone', 'price' => 443350000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
+                    ['name' => 'Alpha', 'price' => 459850000, 'transmission' => 'IVT', 'engine' => 'Smartstream 1.5L MPI'],
                 ],
             ],
             [
                 'name' => 'CRETA N Line',
+                'slug' => 'creta-n-line',
                 'category' => 'SUV',
                 'price' => 477850000,
                 'variants' => [
-                    ['name' => 'N Line', 'price' => 477850000, 'transmission' => 'Dual Clutch / IVT', 'engine' => 'Turbocharged Engine'],
+                    ['name' => 'N Line', 'price' => 477850000, 'transmission' => 'Dual Clutch / IVT', 'engine' => '1.5 Turbo GDI'],
                     ['name' => 'Turbo', 'price' => 525850000, 'transmission' => 'DCT 7-Speed', 'engine' => '1.5 Turbo GDI'],
                 ],
             ],
             [
                 'name' => 'PALISADE',
+                'slug' => 'palisade',
                 'category' => 'SUV',
                 'price' => 952800000,
                 'variants' => [
@@ -82,21 +101,26 @@ class OfficialPricelistSeeder extends Seeder
             ],
             [
                 'name' => 'PALISADE HEV',
+                'slug' => 'palisade-hev',
                 'category' => 'HEV',
                 'price' => 1136600000,
                 'variants' => [
                     ['name' => 'Signature', 'price' => 1136600000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo'],
                     ['name' => 'Calligraphy', 'price' => 1309400000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo'],
                     ['name' => 'Calligraphy AWD', 'price' => 1396500000, 'transmission' => 'AWD', 'engine' => 'Hybrid Turbo'],
+                    ['name' => 'New MY 27 Signature', 'price' => 1138700000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo (MY27)'],
+                    ['name' => 'New MY 27 Calligraphy', 'price' => 1325700000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo (MY27)'],
+                    ['name' => 'New MY 27 Calligraphy AWD', 'price' => 1412700000, 'transmission' => 'HTRAC AWD', 'engine' => 'Hybrid Turbo (MY27)'],
                 ],
             ],
             [
                 'name' => 'SANTA FE HEV',
+                'slug' => 'santa-fe',
                 'category' => 'HEV',
                 'price' => 740500000,
                 'variants' => [
-                    ['name' => 'G 2.5 6AT Prime', 'price' => 740500000, 'transmission' => 'Automatic 6-Speed', 'engine' => 'Smartstream 2.5L'],
-                    ['name' => 'G 2.5 6AT Calligraphy', 'price' => 830000000, 'transmission' => 'Automatic 6-Speed', 'engine' => 'Smartstream 2.5L'],
+                    ['name' => 'G 2.5 8AT Prime', 'price' => 740500000, 'transmission' => 'Automatic 8-Speed', 'engine' => 'Smartstream 2.5L GDi'],
+                    ['name' => 'G 2.5 8AT Calligraphy', 'price' => 830000000, 'transmission' => 'Automatic 8-Speed', 'engine' => 'Smartstream 2.5L GDi'],
                     ['name' => 'HEV Prime', 'price' => 832100000, 'transmission' => 'Hybrid Automatic', 'engine' => '1.6T-GDi Hybrid'],
                     ['name' => 'HEV Calligraphy', 'price' => 919400000, 'transmission' => 'Hybrid Automatic', 'engine' => '1.6T-GDi Hybrid'],
                     ['name' => 'HEV XRT', 'price' => 937100000, 'transmission' => 'Hybrid AWD', 'engine' => '1.6T-GDi Hybrid'],
@@ -104,6 +128,7 @@ class OfficialPricelistSeeder extends Seeder
             ],
             [
                 'name' => 'STARIA',
+                'slug' => 'staria',
                 'category' => 'Luxury MPV',
                 'price' => 966700000,
                 'variants' => [
@@ -113,6 +138,7 @@ class OfficialPricelistSeeder extends Seeder
             ],
             [
                 'name' => 'IONIQ 5',
+                'slug' => 'ioniq-5',
                 'category' => 'EV',
                 'price' => 813500000,
                 'variants' => [
@@ -124,6 +150,7 @@ class OfficialPricelistSeeder extends Seeder
             ],
             [
                 'name' => 'KONA Electric',
+                'slug' => 'kona-electric',
                 'category' => 'EV',
                 'price' => 570250000,
                 'variants' => [
@@ -135,24 +162,14 @@ class OfficialPricelistSeeder extends Seeder
                     ['name' => 'N Line', 'price' => 694550000, 'transmission' => 'Single Speed', 'engine' => 'Electric N Line Performance'],
                 ],
             ],
-            [
-                'name' => 'IONIQ 9',
-                'category' => 'EV',
-                'price' => 1547000000,
-                'variants' => [
-                    ['name' => 'Calligraphy AWD 6P Swivel Seat', 'price' => 1547000000, 'transmission' => 'Dual Motor AWD', 'engine' => 'Electric 110.3 kWh Battery'],
-                    ['name' => 'Calligraphy AWD 6P Power Seat', 'price' => 1557000000, 'transmission' => 'Dual Motor AWD', 'engine' => 'Electric 110.3 kWh Battery'],
-                ],
-            ],
         ];
 
         foreach ($pricelist as $item) {
-            $existing = Car::where('name', 'LIKE', '%' . $item['name'] . '%')
-                ->orWhere('name', 'LIKE', '%' . str_replace([' Cartenz', ' X', ' HEV', ' The New ', 'New '], '', $item['name']) . '%')
-                ->first();
+            $existing = Car::where('slug', $item['slug'])->first();
 
             if ($existing) {
                 $existing->update([
+                    'name' => $item['name'],
                     'category' => $item['category'],
                     'price' => $item['price'],
                     'variants' => $item['variants'],
@@ -160,7 +177,7 @@ class OfficialPricelistSeeder extends Seeder
             } else {
                 Car::create([
                     'name' => $item['name'],
-                    'slug' => Str::slug($item['name']),
+                    'slug' => $item['slug'],
                     'category' => $item['category'],
                     'price' => $item['price'],
                     'description' => "Unit resmi {$item['name']} OTR Surabaya dengan garansi resmi dan penawaran terbaik.",

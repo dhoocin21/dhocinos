@@ -4,6 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
+    <!-- Dark Mode Theme Initialization (FOUC Prevention) -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    
     <!-- Favicon -->
     @if($logo = \App\Models\Setting::get('site_logo'))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $logo) }}">
@@ -211,10 +220,40 @@
         .animate-marquee:hover, .animate-marquee-reverse:hover {
             animation-play-state: paused;
         }
+
+        /* Global Dark Mode Rules for Homepage */
+        .dark body {
+            background-color: #070d19 !important;
+            color: #f1f5f9 !important;
+        }
+        .dark .bg-white {
+            background-color: #0c1527 !important;
+        }
+        .dark .bg-gray-50, .dark .bg-slate-50, .dark .bg-neutral-50 {
+            background-color: #080f1d !important;
+        }
+        .dark .bg-gray-100 {
+            background-color: #0f1c34 !important;
+        }
+        .dark .text-gray-900, .dark .text-[#002c5f] {
+            color: #ffffff !important;
+        }
+        .dark .text-gray-800 {
+            color: #f1f5f9 !important;
+        }
+        .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500 {
+            color: #94a3b8 !important;
+        }
+        .dark .border-gray-100, .dark .border-gray-200 {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        .dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg, .dark .shadow-xl {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+        }
     </style>
     @livewireStyles
 </head>
-<body class="bg-white text-gray-900 antialiased overflow-x-hidden">
+<body class="bg-white dark:bg-[#070d19] text-gray-900 dark:text-slate-100 antialiased overflow-x-hidden transition-colors duration-300">
     
     <x-navbar />
 
