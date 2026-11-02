@@ -25,6 +25,21 @@ class LicenseStatusWidget extends Widget
 
     public function getLicenseInfo(): array
     {
+        $user = auth()->user();
+        if ($user && $user->role === 'developer') {
+            return [
+                'plan' => 'developer',
+                'is_developer' => true,
+                'is_pro' => true,
+                'expired_at' => 'LIFETIME ACCESS',
+                'is_expired' => false,
+                'is_near_expiry' => false,
+                'days_left' => null,
+                'status_label' => 'ACTIVE',
+                'status_color' => 'success',
+            ];
+        }
+
         $data = Setting::getLicenseData();
         $expiry = Carbon::parse($data['expired_at'] ?? now());
         $now = now();
@@ -36,6 +51,7 @@ class LicenseStatusWidget extends Widget
 
         return [
             'plan' => $realPlan,
+            'is_developer' => false,
             'is_pro' => $realPlan === 'pro',
             'expired_at' => $expiry->format('d M Y'),
             'is_expired' => $isExpired,

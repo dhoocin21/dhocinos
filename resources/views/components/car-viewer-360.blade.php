@@ -218,7 +218,57 @@
              },
              handlePointerUp() {
                  this.isDragging = false;
-             }
+             },
+              scrollPills(direction) {
+                  const el = this.$refs.pillContainer;
+                  if (!el) return;
+                  const amount = direction === 'left' ? -350 : 350;
+                  el.scrollBy({ left: amount, behavior: 'smooth' });
+              },
+              init() {
+                  this.initPillDrag();
+              },
+              initPillDrag() {
+                  const slider = this.$refs.pillContainer;
+                  if (!slider) return;
+                  let isDown = false;
+                  let startX = 0;
+                  let scrollLeft = 0;
+                  let dragged = false;
+
+                  slider.addEventListener('mousedown', (e) => {
+                      isDown = true;
+                      dragged = false;
+                      slider.classList.add('cursor-grabbing');
+                      startX = e.pageX - slider.offsetLeft;
+                      scrollLeft = slider.scrollLeft;
+                  });
+
+                  window.addEventListener('mouseup', () => {
+                      if (!isDown) return;
+                      isDown = false;
+                      slider.classList.remove('cursor-grabbing');
+                      setTimeout(() => { dragged = false; }, 60);
+                  });
+
+                  slider.addEventListener('mousemove', (e) => {
+                      if (!isDown) return;
+                      e.preventDefault();
+                      const x = e.pageX - slider.offsetLeft;
+                      const walk = (x - startX) * 1.5;
+                      if (Math.abs(walk) > 5) {
+                          dragged = true;
+                      }
+                      slider.scrollLeft = scrollLeft - walk;
+                  });
+
+                  slider.addEventListener('click', (e) => {
+                      if (dragged) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                      }
+                  }, true);
+              }
          }">
         
         <!-- Section Header -->
@@ -243,11 +293,34 @@
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     Pilih Unit Kendaraan:
                 </span>
-                <span class="text-[11px] text-cyan-400/80">Geser untuk melihat semua unit ({{ count($carsData) }} Unit)</span>
+                <div class="flex items-center gap-2.5">
+                    <span class="text-[11px] text-cyan-400/90 hidden sm:inline">Geser mouse / klik panah ({{ count($carsData) }} Unit)</span>
+                    <div class="flex items-center gap-1.5">
+                        <button 
+                            type="button" 
+                            @click="scrollPills('left')" 
+                            class="w-7 h-7 rounded-lg bg-slate-900 border border-white/20 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 flex items-center justify-center transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer" 
+                            title="Geser Kiri"
+                            aria-label="Geser Kiri">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button 
+                            type="button" 
+                            @click="scrollPills('right')" 
+                            class="w-7 h-7 rounded-lg bg-slate-900 border border-white/20 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 flex items-center justify-center transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer" 
+                            title="Geser Kanan"
+                            aria-label="Geser Kanan">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Scrollable Pill Bar -->
-            <div class="flex items-center gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar select-none" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <!-- Scrollable & Draggable Pill Bar -->
+            <div 
+                x-ref="pillContainer"
+                class="flex items-center gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar select-none cursor-grab active:cursor-grabbing scroll-smooth" 
+                style="scrollbar-width: none; -ms-overflow-style: none;">
                 <template x-for="car in cars" :key="car.slug">
                     <button 
                         type="button"

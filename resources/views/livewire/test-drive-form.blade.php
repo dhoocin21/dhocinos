@@ -9,38 +9,38 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div class="space-y-2">
-                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Nama Lengkap</label>
+                <label class="text-[11px] font-black text-gray-700 dark:text-gray-200 uppercase tracking-widest px-1">Nama Lengkap</label>
                 <input type="text" wire:model="name" placeholder="Sesuai KTP" 
-                       class="w-full bg-gray-50 border-transparent rounded-2xl p-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all shadow-sm">
+                       class="w-full bg-gray-50 dark:bg-slate-800 text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-semibold focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm">
             </div>
             <div class="space-y-2">
-                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Nomor WhatsApp</label>
+                <label class="text-[11px] font-black text-gray-700 dark:text-gray-200 uppercase tracking-widest px-1">Nomor WhatsApp</label>
                 <input type="tel" wire:model="phone" placeholder="0812xxxx" 
-                       class="w-full bg-gray-50 border-transparent rounded-2xl p-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all shadow-sm">
+                       class="w-full bg-gray-50 dark:bg-slate-800 text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-semibold focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm">
             </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div class="space-y-2">
-                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Pilih Unit Mobil</label>
-                <select wire:model="car_id" class="w-full bg-gray-50 border-transparent rounded-2xl p-4 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all shadow-sm">
-                    <option value="">-- Pilih Unit --</option>
+                <label class="text-[11px] font-black text-gray-700 dark:text-gray-200 uppercase tracking-widest px-1">Pilih Unit Mobil</label>
+                <select wire:model="car_id" class="w-full bg-gray-50 dark:bg-slate-800 text-gray-950 dark:text-white border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-bold focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm">
+                    <option value="" class="text-gray-500 dark:text-gray-400">-- Pilih Unit --</option>
                     @foreach($cars as $car)
-                        <option value="{{ $car->id }}">{{ $car->name }}</option>
+                        <option value="{{ $car->id }}" class="text-gray-900 dark:text-white bg-white dark:bg-slate-900">{{ $car->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="space-y-2">
-                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Rencana Tanggal</label>
+                <label class="text-[11px] font-black text-gray-700 dark:text-gray-200 uppercase tracking-widest px-1">Rencana Tanggal</label>
                 <input type="date" wire:model="booking_date" 
-                       class="w-full bg-gray-50 border-transparent rounded-2xl p-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all shadow-sm">
+                       class="w-full bg-gray-50 dark:bg-slate-800 text-gray-950 dark:text-white border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-semibold focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm">
             </div>
         </div>
 
         <div class="space-y-2">
-            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Catatan Tambahan (Opsional)</label>
+            <label class="text-[11px] font-black text-gray-700 dark:text-gray-200 uppercase tracking-widest px-1">Catatan Tambahan (Opsional)</label>
             <textarea wire:model="notes" placeholder="Tulis permintaan khusus Anda di sini..." 
-                      class="w-full bg-gray-50 border-transparent rounded-2xl p-4 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all h-24 shadow-sm"></textarea>
+                      class="w-full bg-gray-50 dark:bg-slate-800 text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-semibold focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all h-24 shadow-sm"></textarea>
         </div>
     </div>
 

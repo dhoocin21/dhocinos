@@ -1,4 +1,4 @@
-<div class="fixed bottom-6 right-6 z-50">
+<div class="fixed {{ $isOpen ? 'bottom-6 right-4 sm:bottom-8 sm:right-8 z-50' : 'bottom-24 right-4 sm:bottom-28 sm:right-8 z-40' }}">
     <!-- Floating Trigger Button -->
     @if(!$isOpen)
         <button 

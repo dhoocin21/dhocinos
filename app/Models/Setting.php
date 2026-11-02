@@ -47,6 +47,11 @@ class Setting extends Model
 
     public static function isLicenseActive(): bool
     {
+        // Super Developer always has permanent lifetime access without expiration
+        if (auth()->check() && auth()->user()->role === 'developer') {
+            return true;
+        }
+
         $data = self::getLicenseData();
         $expiry = \Illuminate\Support\Carbon::parse($data['expired_at'] ?? '2000-01-01');
         return $expiry->isFuture();

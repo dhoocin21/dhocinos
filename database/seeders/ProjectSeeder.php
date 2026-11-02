@@ -63,7 +63,7 @@ class ProjectSeeder extends Seeder
                 'description' => 'Unleash the X in you. Perpaduan sempurna antara kelegaan MPV keluarga dengan ketangguhan karakter Crossover SUV bertenaga.',
                 'features' => ['Bold Crossover Design', 'High Ground Clearance 200mm', 'Premium Roof Rails', 'BOSE Audio', 'Driver Ventilated Seat'],
                 'image' => 'cars/stargazer-cartenz-x.png',
-                'hero_image' => 'cars/hero/stargazer_cartenz_official_hero.jpg',
+                'hero_image' => 'cars/hero/stargazer_cartenz_x_official_hero.jpg',
                 'images' => ['cars/gallery/stargazer_cartenz_interior.jpg'],
                 'is_available' => true,
                 'variants' => [

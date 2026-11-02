@@ -21,7 +21,7 @@
                 <div>
                     <div class="flex items-center gap-1.5">
                         <span class="text-xs md:text-sm font-black tracking-tight text-gray-900 dark:text-white whitespace-nowrap">
-                            {{ $info['is_pro'] ? 'PRO' : 'Regular' }}
+                            {{ ($info['is_developer'] ?? false) ? 'DEVELOPER' : ($info['is_pro'] ? 'PRO' : 'Regular') }}
                         </span>
                         <span class="inline-flex items-center rounded bg-{{ $info['status_color'] }}-50 px-1.5 py-0.5 text-[8px] md:text-[10px] font-bold text-{{ $info['status_color'] }}-700 ring-1 ring-inset ring-{{ $info['status_color'] }}-600/20 dark:bg-{{ $info['status_color'] }}-900/30 dark:text-{{ $info['status_color'] }}-400 uppercase">
                             {{ $info['status_label'] }}
@@ -36,7 +36,7 @@
                 <div>
                     <div class="flex flex-col md:flex-row md:items-baseline md:gap-2">
                         <span class="text-[10px] md:text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">{{ $info['expired_at'] }}</span>
-                        @if(!$info['is_expired'])
+                        @if(!$info['is_expired'] && !is_null($info['days_left']))
                             <span class="text-[9px] md:text-[10px] font-medium text-gray-400">
                                 ({{ $info['days_left'] }} hr)
                             </span>

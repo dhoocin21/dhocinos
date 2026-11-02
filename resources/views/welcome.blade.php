@@ -235,7 +235,12 @@
         .dark .bg-gray-100 {
             background-color: #0f1c34 !important;
         }
-        .dark .text-gray-900, .dark .text-[#002c5f] {
+
+        /* High Contrast Typography in Dark Mode */
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+            color: #ffffff !important;
+        }
+        .dark .text-gray-950, .dark .text-gray-900, .dark .text-[#002c5f] {
             color: #ffffff !important;
         }
         .dark .text-gray-800 {
@@ -249,6 +254,89 @@
         }
         .dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg, .dark .shadow-xl {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+        }
+
+        /* Testimonials in Dark Mode */
+        .dark #testimonials {
+            background-color: #070d19 !important;
+        }
+        .dark #testimonials .testimonial-card {
+            background-color: #0f1c34 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark #testimonials .testimonial-card h4 {
+            color: #38bdf8 !important;
+        }
+        .dark #testimonials .testimonial-card span.testimonial-title {
+            color: #94a3b8 !important;
+        }
+        .dark #testimonials .testimonial-card p {
+            color: #cbd5e1 !important;
+        }
+        .dark #testimonials .testimonial-avatar-box {
+            background-color: #0f1c34 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Universal High-Contrast Form Inputs (Clean & Dark Mode) */
+        input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+        select,
+        textarea {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+        input:not([type="range"]):not([type="checkbox"]):not([type="radio"])::placeholder,
+        textarea::placeholder {
+            color: #64748b !important;
+            -webkit-text-fill-color: #64748b !important;
+            opacity: 1 !important;
+        }
+        .dark input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+        .dark select,
+        .dark textarea {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            background-color: #0f1c34 !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        .dark input:not([type="range"]):not([type="checkbox"]):not([type="radio"])::placeholder,
+        .dark textarea::placeholder {
+            color: #94a3b8 !important;
+            -webkit-text-fill-color: #94a3b8 !important;
+            opacity: 1 !important;
+        }
+        .dark select option {
+            background-color: #0c1527 !important;
+            color: #ffffff !important;
+        }
+
+        /* Dark Mode Car Models Showcase */
+        .dark #models {
+            background-color: #070d19 !important;
+        }
+        .dark #models .group {
+            background-color: #0c1527 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        .dark #models .group:hover {
+            border-color: rgba(0, 170, 210, 0.4) !important;
+            box-shadow: 0 15px 35px rgba(0, 44, 95, 0.35) !important;
+        }
+        .dark #models .group h3 {
+            color: #ffffff !important;
+        }
+        .dark #models .group div > span {
+            color: #e2e8f0 !important;
+        }
+        .dark #models .group a {
+            border-color: rgba(255, 255, 255, 0.18) !important;
+            color: #e2e8f0 !important;
+            background-color: transparent !important;
+        }
+        .dark #models .group a:hover {
+            border-color: #00aad2 !important;
+            background-color: #002c5f !important;
+            color: #ffffff !important;
         }
     </style>
     @livewireStyles
@@ -400,42 +488,42 @@
     <livewire:promo-section />
 
     <!-- Car Models - Break the Frame -->
-    <section id="models" class="py-12 md:py-16 bg-white" x-data="{ activeTab: 'ALL', searchQuery: '', budgetFilter: 'ALL' }">
+    <section id="models" class="py-12 md:py-16 bg-white dark:bg-[#070d19]" x-data="{ activeTab: 'ALL', searchQuery: '', budgetFilter: 'ALL' }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">{{ \App\Models\Setting::get('site_name', 'Hyundai') }} Models</h2>
-                <div class="h-1.5 w-24 bg-[#002c5f] mx-auto rounded-full"></div>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">{{ \App\Models\Setting::get('site_name', 'Hyundai') }} Models</h2>
+                <div class="h-1.5 w-24 bg-[#002c5f] dark:bg-cyan-400 mx-auto rounded-full"></div>
             </div>
 
             <!-- Search & Budget Filter Controls Bar -->
-            <div class="max-w-4xl mx-auto mb-6 bg-gray-50 border border-gray-200/80 p-3 sm:p-4 rounded-2xl shadow-sm flex flex-col sm:flex-row items-center gap-3">
+            <div class="max-w-4xl mx-auto mb-6 bg-gray-50 dark:bg-slate-900/90 border border-gray-200/80 dark:border-slate-800 p-3 sm:p-4 rounded-2xl shadow-sm flex flex-col sm:flex-row items-center gap-3">
                 <!-- Search Input -->
                 <div class="relative w-full sm:flex-1">
-                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     </div>
                     <input 
                         type="text" 
                         x-model="searchQuery" 
                         placeholder="Cari model mobil... (contoh: Stargazer, Creta, Ioniq, Palisade)" 
-                        class="w-full pl-10 pr-8 py-2.5 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#002c5f] focus:ring-1 focus:ring-[#002c5f] transition"
+                        class="w-full pl-10 pr-8 py-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-semibold text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-[#002c5f] dark:focus:border-cyan-400 focus:ring-1 focus:ring-[#002c5f] transition"
                     >
                     <button 
                         type="button"
                         x-show="searchQuery" 
                         x-cloak
                         @click="searchQuery = ''" 
-                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
                     </button>
                 </div>
 
                 <!-- Budget Filter Dropdown -->
                 <div class="w-full sm:w-auto flex items-center gap-2">
-                    <span class="text-[11px] font-bold text-gray-500 whitespace-nowrap hidden sm:inline">Budget:</span>
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 whitespace-nowrap hidden sm:inline">Budget:</span>
                     <select 
                         x-model="budgetFilter" 
-                        class="w-full sm:w-52 py-2.5 px-3 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 focus:outline-none focus:border-[#002c5f] transition cursor-pointer">
+                        class="w-full sm:w-52 py-2.5 px-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:border-[#002c5f] dark:focus:border-cyan-400 transition cursor-pointer">
                         <option value="ALL">Semua Rentang Harga</option>
                         <option value="under350">&lt; Rp 350 Juta</option>
                         <option value="350to700">Rp 350 Jt - Rp 700 Jt</option>
@@ -497,16 +585,16 @@
                          x-transition:enter="transition ease-out duration-400"
                          x-transition:enter-start="opacity-0 scale-95"
                          x-transition:enter-end="opacity-100 scale-100"
-                         class="group flex flex-col justify-between bg-white p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:border-gray-100 border border-transparent rounded-xl">
+                         class="group flex flex-col justify-between bg-white dark:bg-[#0c1527] p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:border-gray-100 dark:hover:border-cyan-500/30 border border-transparent dark:border-white/5 rounded-xl">
                         
                         <!-- Top Information: Model Name & Price (Senada seperti hyundai.com) -->
                         <div>
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-950 tracking-tight leading-snug">
+                            <h3 class="text-xl sm:text-2xl font-bold text-gray-950 dark:text-white tracking-tight leading-snug">
                                 {{ $car->name }}
                             </h3>
-                            <div class="mt-2 text-sm text-gray-500 font-medium flex items-baseline gap-1.5">
+                            <div class="mt-2 text-sm text-gray-500 dark:text-slate-400 font-medium flex items-baseline gap-1.5">
                                 <span>From</span>
-                                <span class="text-base sm:text-lg font-bold text-gray-950">
+                                <span class="text-base sm:text-lg font-bold text-gray-950 dark:text-white">
                                     Rp. {{ number_format($car->price, 0, ',', '.') }}
                                 </span>
                             </div>
@@ -528,12 +616,12 @@
                         <!-- Bottom: 2 Stacked Rectangular Outline Buttons (Official Hyundai.com Style) -->
                         <div class="space-y-2.5 pt-2">
                             <a href="{{ route('car.show', $car->slug) }}" 
-                               class="block w-full py-3 px-4 border border-gray-300 hover:border-gray-950 hover:bg-gray-950 hover:text-white text-gray-700 text-xs font-semibold uppercase tracking-[0.2em] text-center transition duration-200">
+                               class="block w-full py-3 px-4 border border-gray-300 dark:border-slate-700 hover:border-gray-950 hover:bg-gray-950 dark:hover:border-cyan-400 dark:hover:bg-cyan-500/20 text-gray-700 dark:text-slate-200 hover:text-white text-xs font-semibold uppercase tracking-[0.2em] text-center transition duration-200">
                                 DETAIL
                             </a>
                             <a href="{{ route('quotation', ['car_id' => $car->id]) }}" 
                                target="_blank"
-                               class="block w-full py-3 px-4 border border-gray-300 hover:border-[#002c5f] hover:bg-[#002c5f] hover:text-white text-gray-700 text-xs font-semibold uppercase tracking-[0.2em] text-center transition duration-200">
+                               class="block w-full py-3 px-4 border border-gray-300 dark:border-slate-700 hover:border-[#002c5f] hover:bg-[#002c5f] dark:hover:border-cyan-400 dark:hover:bg-blue-600 text-gray-700 dark:text-slate-200 hover:text-white text-xs font-semibold uppercase tracking-[0.2em] text-center transition duration-200">
                                 GET QUOTE
                             </a>
                         </div>
@@ -561,7 +649,7 @@
     <x-car-viewer-360 :cars="$cars" />
 
     <!-- Service Tools Section (Test Drive & Credit) -->
-    <section id="services" class="py-12 md:py-16 bg-gray-50 overflow-hidden">
+    <section id="services" class="py-12 md:py-16 bg-gray-50 dark:bg-[#080f1d] overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                 
@@ -569,9 +657,9 @@
                 <div class="flex flex-col w-full">
                     <!-- Header Locked Height -->
                     <div style="min-height: 90px;" class="mb-2">
-                        <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-2">Experience</span>
-                        <h2 class="text-3xl font-black text-gray-900 leading-tight">Booking Test Drive</h2>
-                        <div class="h-1 w-16 bg-[#002c5f] rounded-full mt-3"></div>
+                        <span class="text-[10px] font-black text-blue-600 dark:text-cyan-400 uppercase tracking-[0.3em] block mb-2">Experience</span>
+                        <h2 class="text-3xl font-black text-gray-900 dark:text-white leading-tight">Booking Test Drive</h2>
+                        <div class="h-1 w-16 bg-[#002c5f] dark:bg-cyan-400 rounded-full mt-3"></div>
                     </div>
                     <!-- Card Container -->
                     <div class="flex-grow flex flex-col h-full">
@@ -583,9 +671,9 @@
                 <div class="flex flex-col w-full mt-12 md:mt-0">
                     <!-- Header Locked Height -->
                     <div style="min-height: 90px;" class="mb-2">
-                        <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-2">Financing</span>
-                        <h2 class="text-3xl font-black text-gray-900 leading-tight">Simulasi Kredit</h2>
-                        <div class="h-1 w-16 bg-[#002c5f] rounded-full mt-3"></div>
+                        <span class="text-[10px] font-black text-blue-600 dark:text-cyan-400 uppercase tracking-[0.3em] block mb-2">Financing</span>
+                        <h2 class="text-3xl font-black text-gray-900 dark:text-white leading-tight">Simulasi Kredit</h2>
+                        <div class="h-1 w-16 bg-[#002c5f] dark:bg-cyan-400 rounded-full mt-3"></div>
                     </div>
                     <!-- Card Container -->
                     <div class="flex-grow flex flex-col h-full">
@@ -707,18 +795,18 @@
 
     @if(isset($testimonials) && $testimonials->count() > 0)
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-16 md:py-24 bg-white overflow-hidden relative">
+    <section id="testimonials" class="py-16 md:py-24 bg-white dark:bg-[#070d19] overflow-hidden relative border-t border-b border-gray-100 dark:border-white/5 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
-            <h2 class="text-3xl md:text-5xl font-black mb-4 text-[#002c5f] uppercase tracking-widest">Testimonials</h2>
-            <div class="h-1 w-24 bg-[#002c5f] mx-auto mb-6"></div>
-            <p class="text-gray-600">Apa kata mereka yang telah merasakan pelayanan terbaik kami.</p>
+            <h2 class="text-3xl md:text-5xl font-black mb-4 text-[#002c5f] dark:text-white uppercase tracking-widest">Testimonials</h2>
+            <div class="h-1 w-24 bg-[#002c5f] dark:bg-cyan-500 mx-auto mb-6"></div>
+            <p class="text-gray-600 dark:text-slate-400">Apa kata mereka yang telah merasakan pelayanan terbaik kami.</p>
         </div>
 
         <div class="relative w-full flex flex-col gap-10" style="overflow: hidden; padding-top: 40px; padding-bottom: 20px;">
             <!-- Left Gradient Mask -->
-            <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute inset-y-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-white dark:from-[#070d19] to-transparent z-10 pointer-events-none transition-colors"></div>
             <!-- Right Gradient Mask -->
-            <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute inset-y-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-white dark:from-[#070d19] to-transparent z-10 pointer-events-none transition-colors"></div>
 
             @php
                 // Ensure we have enough items to fill the screen width for a smooth loop
@@ -733,10 +821,10 @@
                 <!-- Set 1 -->
                 <div class="flex gap-8 px-4 shrink-0">
                     @foreach($baseItems as $testimonial)
-                        <div class="relative flex flex-col justify-between pt-14 pb-8 px-8 bg-[#f3f4f6] rounded shadow-sm hover:shadow-lg transition-all duration-300 flex-shrink-0" style="width: 350px; white-space: normal;">
+                        <div class="testimonial-card relative flex flex-col justify-between pt-14 pb-8 px-8 bg-slate-100 dark:bg-[#0f1c34] border border-gray-200/80 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-xl dark:hover:border-cyan-500/40 transition-all duration-300 flex-shrink-0" style="width: 350px; white-space: normal;">
                             <!-- Overlapping Image -->
                             <div class="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                                <div class="w-24 h-24 rounded-full p-1.5 bg-white shadow-sm">
+                                <div class="testimonial-avatar-box w-24 h-24 rounded-full p-1.5 bg-white dark:bg-[#0f1c34] border border-gray-100 dark:border-white/10 shadow-md">
                                     @if($testimonial->image)
                                         <img src="{{ asset('storage/' . $testimonial->image) }}" 
                                              alt="{{ $testimonial->name }}" 
@@ -751,17 +839,17 @@
                             </div>
                             
                             <div class="text-center mt-2 flex-grow">
-                                <p class="text-gray-600 text-[15px] leading-relaxed">
-                                    <span class="text-[#002c5f] text-3xl font-serif font-bold align-bottom leading-none mr-1">“</span>
+                                <p class="text-gray-700 dark:text-slate-300 text-[15px] leading-relaxed">
+                                    <span class="text-[#002c5f] dark:text-cyan-400 text-3xl font-serif font-bold align-bottom leading-none mr-1">“</span>
                                     {{ $testimonial->quote }}
-                                    <span class="text-[#002c5f] text-3xl font-serif font-bold align-bottom leading-none ml-1">”</span>
+                                    <span class="text-[#002c5f] dark:text-cyan-400 text-3xl font-serif font-bold align-bottom leading-none ml-1">”</span>
                                 </p>
                             </div>
                             
                             <div class="text-center mt-6">
-                                <h4 class="font-bold text-[#002c5f] text-lg inline-block">{{ $testimonial->name }}</h4>
+                                <h4 class="font-bold text-[#002c5f] dark:text-cyan-300 text-lg inline-block">{{ $testimonial->name }}</h4>
                                 @if($testimonial->title)
-                                    <span class="text-xs text-gray-500 font-semibold inline-block ml-1">{{ $testimonial->title }}</span>
+                                    <span class="testimonial-title text-xs text-gray-500 dark:text-slate-400 font-semibold inline-block ml-1">{{ $testimonial->title }}</span>
                                 @endif
                             </div>
                         </div>
@@ -770,10 +858,10 @@
                 <!-- Set 2 (Duplicate for seamless loop) -->
                 <div class="flex gap-8 px-4 shrink-0">
                     @foreach($baseItems as $testimonial)
-                        <div class="relative flex flex-col justify-between pt-14 pb-8 px-8 bg-[#f3f4f6] rounded shadow-sm hover:shadow-lg transition-all duration-300 flex-shrink-0" style="width: 350px; white-space: normal;">
+                        <div class="testimonial-card relative flex flex-col justify-between pt-14 pb-8 px-8 bg-slate-100 dark:bg-[#0f1c34] border border-gray-200/80 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-xl dark:hover:border-cyan-500/40 transition-all duration-300 flex-shrink-0" style="width: 350px; white-space: normal;">
                             <!-- Overlapping Image -->
                             <div class="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                                <div class="w-24 h-24 rounded-full p-1.5 bg-white shadow-sm">
+                                <div class="testimonial-avatar-box w-24 h-24 rounded-full p-1.5 bg-white dark:bg-[#0f1c34] border border-gray-100 dark:border-white/10 shadow-md">
                                     @if($testimonial->image)
                                         <img src="{{ asset('storage/' . $testimonial->image) }}" 
                                              alt="{{ $testimonial->name }}" 
@@ -788,17 +876,17 @@
                             </div>
                             
                             <div class="text-center mt-2 flex-grow">
-                                <p class="text-gray-600 text-[15px] leading-relaxed">
-                                    <span class="text-[#002c5f] text-3xl font-serif font-bold align-bottom leading-none mr-1">“</span>
+                                <p class="text-gray-700 dark:text-slate-300 text-[15px] leading-relaxed">
+                                    <span class="text-[#002c5f] dark:text-cyan-400 text-3xl font-serif font-bold align-bottom leading-none mr-1">“</span>
                                     {{ $testimonial->quote }}
-                                    <span class="text-[#002c5f] text-3xl font-serif font-bold align-bottom leading-none ml-1">”</span>
+                                    <span class="text-[#002c5f] dark:text-cyan-400 text-3xl font-serif font-bold align-bottom leading-none ml-1">”</span>
                                 </p>
                             </div>
                             
                             <div class="text-center mt-6">
-                                <h4 class="font-bold text-[#002c5f] text-lg inline-block">{{ $testimonial->name }}</h4>
+                                <h4 class="font-bold text-[#002c5f] dark:text-cyan-300 text-lg inline-block">{{ $testimonial->name }}</h4>
                                 @if($testimonial->title)
-                                    <span class="text-xs text-gray-500 font-semibold inline-block ml-1">{{ $testimonial->title }}</span>
+                                    <span class="testimonial-title text-xs text-gray-500 dark:text-slate-400 font-semibold inline-block ml-1">{{ $testimonial->title }}</span>
                                 @endif
                             </div>
                         </div>
@@ -915,7 +1003,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12">
             <div class="rounded-3xl overflow-hidden shadow-lg aspect-video bg-black">
                 @php
-                    $videoId = 'S2O79tGisX4';
+                    $videoId = 'gAXz8h9nmug';
                     if ($video && $video->url) {
                         if (preg_match('/(?:\?v=|&v=|be\/|embed\/|v\/|.*v=)([^"&?\/\s]{11})/', $video->url, $matches)) {
                             $videoId = $matches[1];
