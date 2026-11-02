@@ -54,11 +54,19 @@
         <meta name="google-site-verification" content="{{ $cleanVerification }}">
     @endif
 
+    @php
+        $dealerAddress = \App\Models\Setting::get('dealer_address', 'Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya, Jawa Timur 60189');
+        $geoCoordinates = \App\Models\Setting::get('geo_coordinates', '-7.2847, 112.7001');
+        $coords = array_map('trim', explode(',', $geoCoordinates));
+        $latitude = isset($coords[0]) ? (float)$coords[0] : -7.2847;
+        $longitude = isset($coords[1]) ? (float)$coords[1] : 112.7001;
+    @endphp
+
     <!-- Local SEO Geo Meta Tags (Surabaya, Jawa Timur) -->
     <meta name="geo.region" content="ID-JI">
     <meta name="geo.placename" content="Surabaya">
-    <meta name="geo.position" content="-7.2847;112.7001">
-    <meta name="ICBM" content="-7.2847, 112.7001">
+    <meta name="geo.position" content="{{ $latitude }};{{ $longitude }}">
+    <meta name="ICBM" content="{{ $latitude }}, {{ $longitude }}">
 
     @php
         $shareImage = \App\Models\Setting::get('site_logo') 
@@ -92,7 +100,7 @@
       "priceRange": "Rp 245.800.000 - Rp 1.547.000.000",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal",
+        "streetAddress": "{{ $dealerAddress }}",
         "addressLocality": "Surabaya",
         "addressRegion": "Jawa Timur",
         "postalCode": "60189",
@@ -100,8 +108,8 @@
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": -7.2847,
-        "longitude": 112.7001
+        "latitude": {{ $latitude }},
+        "longitude": {{ $longitude }}
       },
       "openingHoursSpecification": [
         {
@@ -236,21 +244,24 @@
             background-color: #0f1c34 !important;
         }
 
-        /* High Contrast Typography in Dark Mode */
+        /* High Contrast Typography in Light & Dark Mode */
+        h1, h2, h3, h4, h5, h6 {
+            color: #0f172a;
+        }
         .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
             color: #ffffff !important;
         }
-        .dark .text-gray-950, .dark .text-gray-900, .dark .text-[#002c5f] {
+        .dark .text-gray-950, .dark .text-gray-900 {
             color: #ffffff !important;
         }
         .dark .text-gray-800 {
             color: #f1f5f9 !important;
         }
         .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500 {
-            color: #94a3b8 !important;
+            color: #cbd5e1 !important;
         }
         .dark .border-gray-100, .dark .border-gray-200 {
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
         }
         .dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg, .dark .shadow-xl {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
@@ -535,42 +546,42 @@
             <!-- Visual Category Tabs Selector (Styled senada seperti di hyundai.com) -->
             <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-14 max-w-5xl mx-auto">
                 <button @click="activeTab = 'ALL'" 
-                        :class="activeTab === 'ALL' ? 'bg-[#002c5f] text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f]' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200'"
+                        :class="activeTab === 'ALL' ? 'bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f] dark:border-cyan-400' : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-gray-200 dark:border-slate-700'"
                         class="px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none flex items-center gap-2 border">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
                     <span>Semua Model</span>
                 </button>
 
                 <button @click="activeTab = 'EV'" 
-                        :class="activeTab === 'EV' ? 'bg-[#002c5f] text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f]' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200'"
+                        :class="activeTab === 'EV' ? 'bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f] dark:border-cyan-400' : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-gray-200 dark:border-slate-700'"
                         class="px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none flex items-center gap-2 border">
                     <svg class="w-4 h-4 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     <span>Electric (EV)</span>
                 </button>
 
                 <button @click="activeTab = 'HEV'" 
-                        :class="activeTab === 'HEV' ? 'bg-[#002c5f] text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f]' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200'"
+                        :class="activeTab === 'HEV' ? 'bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f] dark:border-cyan-400' : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-gray-200 dark:border-slate-700'"
                         class="px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none flex items-center gap-2 border">
                     <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
                     <span>Hybrid (HEV)</span>
                 </button>
 
                 <button @click="activeTab = 'SUV'" 
-                        :class="activeTab === 'SUV' ? 'bg-[#002c5f] text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f]' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200'"
+                        :class="activeTab === 'SUV' ? 'bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f] dark:border-cyan-400' : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-gray-200 dark:border-slate-700'"
                         class="px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none flex items-center gap-2 border">
                     <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
                     <span>SUV</span>
                 </button>
 
                 <button @click="activeTab = 'MPV'" 
-                        :class="activeTab === 'MPV' ? 'bg-[#002c5f] text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f]' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200'"
+                        :class="activeTab === 'MPV' ? 'bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f] dark:border-cyan-400' : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-gray-200 dark:border-slate-700'"
                         class="px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none flex items-center gap-2 border">
                     <svg class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h2a1 1 0 0 0 1-1v-4a2 2 0 0 0-1.2-1.85L17.5 7.5A2 2 0 0 0 16 7H5a2 2 0 0 0-1.8 1.1L1.2 12A2 2 0 0 0 1 13v2a1 1 0 0 0 1 1h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
                     <span>MPV</span>
                 </button>
 
                 <button @click="activeTab = 'Luxury MPV'" 
-                        :class="activeTab === 'Luxury MPV' ? 'bg-[#002c5f] text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f]' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200'"
+                        :class="activeTab === 'Luxury MPV' ? 'bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 text-white shadow-lg shadow-blue-900/20 scale-105 border-[#002c5f] dark:border-cyan-400' : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 border-gray-200 dark:border-slate-700'"
                         class="px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none flex items-center gap-2 border">
                     <svg class="w-4 h-4 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>
                     <span>Luxury MPV</span>
@@ -686,21 +697,21 @@
     </section>
 
     <!-- Trade-In Program Section -->
-    <section id="trade-in" class="py-12 md:py-16 bg-white overflow-hidden">
+    <section id="trade-in" class="py-12 md:py-16 bg-white dark:bg-[#070d19] overflow-hidden transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <livewire:trade-in-calculator />
         </div>
     </section>
 
     <!-- Side-by-Side Car Comparator Section -->
-    <section id="comparator" class="py-12 md:py-16 bg-gray-50 overflow-hidden">
+    <section id="comparator" class="py-12 md:py-16 bg-gray-50 dark:bg-[#080f1d] overflow-hidden transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <livewire:car-comparator />
         </div>
     </section>
 
     <!-- EV Savings Calculator Section -->
-    <section id="ev-savings" class="py-12 md:py-20 text-white overflow-hidden relative" style="background: #020b18;">
+    <section id="ev-savings" class="py-12 md:py-20 bg-slate-50 dark:bg-[#080f1d] overflow-hidden relative transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <livewire:ev-savings-calculator />
         </div>
@@ -708,9 +719,9 @@
 
     <!-- Consultant Profile -->
     @if($consultant)
-    <section id="consultant" class="py-12 md:py-16 bg-white">
+    <section id="consultant" class="py-12 md:py-16 bg-white dark:bg-[#070d19] transition-colors">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-3xl overflow-hidden shadow-xl flex flex-col md:flex-row border border-gray-100">
+            <div class="bg-white dark:bg-[#0c1527] rounded-3xl overflow-hidden shadow-xl flex flex-col md:flex-row border border-gray-100 dark:border-slate-800">
                 <div class="md:w-1/2 relative h-80 md:h-auto overflow-hidden bg-slate-900 flex items-center justify-center">
                     @php
                         $consultantPhotoUrl = null;
@@ -748,14 +759,14 @@
                     </div>
                 </div>
                 <div class="md:w-1/2 p-8 md:p-14 flex flex-col justify-center">
-                    <h2 class="text-blue-600 font-black tracking-widest uppercase mb-3 text-xs flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                    <h2 class="text-blue-600 dark:text-cyan-400 font-black tracking-widest uppercase mb-3 text-xs flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse"></span>
                         Sales Consultant
                     </h2>
-                    <h3 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 flex items-center flex-wrap gap-2.5 leading-tight">
+                    <h3 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 dark:text-white flex items-center flex-wrap gap-2.5 leading-tight">
                         <span>{{ $consultant->name ?? 'OFFICIAL HYUNDAI SURABAYA' }}</span>
                         <!-- Verified Blue Checkmark Badge -->
-                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white shadow-sm ring-4 ring-blue-100 shrink-0" title="Akun Resmi Terverifikasi">
+                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white shadow-sm ring-4 ring-blue-100 dark:ring-blue-900/50 shrink-0" title="Akun Resmi Terverifikasi">
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
@@ -764,27 +775,27 @@
                     
                     <div class="space-y-5 mb-8">
                         <div class="flex items-start">
-                            <div class="bg-blue-50 p-3 rounded-2xl mr-4 text-blue-600 shrink-0 border border-blue-100">
+                            <div class="bg-blue-50 dark:bg-slate-800/80 p-3 rounded-2xl mr-4 text-blue-600 dark:text-cyan-400 shrink-0 border border-blue-100 dark:border-slate-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                             </div>
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Lokasi Dealer</p>
-                                <p class="text-gray-700 text-sm font-semibold mt-0.5">{{ $consultant->address ?? 'Jl. Mayjen HR. Muhammad No.35C, Kec. Sukomanunggal, Surabaya.' }}</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-300">Lokasi Dealer</p>
+                                <p class="text-gray-700 dark:text-slate-200 text-sm font-semibold mt-0.5">{{ $consultant->address ?? 'Jl. Mayjen HR. Muhammad No.35C, Kec. Sukomanunggal, Surabaya.' }}</p>
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <div class="bg-emerald-50 p-3 rounded-2xl mr-4 text-emerald-600 shrink-0 border border-emerald-100">
+                            <div class="bg-emerald-50 dark:bg-slate-800/80 p-3 rounded-2xl mr-4 text-emerald-600 dark:text-emerald-400 shrink-0 border border-emerald-100 dark:border-slate-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                             </div>
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400">WhatsApp</p>
-                                <p class="text-gray-700 text-sm font-semibold mt-0.5">{{ $consultant->phone ?? '0813-3013-5013' }}</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-300">WhatsApp</p>
+                                <p class="text-gray-700 dark:text-slate-200 text-sm font-semibold mt-0.5">{{ $consultant->phone ?? '0813-3013-5013' }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <a href="{{ route('track.wa') }}" class="bg-[#002c5f] hover:bg-blue-800 text-white text-center py-4 px-6 rounded-2xl font-black text-sm uppercase tracking-wider transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-3">
-                        <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                    <a href="{{ route('track.wa') }}" class="bg-[#002c5f] dark:bg-cyan-500 dark:text-slate-950 hover:bg-blue-800 dark:hover:bg-cyan-400 text-white text-center py-4 px-6 rounded-2xl font-black text-sm uppercase tracking-wider transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-3">
+                        <svg class="w-5 h-5 text-emerald-400 dark:text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
                         Hubungi {{ $consultant->name ?? 'OFFICIAL' }}
                     </a>
                 </div>
@@ -900,17 +911,17 @@
     @endif
 
     <!-- Handover Gallery -->
-    <section id="gallery" class="py-12 md:py-16 bg-gray-50">
+    <section id="gallery" class="py-12 md:py-16 bg-gray-50 dark:bg-[#080f1d] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-black mb-4">Galeri Serah Terima</h2>
-                <p class="text-gray-400 uppercase tracking-widest text-sm">Kebahagiaan Pelanggan Kami</p>
-                <div class="h-1.5 w-24 bg-[#002c5f] mx-auto rounded-full mt-4"></div>
+                <h2 class="text-3xl md:text-5xl font-black mb-4 text-gray-950 dark:text-white">Galeri Serah Terima</h2>
+                <p class="text-slate-700 dark:text-slate-300 uppercase tracking-widest text-sm font-bold">Kebahagiaan Pelanggan Kami</p>
+                <div class="h-1.5 w-24 bg-[#002c5f] dark:bg-cyan-400 mx-auto rounded-full mt-4"></div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @forelse($galleries as $gallery)
-                    <div class="relative group aspect-square overflow-hidden rounded-2xl bg-gray-50">
+                    <div class="relative group aspect-square overflow-hidden rounded-2xl bg-gray-100 dark:bg-slate-800">
                         <img src="{{ asset('storage/'.$gallery->image) }}" alt="Handover" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                             <p class="text-white text-xs font-medium">{{ $gallery->caption }}</p>
@@ -918,7 +929,7 @@
                     </div>
                 @empty
                     @for($i=1; $i<=8; $i++)
-                        <div class="relative group aspect-square overflow-hidden rounded-2xl bg-gray-100 animate-pulse"></div>
+                        <div class="relative group aspect-square overflow-hidden rounded-2xl bg-gray-200 dark:bg-slate-800 animate-pulse"></div>
                     @endfor
                 @endforelse
             </div>
@@ -926,15 +937,15 @@
     </section>
 
     <!-- Blog / News Section -->
-    <section id="news" class="py-12 md:py-16 bg-white">
+    <section id="news" class="py-12 md:py-16 bg-white dark:bg-[#070d19] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
                 <div>
-                    <h2 class="text-3xl md:text-5xl font-black mb-4">Auto Insight & Exclusive Updates</h2>
-                    <p class="text-gray-400 uppercase tracking-widest text-sm max-w-2xl">Jelajahi dunia otomotif melalui kacamata Hyundai. Dapatkan tips eksklusif, berita teknologi terbaru, dan penawaran yang dipersonalisasi khusus untuk Anda.</p>
-                    <div class="h-1.5 w-24 bg-[#002c5f] rounded-full mt-4"></div>
+                    <h2 class="text-3xl md:text-5xl font-black mb-4 text-gray-950 dark:text-white">Auto Insight & Exclusive Updates</h2>
+                    <p class="text-slate-700 dark:text-slate-300 uppercase tracking-widest text-sm max-w-2xl font-bold">Jelajahi dunia otomotif melalui kacamata Hyundai. Dapatkan tips eksklusif, berita teknologi terbaru, dan penawaran yang dipersonalisasi khusus untuk Anda.</p>
+                    <div class="h-1.5 w-24 bg-[#002c5f] dark:bg-cyan-400 rounded-full mt-4"></div>
                 </div>
-                <a href="{{ route('posts.index') }}" class="flex items-center text-[#002c5f] font-bold hover:underline gap-2 group/all">
+                <a href="{{ route('posts.index') }}" class="flex items-center text-[#002c5f] dark:text-cyan-400 font-extrabold hover:underline gap-2 group/all">
                     Explore All Insights
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover/all:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
@@ -942,15 +953,15 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 @forelse($posts->take(8) as $post)
-                    <article class="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-blue-100 hover:shadow-xl transition-all duration-500">
-                        <a href="{{ route('posts.show', $post->slug) }}" class="block overflow-hidden aspect-video bg-gray-100">
+                    <article class="group bg-white dark:bg-[#0c1527] rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-800 hover:border-blue-200 dark:hover:border-cyan-500/40 hover:shadow-xl transition-all duration-500">
+                        <a href="{{ route('posts.show', $post->slug) }}" class="block overflow-hidden aspect-video bg-gray-100 dark:bg-slate-800">
                             @if($post->image)
                                 <img src="{{ \Illuminate\Support\Str::startsWith($post->image, ['http://', 'https://']) ? $post->image : asset('storage/' . $post->image) }}" 
                                      alt="{{ $post->title }}" 
                                      loading="lazy"
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             @else
-                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 text-gray-300">
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 text-gray-400 dark:text-slate-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
                                     <span class="text-[10px] uppercase tracking-widest font-bold">Image Preview</span>
                                 </div>
@@ -959,25 +970,25 @@
                         <div class="p-5 flex flex-col justify-between h-[calc(100%-aspect-video)]">
                             <div>
                                 <div class="flex items-center gap-3 mb-3">
-                                    <span class="bg-blue-50 text-[#002c5f] text-[9px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider">
+                                    <span class="bg-blue-50 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-300 text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider border border-blue-100 dark:border-slate-700">
                                         {{ $post->category }}
                                     </span>
-                                    <span class="text-gray-400 text-[9px] uppercase tracking-widest font-medium">
+                                    <span class="text-slate-600 dark:text-slate-400 text-[10px] uppercase tracking-widest font-bold">
                                         {{ $post->published_at ? $post->published_at->format('d M Y') : $post->created_at->format('d M Y') }}
                                     </span>
                                 </div>
-                                <h3 class="text-base font-bold mb-2 line-clamp-2 group-hover:text-[#002c5f] transition-colors leading-snug">
+                                <h3 class="text-base font-extrabold mb-2 line-clamp-2 text-gray-950 dark:text-white group-hover:text-[#002c5f] dark:group-hover:text-cyan-400 transition-colors leading-snug">
                                     <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
                                 </h3>
                                 @php
                                     $cleanContent = preg_replace('/<div class="p-4 rounded-2xl bg-blue-50.*?<\/div>/is', '', $post->content);
                                     $cleanExcerpt = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($cleanContent))));
                                 @endphp
-                                <p class="text-gray-500 text-xs line-clamp-2 mb-4 font-light leading-relaxed">
+                                <p class="text-slate-700 dark:text-slate-300 text-xs line-clamp-2 mb-4 font-normal leading-relaxed">
                                     {{ Str::limit($cleanExcerpt, 85) }}
                                 </p>
                             </div>
-                            <a href="{{ route('posts.show', $post->slug) }}" class="inline-flex items-center text-[11px] font-bold text-gray-900 group-hover:text-[#002c5f] gap-1.5 uppercase tracking-wider mt-auto">
+                            <a href="{{ route('posts.show', $post->slug) }}" class="inline-flex items-center text-xs font-black text-gray-950 dark:text-cyan-400 group-hover:text-[#002c5f] dark:group-hover:text-cyan-300 gap-1.5 uppercase tracking-wider mt-auto">
                                 Read More
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                             </a>
@@ -999,7 +1010,7 @@
     </section>
 
     <!-- Video & Map -->
-    <section class="py-12 md:py-16 bg-gray-50">
+    <section class="py-12 md:py-16 bg-gray-50 dark:bg-[#080f1d] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12">
             <div class="rounded-3xl overflow-hidden shadow-lg aspect-video bg-black">
                 @php
@@ -1029,104 +1040,104 @@
     </section>
 
     <!-- FAQ Khusus Mobil Listrik & Garansi Resmi Hyundai -->
-    <section id="faq" class="py-16 md:py-24 bg-white border-t border-gray-100" x-data="{ activeFaq: 1 }">
+    <section id="faq" class="py-16 md:py-24 bg-white dark:bg-[#070d19] border-t border-gray-100 dark:border-slate-800 transition-colors" x-data="{ activeFaq: 1 }">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-xs font-black text-blue-600 uppercase tracking-[0.25em] block mb-2">Panduan Calon Pembeli</span>
-                <h2 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
-                    Pertanyaan Seputar <span class="text-[#002c5f]">Mobil Listrik & Garansi Hyundai</span>
+                <span class="text-xs font-black text-blue-600 dark:text-cyan-400 uppercase tracking-[0.25em] block mb-2">Panduan Calon Pembeli</span>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                    Pertanyaan Seputar <span class="text-[#002c5f] dark:text-cyan-400">Mobil Listrik & Garansi Hyundai</span>
                 </h2>
-                <div class="h-1.5 w-20 bg-[#002c5f] rounded-full mx-auto mt-4"></div>
-                <p class="text-gray-500 text-sm mt-4">
+                <div class="h-1.5 w-20 bg-[#002c5f] dark:bg-cyan-400 rounded-full mx-auto mt-4"></div>
+                <p class="text-slate-700 dark:text-slate-300 font-medium text-sm mt-4">
                     Semua yang perlu Anda ketahui tentang kemudahan memiliki mobil listrik (EV), garansi baterai 8 tahun, dan pengisian daya di rumah.
                 </p>
             </div>
 
             <div class="space-y-4">
                 <!-- FAQ Item 1 -->
-                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 1 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                <div class="border border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 1 ? 'border-blue-500 shadow-md bg-blue-50/50 dark:bg-slate-900/90' : 'bg-white dark:bg-[#0c1527] hover:border-gray-300 dark:hover:border-slate-700'">
                     <button @click="activeFaq = (activeFaq === 1 ? null : 1)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
-                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Berapa lama garansi baterai mobil listrik (EV) Hyundai?</span>
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 1 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white">Berapa lama garansi baterai mobil listrik (EV) Hyundai?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-400 flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 1 ? 'rotate-180 bg-[#002c5f] text-white dark:bg-cyan-500 dark:text-slate-950' : ''">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                     </button>
-                    <div x-show="activeFaq === 1" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div x-show="activeFaq === 1" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-slate-800 dark:text-slate-200 leading-relaxed border-t border-gray-200 dark:border-slate-800 pt-4 font-normal">
                         Baterai tegangan tinggi (<em>High Voltage Battery</em>) pada semua lini mobil listrik Hyundai (seperti <strong>IONIQ 5, IONIQ 6, dan All New KONA Electric</strong>) dilindungi garansi resmi selama <strong>8 Tahun atau 160.000 KM</strong> (mana yang tercapai lebih dulu). Selain itu, kendaraan juga dilindungi garansi dasar manufaktur hingga 3-4 tahun dan gratis servis suku cadang.
                     </div>
                 </div>
 
                 <!-- FAQ Item 2 -->
-                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 2 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                <div class="border border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 2 ? 'border-blue-500 shadow-md bg-blue-50/50 dark:bg-slate-900/90' : 'bg-white dark:bg-[#0c1527] hover:border-gray-300 dark:hover:border-slate-700'">
                     <button @click="activeFaq = (activeFaq === 2 ? null : 2)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
-                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Bagaimana cara mengisi daya (charging) di rumah? Apakah sulit?</span>
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 2 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white">Bagaimana cara mengisi daya (charging) di rumah? Apakah sulit?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-400 flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 2 ? 'rotate-180 bg-[#002c5f] text-white dark:bg-cyan-500 dark:text-slate-950' : ''">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                     </button>
-                    <div x-show="activeFaq === 2" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div x-show="activeFaq === 2" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-slate-800 dark:text-slate-200 leading-relaxed border-t border-gray-200 dark:border-slate-800 pt-4 font-normal">
                         Sangat mudah dan praktis! Setiap pembelian mobil listrik Hyundai, Anda mendapatkan fasilitas <strong>Gratis AC Home Wallbox Charger 7.4 kW / 11 kW</strong> lengkap dengan survei dan pemasangan teknisi berlisensi langsung di rumah Anda. Anda juga mendapatkan kabel <em>Portable Emergency Charger</em> yang dapat langsung dicolok ke stopkontak rumah biasa (schuko).
                     </div>
                 </div>
 
                 <!-- FAQ Item 3 -->
-                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 3 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                <div class="border border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 3 ? 'border-blue-500 shadow-md bg-blue-50/50 dark:bg-slate-900/90' : 'bg-white dark:bg-[#0c1527] hover:border-gray-300 dark:hover:border-slate-700'">
                     <button @click="activeFaq = (activeFaq === 3 ? null : 3)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
-                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Apakah ada diskon tarif listrik khusus dari PLN untuk pemilik EV?</span>
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 3 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white">Apakah ada diskon tarif listrik khusus dari PLN untuk pemilik EV?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-400 flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 3 ? 'rotate-180 bg-[#002c5f] text-white dark:bg-cyan-500 dark:text-slate-950' : ''">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                     </button>
-                    <div x-show="activeFaq === 3" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div x-show="activeFaq === 3" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-slate-800 dark:text-slate-200 leading-relaxed border-t border-gray-200 dark:border-slate-800 pt-4 font-normal">
                         <strong>Ya, benar!</strong> PLN memiliki program insentif resmi diskon tarif listrik sebesar <strong>30% setiap hari pada pukul 22.00 s/d 05.00 WIB</strong> khusus untuk pengisian daya kendaraan listrik di rumah melalui Home Charging Wallbox. Biaya pengisian menjadi sangat murah, hanya sekitar Rp 1.187 per kWh!
                     </div>
                 </div>
 
                 <!-- FAQ Item 4 -->
-                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 4 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                <div class="border border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 4 ? 'border-blue-500 shadow-md bg-blue-50/50 dark:bg-slate-900/90' : 'bg-white dark:bg-[#0c1527] hover:border-gray-300 dark:hover:border-slate-700'">
                     <button @click="activeFaq = (activeFaq === 4 ? null : 4)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
-                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Berapa lama waktu pengisian daya di SPKLU Fast Charging luar kota?</span>
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 4 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white">Berapa lama waktu pengisian daya di SPKLU Fast Charging luar kota?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-400 flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 4 ? 'rotate-180 bg-[#002c5f] text-white dark:bg-cyan-500 dark:text-slate-950' : ''">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                     </button>
-                    <div x-show="activeFaq === 4" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div x-show="activeFaq === 4" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-slate-800 dark:text-slate-200 leading-relaxed border-t border-gray-200 dark:border-slate-800 pt-4 font-normal">
                         Didukung arsitektur <em>E-GMP 800V Ultra-Fast Charging</em>, pengisian dari kapasitas 10% hingga 80% pada IONIQ 5 & IONIQ 6 hanya membutuhkan waktu <strong>kurang lebih 18 menit</strong> di SPKLU Ultra Fast DC 350 kW, atau sekitar 45-55 menit di SPKLU Fast DC 50 kW yang telah tersedia di mall, rest area tol Trans Jawa, dan dealer resmi Hyundai Surabaya.
                     </div>
                 </div>
 
                 <!-- FAQ Item 5 -->
-                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 5 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                <div class="border border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 5 ? 'border-blue-500 shadow-md bg-blue-50/50 dark:bg-slate-900/90' : 'bg-white dark:bg-[#0c1527] hover:border-gray-300 dark:hover:border-slate-700'">
                     <button @click="activeFaq = (activeFaq === 5 ? null : 5)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
-                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Berapa biaya servis & perawatan berkala mobil listrik?</span>
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 5 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white">Berapa biaya servis & perawatan berkala mobil listrik?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-400 flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 5 ? 'rotate-180 bg-[#002c5f] text-white dark:bg-cyan-500 dark:text-slate-950' : ''">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                     </button>
-                    <div x-show="activeFaq === 5" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div x-show="activeFaq === 5" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-slate-800 dark:text-slate-200 leading-relaxed border-t border-gray-200 dark:border-slate-800 pt-4 font-normal">
                         <strong>Bebas Biaya Jasa Servis & Suku Cadang hingga 5 Tahun atau 75.000 KM!</strong> Mobil listrik memiliki komponen mekanis bergerak yang jauh lebih sedikit dibanding mesin konvensional (tidak perlu ganti oli mesin, busi, timing belt, atau filter bahan bakar), sehingga biaya perawatan rutin tahunan praktis mendekati nol rupiah.
                     </div>
                 </div>
 
                 <!-- FAQ Item 6 -->
-                <div class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 6 ? 'border-blue-500 shadow-md bg-blue-50/20' : 'hover:border-gray-300'">
+                <div class="border border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-200" :class="activeFaq === 6 ? 'border-blue-500 shadow-md bg-blue-50/50 dark:bg-slate-900/90' : 'bg-white dark:bg-[#0c1527] hover:border-gray-300 dark:hover:border-slate-700'">
                     <button @click="activeFaq = (activeFaq === 6 ? null : 6)" class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none">
-                        <span class="font-extrabold text-base sm:text-lg text-gray-900">Apakah saya bisa tukar tambah (Trade-In) mobil bensin lama saya?</span>
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#002c5f] flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 6 ? 'rotate-180 bg-[#002c5f] text-white' : ''">
+                        <span class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white">Apakah saya bisa tukar tambah (Trade-In) mobil bensin lama saya?</span>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-800 text-[#002c5f] dark:text-cyan-400 flex items-center justify-center shrink-0 transition-transform duration-300" :class="activeFaq === 6 ? 'rotate-180 bg-[#002c5f] text-white dark:bg-cyan-500 dark:text-slate-950' : ''">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                     </button>
-                    <div x-show="activeFaq === 6" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div x-show="activeFaq === 6" x-collapse x-cloak class="px-5 sm:px-6 pb-6 text-sm text-slate-800 dark:text-slate-200 leading-relaxed border-t border-gray-200 dark:border-slate-800 pt-4 font-normal">
                         <strong>Tentu saja bisa!</strong> Melalui layanan resmi Tukar Tambah Hyundai, kami menerima semua merek mobil lama (Toyota, Honda, Mitsubishi, Suzuki, dll) dengan penilaian harga pasar yang transparan dan kompetitif. Nilai tukar tambah mobil lama Anda dapat langsung dialokasikan sebagai Uang Muka (DP) unit Hyundai baru Anda.
                     </div>
                 </div>
             </div>
 
             <!-- Still Have Questions CTA -->
-            <div class="mt-12 text-center p-8 bg-blue-50 rounded-3xl border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="mt-12 text-center p-8 bg-blue-50/90 dark:bg-[#0c1527] rounded-3xl border border-blue-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md transition-colors">
                 <div class="text-center sm:text-left">
-                    <h4 class="text-lg font-black text-[#002c5f]">Masih punya pertanyaan seputar promo atau mobil listrik?</h4>
-                    <p class="text-xs text-gray-600 mt-1">Konsultasikan kebutuhan mobilitas Anda langsung dengan Sales Consultant resmi kami.</p>
+                    <h4 class="text-lg font-black text-[#002c5f] dark:text-white">Masih punya pertanyaan seputar promo atau mobil listrik?</h4>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-semibold mt-1">Konsultasikan kebutuhan mobilitas Anda langsung dengan Sales Consultant resmi kami.</p>
                 </div>
                 <a href="{{ route('track.wa', ['text' => 'Halo Mas Nico, saya ingin konsultasi mengenai mobil listrik Hyundai dan promo terbarunya.']) }}" target="_blank"
                     class="px-6 py-3.5 bg-[#002c5f] hover:bg-blue-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-lg shadow-blue-900/20 whitespace-nowrap flex items-center gap-2">
@@ -1138,7 +1149,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-[#002c5f] text-white py-16">
+    <footer class="bg-[#002c5f] dark:bg-[#050a14] border-t border-transparent dark:border-slate-800/80 text-white py-16 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="col-span-1 md:col-span-2">
                 <div class="flex items-center mb-6">

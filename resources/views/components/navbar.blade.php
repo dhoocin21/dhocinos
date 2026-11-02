@@ -47,7 +47,7 @@
         @endphp
 
         <!-- Desktop Navigation Menu -->
-        <div class="hidden md:flex items-center gap-6 lg:gap-7 text-xs lg:text-[13px] font-semibold uppercase tracking-wider lg:tracking-widest text-gray-500 dark:text-slate-300">
+        <div class="hidden md:flex items-center gap-6 lg:gap-7 text-xs lg:text-[13px] font-bold uppercase tracking-wider lg:tracking-widest text-slate-700 dark:text-slate-200">
             <a href="{{ url('/#home') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors">Home</a>
             
             <!-- Dynamic Mega Menu (positioned relative to navbar) -->
@@ -111,20 +111,29 @@
 
         <!-- Action Buttons & Dark Mode Toggle -->
         <div class="flex items-center space-x-2.5 sm:space-x-3 md:space-x-3.5">
-            <!-- Dark / Light Mode Switcher -->
-            <button type="button" 
-                @click="toggleTheme()"
-                class="p-2 sm:p-2.5 rounded-full border border-gray-200 dark:border-slate-700 bg-gray-50/80 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 active:scale-95 transition-all focus:outline-none shadow-sm flex items-center justify-center cursor-pointer"
-                :title="isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap'">
-                <!-- Sun Icon (Active in Dark Mode) -->
-                <svg x-show="isDark" x-cloak class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-                </svg>
-                <!-- Moon Icon (Active in Light Mode) -->
-                <svg x-show="!isDark" class="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                </svg>
-            </button>
+            <!-- Dual Theme Switcher: Versi Clean vs Dark -->
+            <div class="inline-flex items-center p-0.5 sm:p-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner">
+                <button type="button" 
+                    @click="if (isDark) toggleTheme()"
+                    class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-black transition-all cursor-pointer"
+                    :class="!isDark ? 'bg-white text-[#002c5f] shadow-sm' : 'text-slate-400 hover:text-slate-200'"
+                    title="Beralih ke Versi Clean (Terang)">
+                    <svg class="w-3.5 h-3.5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+                    </svg>
+                    <span class="hidden sm:inline">Clean</span>
+                </button>
+                <button type="button" 
+                    @click="if (!isDark) toggleTheme()"
+                    class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-black transition-all cursor-pointer"
+                    :class="isDark ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+                    title="Beralih ke Versi Dark (Gelap)">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                    </svg>
+                    <span class="hidden sm:inline">Dark</span>
+                </button>
+            </div>
 
             @if (Route::has('login'))
                 @auth
@@ -160,6 +169,27 @@
          class="md:hidden absolute top-full left-0 w-full bg-white/98 dark:bg-[#070d19]/98 backdrop-blur-2xl border-b border-gray-100 dark:border-slate-800 shadow-2xl p-6 z-40 max-h-[85vh] overflow-y-auto">
          
          <div class="space-y-6">
+             <!-- Mobile Theme Switcher Banner -->
+             <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                 <div class="flex items-center gap-2">
+                     <span class="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Tema Halaman</span>
+                 </div>
+                 <div class="inline-flex items-center p-1 rounded-full bg-slate-200/70 dark:bg-slate-900 border border-slate-300/60 dark:border-slate-700">
+                     <button type="button" 
+                         @click="if (isDark) toggleTheme()"
+                         class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black transition-all cursor-pointer"
+                         :class="!isDark ? 'bg-white text-[#002c5f] shadow-sm' : 'text-slate-400 hover:text-slate-200'">
+                         <span>☀️ Clean</span>
+                     </button>
+                     <button type="button" 
+                         @click="if (!isDark) toggleTheme()"
+                         class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black transition-all cursor-pointer"
+                         :class="isDark ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-800'">
+                         <span>🌙 Dark</span>
+                     </button>
+                 </div>
+             </div>
+
              <div class="flex flex-col space-y-3 text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-slate-300">
                  <a href="{{ url('/#home') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">Home</a>
                  

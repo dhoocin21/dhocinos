@@ -21,7 +21,68 @@
         <link rel="icon" type="image/png" href="{{ asset('assets/images/hyundai_logo.png') }}">
     @endif
 
-    <title>Daftar Harga OTR Hyundai Surabaya Terbaru - {{ date('F Y') }}</title>
+    @php
+        $pageTitle = "Daftar Harga OTR Hyundai Surabaya Terbaru 2026 - Dealer Resmi HR Muhammad";
+        $pageDesc = "Pricelist harga mobil baru Hyundai OTR Surabaya 2026 terlengkap: Stargazer, Creta, Palisade, Santa Fe, IONIQ 5, IONIQ 6, KONA EV. Dapatkan promo diskon & simulasi kredit bersama Sales Nico 0813-3013-5013.";
+        $pageKeywords = "daftar harga hyundai surabaya, pricelist hyundai surabaya 2026, harga otr hyundai stargazer surabaya, harga creta surabaya, promo kredit hyundai surabaya nico";
+        $currentUrl = route('pricelist');
+        $shareImage = \App\Models\Setting::get('site_logo') ? asset('storage/' . \App\Models\Setting::get('site_logo')) : asset('assets/images/hyundai_logo.png');
+
+        $dealerAddress = \App\Models\Setting::get('dealer_address', 'Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya, Jawa Timur 60189');
+        $geoCoordinates = \App\Models\Setting::get('geo_coordinates', '-7.2847, 112.7001');
+        $coords = array_map('trim', explode(',', $geoCoordinates));
+        $latitude = isset($coords[0]) ? (float)$coords[0] : -7.2847;
+        $longitude = isset($coords[1]) ? (float)$coords[1] : 112.7001;
+    @endphp
+
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $pageDesc }}">
+    <meta name="keywords" content="{{ $pageKeywords }}">
+    <link rel="canonical" href="{{ $currentUrl }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <!-- Local SEO Geo Meta Tags -->
+    <meta name="geo.region" content="ID-JI">
+    <meta name="geo.placename" content="Surabaya">
+    <meta name="geo.position" content="{{ $latitude }};{{ $longitude }}">
+    <meta name="ICBM" content="{{ $latitude }}, {{ $longitude }}">
+
+    <!-- Open Graph / Facebook / WhatsApp Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ $currentUrl }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $pageDesc }}">
+    <meta property="og:image" content="{{ $shareImage }}">
+    <meta property="og:site_name" content="Hyundai Gowa HR Muhammad Surabaya">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageDesc }}">
+    <meta name="twitter:image" content="{{ $shareImage }}">
+
+    <!-- Structured Data: BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Daftar Harga OTR",
+          "item": "{{ $currentUrl }}"
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">

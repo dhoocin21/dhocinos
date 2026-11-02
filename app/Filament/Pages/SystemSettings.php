@@ -60,6 +60,9 @@ class SystemSettings extends Page
             'meta_title' => Setting::get('meta_title', 'Promo Hyundai Surabaya 2026 - Dealer Resmi Hyundai Gowa HR Muhammad (Nico)'),
             'meta_description' => Setting::get('meta_description', 'Promo diskon mobil baru Hyundai Surabaya, DP mulai 10%, bunga 0%, garansi baterai EV 8 tahun, dan tukar tambah semua merek mobil. Hubungi Nico 0813-3013-5013.'),
             'meta_keywords' => Setting::get('meta_keywords', 'hyundai surabaya, dealer hyundai hr muhammad, promo hyundai gowa surabaya, kredit stargazer surabaya, harga creta surabaya, palisade surabaya'),
+            'dealer_address' => Setting::get('dealer_address', 'Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya, Jawa Timur 60189'),
+            'dealer_maps_url' => Setting::get('dealer_maps_url', 'https://maps.app.goo.gl/wJk4zXpG8M8GzK2T6'),
+            'geo_coordinates' => Setting::get('geo_coordinates', '-7.2847, 112.7001'),
             'lead_modal_enabled' => (bool) Setting::get('lead_modal_enabled', true),
             'telegram_notifications_enabled' => (bool) Setting::get('telegram_notifications_enabled', false),
             'telegram_bot_token' => Setting::get('telegram_bot_token', ''),
@@ -151,6 +154,22 @@ class SystemSettings extends Page
                             ->label('Target Kata Kunci (Keywords)')
                             ->placeholder('Pisahkan dengan koma')
                             ->columnSpanFull(),
+                        TextInput::make('dealer_address')
+                            ->label('Alamat Fisik Showroom / Dealer (Local NAP)')
+                            ->placeholder('Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya, Jawa Timur 60189')
+                            ->helperText('Pastikan persis sama dengan alamat di Google Maps profil dealer.')
+                            ->columnSpanFull(),
+                        TextInput::make('dealer_maps_url')
+                            ->label('Tautan Google Maps Titik Showroom')
+                            ->url()
+                            ->placeholder('https://maps.app.goo.gl/...')
+                            ->helperText('Link langsung ke Google Maps untuk navigasi dan sinyal Local SEO.')
+                            ->columnSpan(1),
+                        TextInput::make('geo_coordinates')
+                            ->label('Koordinat Titik GPS (Latitude, Longitude)')
+                            ->placeholder('-7.2847, 112.7001')
+                            ->helperText('Koordinat lokasi untuk Geo Tag lokal Surabaya.')
+                            ->columnSpan(1),
                         \Filament\Forms\Components\Toggle::make('lead_modal_enabled')
                             ->label('Aktifkan Pop-up Penawaran Promo & Lead Magnet Otomatis')
                             ->default(true)
@@ -192,7 +211,7 @@ class SystemSettings extends Page
                 'ai_provider', 'ai_model', 'ai_api_key', 'ai_system_prompt',
                 'google_ads_id', 'google_tag_manager_id', 'meta_pixel_id',
                 'google_site_verification', 'meta_title', 'meta_description',
-                'meta_keywords', 'lead_modal_enabled',
+                'meta_keywords', 'dealer_address', 'dealer_maps_url', 'geo_coordinates', 'lead_modal_enabled',
                 'telegram_notifications_enabled', 'telegram_bot_token', 'telegram_chat_id'
             ];
             foreach ($allowedKeys as $key) {

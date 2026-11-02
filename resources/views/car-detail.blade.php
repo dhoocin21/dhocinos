@@ -20,7 +20,113 @@
         <link rel="icon" type="image/png" href="{{ asset('assets/images/hyundai_logo.png') }}">
     @endif
 
-    <title>{{ $car->name }} - Hyundai Showroom</title>
+    @php
+        $carPriceFormatted = number_format($car->price, 0, ',', '.');
+        $pageTitle = "Harga & Promo Hyundai " . $car->name . " Surabaya 2026 - Dealer Resmi HR Muhammad";
+        $pageDesc = "Dapatkan promo diskon, simulasi kredit DP mulai 10% & cicilan ringan Hyundai " . $car->name . " OTR Surabaya. Garansi resmi, tukar tambah & test drive dengan Sales Nico 0813-3013-5013.";
+        $pageKeywords = "harga hyundai " . strtolower($car->name) . " surabaya, promo hyundai " . strtolower($car->name) . " surabaya, kredit " . strtolower($car->name) . " surabaya, cicilan " . strtolower($car->name) . ", spesifikasi hyundai " . strtolower($car->name) . ", dealer hyundai gowa hr muhammad nico";
+        $carImage = $car->hero_image ? asset('storage/' . $car->hero_image) : ($car->image ? asset('storage/' . $car->image) : asset('assets/images/hyundai_logo.png'));
+        $currentUrl = route('car.show', $car->slug);
+
+        $dealerAddress = \App\Models\Setting::get('dealer_address', 'Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya, Jawa Timur 60189');
+        $geoCoordinates = \App\Models\Setting::get('geo_coordinates', '-7.2847, 112.7001');
+        $coords = array_map('trim', explode(',', $geoCoordinates));
+        $latitude = isset($coords[0]) ? (float)$coords[0] : -7.2847;
+        $longitude = isset($coords[1]) ? (float)$coords[1] : 112.7001;
+    @endphp
+
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $pageDesc }}">
+    <meta name="keywords" content="{{ $pageKeywords }}">
+    <link rel="canonical" href="{{ $currentUrl }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <!-- Local SEO Geo Meta Tags -->
+    <meta name="geo.region" content="ID-JI">
+    <meta name="geo.placename" content="Surabaya">
+    <meta name="geo.position" content="{{ $latitude }};{{ $longitude }}">
+    <meta name="ICBM" content="{{ $latitude }}, {{ $longitude }}">
+
+    <!-- Open Graph / Facebook / WhatsApp Preview -->
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="{{ $currentUrl }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $pageDesc }}">
+    <meta property="og:image" content="{{ $carImage }}">
+    <meta property="og:site_name" content="Hyundai Gowa HR Muhammad Surabaya">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageDesc }}">
+    <meta name="twitter:image" content="{{ $carImage }}">
+
+    <!-- Structured Data: BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Daftar Harga OTR",
+          "item": "{{ route('pricelist') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ $car->name }}",
+          "item": "{{ $currentUrl }}"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: Car / Product Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@type": "Car",
+      "name": "Hyundai {{ $car->name }} Surabaya",
+      "image": "{{ $carImage }}",
+      "description": "{{ addslashes(strip_tags($car->description ?: $pageDesc)) }}",
+      "brand": {
+        "@type": "Brand",
+        "name": "Hyundai"
+      },
+      "vehicleModelDate": "2026",
+      "offers": {
+        "@type": "Offer",
+        "url": "{{ $currentUrl }}",
+        "priceCurrency": "IDR",
+        "price": "{{ $car->price }}",
+        "priceValidUntil": "{{ date('Y-12-31') }}",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "AutoDealer",
+          "name": "Hyundai Gowa HR Muhammad Surabaya - Sales Nico",
+          "telephone": "+6281330135013",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ $dealerAddress }}",
+            "addressLocality": "Surabaya",
+            "addressRegion": "Jawa Timur",
+            "postalCode": "60189",
+            "addressCountry": "ID"
+          }
+        }
+      }
+    }
+    </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,17 +154,26 @@
         .dark .bg-gray-100 {
             background-color: #0f1c34 !important;
         }
-        .dark .text-gray-900, .dark .text-[#002c5f] {
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+            color: #ffffff !important;
+        }
+        .dark .text-gray-950, .dark .text-gray-900 {
             color: #ffffff !important;
         }
         .dark .text-gray-800 {
             color: #f1f5f9 !important;
         }
-        .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500 {
+        .dark .text-gray-700, .dark .text-gray-600 {
+            color: #e2e8f0 !important;
+        }
+        .dark .text-gray-500, .dark .text-gray-400 {
             color: #94a3b8 !important;
         }
         .dark .border-gray-100, .dark .border-gray-200 {
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark [class*="text-[#002c5f]"] {
+            color: #38bdf8 !important;
         }
     </style>
     @livewireStyles
@@ -187,12 +302,12 @@
                     @endif
                 ]
             }">
-                <h2 class="text-3xl md:text-4xl font-black text-[#002c5f] mb-4">{{ $car->name }}</h2>
+                <h2 class="text-3xl md:text-4xl font-black text-[#002c5f] dark:text-white mb-4">{{ $car->name }}</h2>
                 <div class="flex items-center gap-4 mb-8">
-                    <span class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">
+                    <span class="bg-blue-50 dark:bg-cyan-500/15 text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-cyan-400/30 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">
                         {{ $car->category }}
                     </span>
-                    <span class="text-2xl font-extrabold text-[#002c5f]">
+                    <span class="text-2xl font-extrabold text-[#002c5f] dark:text-cyan-300">
                         <template x-if="hasVariants">
                             <span x-text="variants[selectedVariant].price"></span>
                         </template>
@@ -203,12 +318,14 @@
                 </div>
 
                 <!-- Variant Button Selector -->
-                <div x-show="hasVariants" x-cloak class="mb-8 bg-gray-50 border border-gray-100 p-6 rounded-3xl">
-                    <label class="block text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest">Pilih Tipe / Varian</label>
+                <div x-show="hasVariants" x-cloak class="mb-8 bg-gray-50 dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 p-6 rounded-3xl">
+                    <label class="block text-[10px] font-black uppercase text-gray-500 dark:text-slate-400 mb-3 tracking-widest">Pilih Tipe / Varian</label>
                     <div class="flex flex-wrap gap-2">
                         <template x-for="(v, index) in variants" :key="index">
                             <button @click="selectedVariant = index"
-                                    :class="selectedVariant === index ? 'bg-[#002c5f] text-white border-[#002c5f] shadow-lg shadow-blue-900/10' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100 hover:text-gray-900'"
+                                    :class="selectedVariant === index 
+                                        ? 'bg-[#002c5f] dark:bg-gradient-to-r dark:from-cyan-500 dark:to-blue-600 text-white dark:text-slate-950 font-black border-[#002c5f] dark:border-cyan-400 shadow-lg shadow-blue-900/10 dark:shadow-cyan-500/20' 
+                                        : 'bg-white dark:bg-slate-900/90 text-gray-700 dark:text-slate-300 border-gray-200 dark:border-slate-700/80 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white'"
                                     class="px-4 py-2.5 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-200">
                                 <span x-text="v.name"></span>
                             </button>
@@ -217,29 +334,29 @@
                 </div>
 
                 <!-- Variant Specifications Box -->
-                <div x-show="hasVariants" x-cloak class="grid grid-cols-2 gap-4 bg-blue-50/50 p-5 rounded-2xl border border-blue-100/50 mb-8"
+                <div x-show="hasVariants" x-cloak class="grid grid-cols-2 gap-4 bg-blue-50/70 dark:bg-[#0f1c34] p-5 rounded-2xl border border-blue-100 dark:border-slate-700/80 mb-8"
                      x-transition:enter="transition ease-out duration-300">
                     <div>
-                        <p class="text-[9px] font-black uppercase tracking-widest text-[#002c5f]/60 mb-0.5">Transmisi</p>
-                        <p class="text-xs font-bold text-gray-900" x-text="variants[selectedVariant].transmission"></p>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-blue-900/70 dark:text-cyan-300/90 mb-0.5">Transmisi</p>
+                        <p class="text-xs font-bold text-gray-900 dark:text-white" x-text="variants[selectedVariant].transmission"></p>
                     </div>
                     <div>
-                        <p class="text-[9px] font-black uppercase tracking-widest text-[#002c5f]/60 mb-0.5">Mesin / Kapasitas</p>
-                        <p class="text-xs font-bold text-gray-900" x-text="variants[selectedVariant].engine"></p>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-blue-900/70 dark:text-cyan-300/90 mb-0.5">Mesin / Kapasitas</p>
+                        <p class="text-xs font-bold text-gray-900 dark:text-white" x-text="variants[selectedVariant].engine"></p>
                     </div>
                 </div>
 
-                <div class="prose max-w-none mb-12 text-gray-500 leading-relaxed text-sm">
+                <div class="prose max-w-none mb-12 text-gray-600 dark:text-slate-300 leading-relaxed text-sm font-medium">
                     {!! $car->description !!}
                 </div>
 
                 <!-- Features -->
                 <!-- Dynamic Variant Features -->
                 <div x-show="hasVariants" x-cloak class="mb-12">
-                    <h3 class="text-xs font-black mb-6 uppercase tracking-widest text-gray-900 border-b border-gray-100 pb-3">Key Features (Tipe <span class="text-blue-600" x-text="variants[selectedVariant].name"></span>)</h3>
+                    <h3 class="text-xs font-black mb-6 uppercase tracking-widest text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-800 pb-3">Key Features (Tipe <span class="text-blue-600 dark:text-cyan-400" x-text="variants[selectedVariant].name"></span>)</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <template x-for="(feature, idx) in variants[selectedVariant].features" :key="idx">
-                            <div class="flex items-center text-xs text-gray-600" x-transition:enter="transition ease-out duration-300">
+                            <div class="flex items-center text-xs text-gray-700 dark:text-slate-200 font-medium" x-transition:enter="transition ease-out duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mr-3 flex-shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
                                 <span x-text="feature"></span>
                             </div>
@@ -251,10 +368,10 @@
                 <div x-show="!hasVariants" class="mb-12">
                     @if($car->features && count($car->features) > 0)
                     <div>
-                        <h3 class="text-xs font-black mb-6 uppercase tracking-widest text-gray-900 border-b border-gray-100 pb-3">Key Features</h3>
+                        <h3 class="text-xs font-black mb-6 uppercase tracking-widest text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-800 pb-3">Key Features</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach($car->features as $feature)
-                                <div class="flex items-center text-xs text-gray-600">
+                                <div class="flex items-center text-xs text-gray-700 dark:text-slate-200 font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mr-3 flex-shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
                                     {{ $feature }}
                                 </div>
@@ -267,27 +384,27 @@
                 <!-- Actions -->
                 <div x-data="{ promoCode: '' }" class="space-y-6">
                     <div>
-                        <label class="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Punya Kode Promo?</label>
+                        <label class="block text-[10px] font-black uppercase text-gray-500 dark:text-slate-400 mb-2 tracking-widest">Punya Kode Promo?</label>
                         <input type="text" x-model="promoCode" placeholder="Masukkan kode promo di sini..." 
-                               class="w-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-4 text-sm focus:border-blue-500 focus:ring-0 transition-all uppercase font-mono tracking-widest">
+                               class="w-full bg-gray-50 dark:bg-[#0c1527] border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-xl p-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-blue-500 dark:focus:border-cyan-400 focus:ring-0 transition-all uppercase font-mono tracking-widest">
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a :href="'/track-wa?car_id={{ $car->id }}&text=' + encodeURIComponent('Halo, saya tertarik dengan unit {{ $car->name }}.' + (promoCode ? ' Saya memiliki kode promo: ' + promoCode : ''))" 
-                           class="flex-1 bg-[#002c5f] text-white text-center py-4 rounded-2xl font-bold hover:bg-blue-800 transition-all shadow-xl flex items-center justify-center gap-3">
+                           class="flex-1 bg-[#002c5f] dark:bg-gradient-to-r dark:from-cyan-500 dark:to-blue-600 hover:bg-blue-800 dark:hover:from-cyan-400 dark:hover:to-blue-500 text-white dark:text-slate-950 font-black text-center py-4 rounded-2xl transition-all shadow-xl dark:shadow-cyan-500/20 flex items-center justify-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
                             Hubungi Sales
                         </a>
                         
                         @if($car->flyer)
                             <a href="{{ asset('storage/' . $car->flyer) }}" target="_blank"
-                               class="flex-1 bg-white border-2 border-[#002c5f] text-[#002c5f] text-center py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-3">
+                               class="flex-1 bg-white dark:bg-[#0f1c34] border-2 border-[#002c5f] dark:border-cyan-500/50 text-[#002c5f] dark:text-cyan-300 text-center py-4 rounded-2xl font-bold hover:bg-gray-50 dark:hover:bg-cyan-500/10 transition-all flex items-center justify-center gap-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
                                 Download Flyer (PDF)
                             </a>
                         @else
                             <a href="{{ route('track.wa', ['car_id' => $car->id, 'text' => 'Halo sales Hyundai Surabaya, mohon kirimkan e-brochure / katalog resmi untuk unit ' . $car->name]) }}" target="_blank"
-                               class="flex-1 bg-white border-2 border-[#002c5f] text-[#002c5f] text-center py-4 rounded-2xl font-bold hover:bg-blue-50/50 transition-all flex items-center justify-center gap-3">
+                               class="flex-1 bg-white dark:bg-[#0f1c34] border-2 border-[#002c5f] dark:border-cyan-500/50 text-[#002c5f] dark:text-cyan-300 text-center py-4 rounded-2xl font-bold hover:bg-blue-50/50 dark:hover:bg-cyan-500/10 transition-all flex items-center justify-center gap-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
                                 Minta Brosur (WhatsApp)
                             </a>
@@ -297,7 +414,7 @@
     </main>
 
     <!-- Harga On The Road Section -->
-    <section class="py-16 bg-white border-t border-gray-100 pb-8">
+    <section class="py-16 bg-white dark:bg-[#070d19] border-t border-gray-100 dark:border-slate-800 pb-8 transition-colors">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
@@ -312,7 +429,7 @@
                                  alt="{{ $car->name }}" 
                                  class="relative z-10 w-full h-auto object-contain transform hover:scale-105 hover:-translate-y-2 transition-all duration-700 select-none drop-shadow-[0_20px_50px_rgba(0,44,95,0.15)]">
                         @else
-                            <div class="relative z-10 w-full aspect-[4/3] bg-gray-50 border border-gray-100 rounded-3xl flex items-center justify-center text-gray-300">
+                            <div class="relative z-10 w-full aspect-[4/3] bg-gray-50 dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 rounded-3xl flex items-center justify-center text-gray-400">
                                 No Profile Photo
                             </div>
                         @endif
@@ -322,16 +439,16 @@
                 <!-- Right: OTR Price Table & Disclaimer -->
                 <div class="lg:col-span-7">
                     <div class="mb-6">
-                        <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-2">Price List</span>
-                        <h3 class="text-3xl font-black text-[#002c5f] uppercase tracking-tight">Harga On The Road</h3>
-                        <p class="text-gray-400 text-xs mt-1 font-semibold">Daftar harga OTR Hyundai {{ $car->name }} terbaru</p>
+                        <span class="text-[10px] font-black text-blue-600 dark:text-cyan-400 uppercase tracking-[0.3em] block mb-2">Price List</span>
+                        <h3 class="text-3xl font-black text-[#002c5f] dark:text-white uppercase tracking-tight">Harga On The Road</h3>
+                        <p class="text-gray-500 dark:text-slate-400 text-xs mt-1 font-semibold">Daftar harga OTR Hyundai {{ $car->name }} terbaru</p>
                     </div>
 
                     <!-- Price Table -->
-                    <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl overflow-hidden mb-8">
+                    <div class="bg-white dark:bg-[#0c1527] rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-xl overflow-hidden mb-8">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#002c5f] text-white">
+                                <tr class="bg-[#002c5f] dark:bg-[#0f1c34] text-white">
                                     <th class="p-5 text-xs font-black uppercase tracking-wider w-1/2">Type / Varian</th>
                                     <th class="p-5 text-xs font-black uppercase tracking-wider text-left w-1/2">Harga OTR</th>
                                 </tr>
@@ -339,18 +456,18 @@
                             <tbody>
                                 @if($car->variants && count($car->variants) > 0)
                                     @foreach($car->variants as $variant)
-                                        <tr class="border-b border-gray-100 hover:bg-blue-50/40 transition-colors duration-200">
-                                            <td class="p-5 text-xs font-bold text-gray-900 uppercase tracking-wide w-1/2">{{ $variant['name'] }}</td>
+                                        <tr class="border-b border-gray-100 dark:border-slate-800 hover:bg-blue-50/40 dark:hover:bg-slate-800/40 transition-colors duration-200">
+                                            <td class="p-5 text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide w-1/2">{{ $variant['name'] }}</td>
                                             <td class="p-5 text-left w-1/2">
-                                                <span class="text-sm font-black text-[#002c5f]">Rp {{ number_format($variant['price'], 0, ',', '.') }}</span>
+                                                <span class="text-sm font-black text-[#002c5f] dark:text-cyan-300">Rp {{ number_format($variant['price'], 0, ',', '.') }}</span>
                                             </td>
                                         </tr>
                                     @endforeach
                                 @else
-                                    <tr class="border-b border-gray-100">
-                                        <td class="p-5 text-xs font-bold text-gray-900 uppercase tracking-wide w-1/2">Standard</td>
+                                    <tr class="border-b border-gray-100 dark:border-slate-800">
+                                        <td class="p-5 text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide w-1/2">Standard</td>
                                         <td class="p-5 text-left w-1/2">
-                                            <span class="text-sm font-black text-[#002c5f]">Rp {{ number_format($car->price, 0, ',', '.') }}</span>
+                                            <span class="text-sm font-black text-[#002c5f] dark:text-cyan-300">Rp {{ number_format($car->price, 0, ',', '.') }}</span>
                                         </td>
                                     </tr>
                                 @endif
@@ -359,23 +476,23 @@
                     </div>
 
                     <!-- Disclaimer -->
-                    <div class="bg-gray-50 border border-gray-100 p-6 rounded-3xl">
-                        <h4 class="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-3">Disclaimer / Catatan</h4>
-                        <ul class="space-y-2 text-[10px] text-gray-400 font-semibold leading-relaxed">
+                    <div class="bg-gray-50 dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 p-6 rounded-3xl">
+                        <h4 class="text-[10px] font-black uppercase text-gray-500 dark:text-slate-400 tracking-widest mb-3">Disclaimer / Catatan</h4>
+                        <ul class="space-y-2 text-[10px] text-gray-500 dark:text-slate-400 font-semibold leading-relaxed">
                             <li class="flex items-start">
-                                <span class="text-blue-500 mr-2 flex-shrink-0">•</span>
+                                <span class="text-blue-500 dark:text-cyan-400 mr-2 flex-shrink-0">•</span>
                                 <span>Harga dan spesifikasi dapat berubah sewaktu-waktu tanpa pemberitahuan terlebih dahulu.</span>
                             </li>
                             <li class="flex items-start">
-                                <span class="text-blue-500 mr-2 flex-shrink-0">•</span>
+                                <span class="text-blue-500 dark:text-cyan-400 mr-2 flex-shrink-0">•</span>
                                 <span>Harga berlaku On The Road Surabaya, Sidoarjo, Gresik, dan wilayah Jawa Timur.</span>
                             </li>
                             <li class="flex items-start">
-                                <span class="text-blue-500 mr-2 flex-shrink-0">•</span>
+                                <span class="text-blue-500 dark:text-cyan-400 mr-2 flex-shrink-0">•</span>
                                 <span>Harga BBN tidak mengikat, apabila terjadi selisih BBN sepenuhnya menjadi beban konsumen.</span>
                             </li>
                             <li class="flex items-start">
-                                <span class="text-blue-500 mr-2 flex-shrink-0">•</span>
+                                <span class="text-blue-500 dark:text-cyan-400 mr-2 flex-shrink-0">•</span>
                                 <span>Harga BBN yang tertera hanya berlaku untuk kepemilikan kendaraan pertama (I).</span>
                             </li>
                         </ul>
@@ -388,70 +505,70 @@
 
     <!-- Side-by-Side Comparison Table Section -->
     @if($car->variants && count($car->variants) > 0)
-    <section class="py-16 bg-gray-50 border-t border-gray-100">
+    <section class="py-16 bg-gray-50 dark:bg-[#080f1d] border-t border-gray-100 dark:border-slate-800 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-2">Lineup</span>
-                <h3 class="text-3xl font-black text-[#002c5f]">Perbandingan Spesifikasi & Fitur</h3>
-                <p class="text-gray-400 text-xs mt-2 font-medium">Bandingkan harga dan kelengkapan fitur dari setiap tipe {{ $car->name }}</p>
-                <div class="h-1 w-16 bg-[#002c5f] mx-auto rounded-full mt-4"></div>
+                <span class="text-[10px] font-black text-blue-600 dark:text-cyan-400 uppercase tracking-[0.3em] block mb-2">Lineup</span>
+                <h3 class="text-3xl font-black text-[#002c5f] dark:text-white">Perbandingan Spesifikasi & Fitur</h3>
+                <p class="text-gray-500 dark:text-slate-400 text-xs mt-2 font-medium">Bandingkan harga dan kelengkapan fitur dari setiap tipe {{ $car->name }}</p>
+                <div class="h-1 w-16 bg-[#002c5f] dark:bg-cyan-400 mx-auto rounded-full mt-4"></div>
             </div>
 
             <!-- Comparison Table Container -->
-            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl overflow-hidden">
+            <div class="bg-white dark:bg-[#0c1527] rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-xl overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[700px]">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-100">
-                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400 w-[200px]">Fitur / Spesifikasi</th>
+                            <tr class="bg-gray-50 dark:bg-[#0f1c34] border-b border-gray-100 dark:border-slate-800">
+                                <th class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-400 w-[200px]">Fitur / Spesifikasi</th>
                                 @foreach($car->variants as $variant)
-                                    <th class="p-6 text-center border-l border-gray-100 min-w-[150px]" style="width: calc((100% - 200px) / {{ count($car->variants) }})">
-                                        <span class="text-[9px] font-black text-blue-600 uppercase tracking-widest block mb-1">Tipe</span>
-                                        <h4 class="text-base font-black text-gray-900 uppercase">{{ $variant['name'] }}</h4>
+                                    <th class="p-6 text-center border-l border-gray-100 dark:border-slate-800 min-w-[150px]" style="width: calc((100% - 200px) / {{ count($car->variants) }})">
+                                        <span class="text-[9px] font-black text-blue-600 dark:text-cyan-400 uppercase tracking-widest block mb-1">Tipe</span>
+                                        <h4 class="text-base font-black text-gray-900 dark:text-white uppercase">{{ $variant['name'] }}</h4>
                                     </th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Harga OTR -->
-                            <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
-                                <td class="p-6 text-[11px] font-bold text-gray-900 uppercase tracking-wider">Harga OTR mulai</td>
+                            <tr class="border-b border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="p-6 text-[11px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">Harga OTR mulai</td>
                                 @foreach($car->variants as $variant)
-                                    <td class="p-6 text-center border-l border-gray-100">
-                                        <span class="text-base font-black text-[#002c5f]">Rp {{ number_format($variant['price'], 0, ',', '.') }}</span>
+                                    <td class="p-6 text-center border-l border-gray-100 dark:border-slate-800">
+                                        <span class="text-base font-black text-[#002c5f] dark:text-cyan-300">Rp {{ number_format($variant['price'], 0, ',', '.') }}</span>
                                     </td>
                                 @endforeach
                             </tr>
 
                             <!-- Transmisi -->
-                            <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
-                                <td class="p-6 text-[11px] font-bold text-gray-900 uppercase tracking-wider">Transmisi</td>
+                            <tr class="border-b border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="p-6 text-[11px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">Transmisi</td>
                                 @foreach($car->variants as $variant)
-                                    <td class="p-6 text-center border-l border-gray-100 text-xs font-semibold text-gray-600">
+                                    <td class="p-6 text-center border-l border-gray-100 dark:border-slate-800 text-xs font-semibold text-gray-600 dark:text-slate-300">
                                         {{ $variant['transmission'] ?? '-' }}
                                     </td>
                                 @endforeach
                             </tr>
 
                             <!-- Mesin -->
-                            <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
-                                <td class="p-6 text-[11px] font-bold text-gray-900 uppercase tracking-wider">Mesin / Kapasitas</td>
+                            <tr class="border-b border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="p-6 text-[11px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">Mesin / Kapasitas</td>
                                 @foreach($car->variants as $variant)
-                                    <td class="p-6 text-center border-l border-gray-100 text-xs font-semibold text-gray-600">
+                                    <td class="p-6 text-center border-l border-gray-100 dark:border-slate-800 text-xs font-semibold text-gray-600 dark:text-slate-300">
                                         {{ $variant['engine'] ?? '-' }}
                                     </td>
                                 @endforeach
                             </tr>
 
                             <!-- Fitur Utama -->
-                            <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="p-6 text-[11px] font-bold text-gray-900 uppercase tracking-wider align-top">Fitur Unggulan</td>
+                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="p-6 text-[11px] font-bold text-gray-900 dark:text-white uppercase tracking-wider align-top">Fitur Unggulan</td>
                                 @foreach($car->variants as $variant)
-                                    <td class="p-6 border-l border-gray-100 align-top">
+                                    <td class="p-6 border-l border-gray-100 dark:border-slate-800 align-top">
                                         <ul class="space-y-2">
                                             @if(isset($variant['key_features']) && is_array($variant['key_features']))
                                                 @foreach($variant['key_features'] as $feature)
-                                                    <li class="flex items-start text-[11px] text-gray-600 text-left">
+                                                    <li class="flex items-start text-[11px] text-gray-600 dark:text-slate-300 text-left">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mr-2 flex-shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg>
                                                         <span>{{ $feature }}</span>
                                                     </li>
@@ -470,7 +587,7 @@
             
             <div class="mt-12 flex justify-center">
                 <a href="{{ route('track.wa', ['car_id' => $car->id, 'text' => 'Halo sales Hyundai, saya ingin melakukan pemesanan/tanya tipe Pilihan untuk unit ' . $car->name]) }}" 
-                   class="bg-[#002c5f] text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-800 transition-all shadow-xl flex items-center justify-center gap-3">
+                   class="bg-[#002c5f] dark:bg-gradient-to-r dark:from-cyan-500 dark:to-blue-600 hover:bg-blue-800 dark:hover:from-cyan-400 dark:hover:to-blue-500 text-white dark:text-slate-950 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl dark:shadow-cyan-500/20 flex items-center justify-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
                     Pesan Tipe Pilihan Sekarang
                 </a>

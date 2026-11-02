@@ -16,6 +16,12 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>{{ route('posts.index') }}</loc>
+        <lastmod>{{ date('Y-m-d') }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>{{ url('/privacy-policy') }}</loc>
         <lastmod>{{ date('Y-m-d') }}</lastmod>
         <changefreq>monthly</changefreq>

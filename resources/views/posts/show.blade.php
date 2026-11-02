@@ -11,7 +11,88 @@
         <link rel="icon" type="image/png" href="{{ asset('assets/images/hyundai_logo.png') }}">
     @endif
 
-    <title>{{ $post->title }} - Hyundai Showroom</title>
+    @php
+        $pageTitle = $post->title . " - Hyundai Gowa Surabaya";
+        $pageDesc = \Illuminate\Support\Str::limit(strip_tags($post->content), 155);
+        $postImage = $post->image ? asset('storage/' . $post->image) : asset('assets/images/hyundai_logo.png');
+        $currentUrl = route('posts.show', $post->slug);
+    @endphp
+
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $pageDesc }}">
+    <link rel="canonical" href="{{ $currentUrl }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <!-- Open Graph / Facebook / WhatsApp Preview -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ $currentUrl }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $pageDesc }}">
+    <meta property="og:image" content="{{ $postImage }}">
+    <meta property="og:site_name" content="Hyundai Gowa HR Muhammad Surabaya">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageDesc }}">
+    <meta name="twitter:image" content="{{ $postImage }}">
+
+    <!-- Structured Data: BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Berita & Auto Insight",
+          "item": "{{ route('posts.index') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ $post->title }}",
+          "item": "{{ $currentUrl }}"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: NewsArticle Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": "{{ addslashes($post->title) }}",
+      "image": [
+        "{{ $postImage }}"
+      ],
+      "datePublished": "{{ $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String() }}",
+      "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+      "author": [{
+        "@type": "Person",
+        "name": "Nico - Sales Consultant Hyundai",
+        "url": "{{ url('/') }}"
+      }],
+      "publisher": {
+        "@type": "Organization",
+        "name": "Hyundai Gowa Surabaya",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ asset('assets/images/hyundai_logo.png') }}"
+        }
+      },
+      "description": "{{ addslashes($pageDesc) }}"
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
