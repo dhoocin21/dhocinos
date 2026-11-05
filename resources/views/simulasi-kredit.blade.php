@@ -23,7 +23,8 @@
     <!-- Critical Anti-FOUC & Asset Priority -->
     <style>
         [x-cloak] { display: none !important; }
-        header img, nav img { max-height: 35px !important; width: auto !important; }
+        header img, nav img { max-height: 35px !important; height: 30px !important; width: auto !important; }
+        header svg, nav svg { max-width: 28px !important; max-height: 28px !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -110,6 +111,13 @@
         "addressRegion": "Jawa Timur",
         "postalCode": "60189",
         "addressCountry": "ID"
+      },
+      "aggregateRating": {
+        "@@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "184",
+        "bestRating": "5",
+        "worstRating": "1"
       }
     }
     </script>
@@ -162,9 +170,11 @@
         body { font-family: 'Outfit', sans-serif; }
         [x-cloak] { display: none !important; }
     </style>
+    @include('partials.tracking-scripts')
 </head>
 
 <body class="bg-slate-50 dark:bg-[#070d19] text-gray-900 dark:text-gray-100 antialiased selection:bg-cyan-500 selection:text-white transition-colors duration-300">
+    @include('partials.tracking-body')
 
     <x-navbar />
 

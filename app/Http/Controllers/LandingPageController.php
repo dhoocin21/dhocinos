@@ -149,6 +149,20 @@ class LandingPageController extends Controller
         return view('promo', compact('cars', 'consultant', 'activeEvent'));
     }
 
+    public function tradeInPage(Request $request)
+    {
+        $cars = Car::where('is_available', true)->get();
+        $consultant = Consultant::first();
+        return view('tukar-tambah', compact('cars', 'consultant'));
+    }
+
+    public function servicePage(Request $request)
+    {
+        $cars = Car::where('is_available', true)->get();
+        $consultant = Consultant::first();
+        return view('bengkel-service', compact('cars', 'consultant'));
+    }
+
     public function quotation(Request $request)
     {
         $carId = $request->get('car_id');

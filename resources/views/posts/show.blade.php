@@ -4,6 +4,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
+    <!-- Dark Mode Theme Initialization (FOUC Prevention) -->
+    <script>
+        try {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        } catch (e) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+    </script>
+    
+    <!-- Critical Anti-FOUC & Asset Priority -->
+    <style>
+        [x-cloak] { display: none !important; }
+        header img, nav img { max-height: 35px !important; height: 30px !important; width: auto !important; }
+        header svg, nav svg { max-width: 28px !important; max-height: 28px !important; }
+    </style>
+    
     <!-- Favicon -->
     @if($logo = \App\Models\Setting::get('site_logo'))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $logo) }}">

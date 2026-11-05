@@ -78,8 +78,9 @@ class SystemSettings extends Page
         $featuredTestDriveIds = Setting::getJson('featured_test_drive_car_ids', []);
 
         $this->form->fill([
-            'site_name' => Setting::get('site_name', 'Hyundai Showroom'),
+            'site_name' => Setting::get('site_name', 'Hyundai Gowa HR Muhammad'),
             'site_logo' => Setting::get('site_logo'),
+            'navbar_show_verified_badge' => (bool) Setting::get('navbar_show_verified_badge', true),
             'featured_test_drive_car_ids' => $featuredTestDriveIds,
             'ev_calculator_models' => $savedEv,
             'ai_provider' => Setting::get('ai_provider', 'gemini'),
@@ -100,27 +101,60 @@ class SystemSettings extends Page
             'telegram_notifications_enabled' => (bool) Setting::get('telegram_notifications_enabled', false),
             'telegram_bot_token' => Setting::get('telegram_bot_token', ''),
             'telegram_chat_id' => Setting::get('telegram_chat_id', ''),
+            'auto_pilot_enabled' => (bool) Setting::get('auto_pilot_enabled', true),
+            'auto_pilot_frequency' => Setting::get('auto_pilot_frequency', 'daily'),
+            'auto_pilot_sync_official' => (bool) Setting::get('auto_pilot_sync_official', true),
+            'auto_pilot_generate_ai' => (bool) Setting::get('auto_pilot_generate_ai', true),
         ]);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('run_auto_pilot')
+                ->label('⚡ Jalankan Auto-Pilot Sekarang (Test Run)')
+                ->icon('heroicon-o-sparkles')
+                ->color('success')
+                ->requiresConfirmation()
+                ->modalHeading('Jalankan Auto-Pilot Pembaruan Konten')
+                ->modalDescription('Sistem akan langsung mensinkronkan rilis resmi hyundai.com dan memproduksi artikel SEO lokal Surabaya baru secara otomatis.')
+                ->modalSubmitActionLabel('Mulai Proses Sekarang')
+                ->action(function () {
+                    \Illuminate\Support\Facades\Artisan::call('hyundai:auto-pilot', ['--force' => true]);
+                    Notification::make()
+                        ->title('Auto-Pilot Berhasil Dijalankan!')
+                        ->body('Konten SEO baru berhasil dibuat dan diterbitkan ke website.')
+                        ->success()
+                        ->send();
+                }),
+        ];
     }
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Branding')
-                    ->description('Atur identitas utama website di sini.')
-                    ->visible(fn () => auth()->user()?->role === 'developer')
+                Section::make('🏷️ Identitas & Nama Showroom (Navbar Branding)')
+                    ->description('Ubah nama dan logo resmi showroom yang muncul di bagian navbar atas website agar terlihat resmi dan kredibel.')
                     ->schema([
                         TextInput::make('site_name')
-                            ->label('Nama Showroom / Brand')
+                            ->label('Nama Showroom di Navbar')
                             ->required()
-                            ->placeholder('Contoh: Hyundai Gowa Surabaya'),
+                            ->placeholder('Contoh: Hyundai Gowa HR Muhammad atau Hyundai Surabaya')
+                            ->helperText('Nama ini langsung menggantikan teks "HYUNDAI SHOWROOM" di samping logo pada navbar atas website.')
+                            ->columnSpan(2),
+                        \Filament\Forms\Components\Toggle::make('navbar_show_verified_badge')
+                            ->label('Centang Biru Resmi (Verified Badge)')
+                            ->default(true)
+                            ->helperText('Menampilkan lencana centang biru resmi terverifikasi di samping nama showroom.')
+                            ->columnSpan(1),
                         FileUpload::make('site_logo')
-                            ->label('Logo Utama')
+                            ->label('Logo Khusus Showroom (Opsional)')
                             ->image()
                             ->directory('settings')
-                            ->helperText('Gunakan logo transparan (PNG) untuk hasil terbaik.'),
-                    ])->columns(2),
+                            ->helperText('Jika dikosongkan, website akan otomatis menggunakan logo resmi Hyundai warna biru standar.')
+                            ->columnSpanFull(),
+                    ])->columns(3),
 
                 Section::make('AutoShow AI Engine & Perintah AI')
                     ->description('Hubungkan website dengan model AI (OpenRouter atau Google Gemini) dan berikan instruksi/perintah spesifik untuk asisten AI.')
@@ -280,6 +314,54 @@ class SystemSettings extends Page
                             ->helperText('Cek ID akun Telegram Anda melalui bot @userinfobot.')
                             ->visible(fn ($get) => (bool) $get('telegram_notifications_enabled')),
                     ])->columns(2),
+
+                Section::make('🚀 Auto-Pilot SEO Content Engine (Update Konten Otomatis Periodik)')
+                    ->description('Sistem otomatisasi latar belakang (Cron Job) yang memperbarui berita resmi dari hyundai.com dan memproduksi ulasan & artikel SEO lokal Surabaya secara teratur untuk mendongkrak peringkat #1 Google.')
+                    ->schema([
+                        \Filament\Forms\Components\Toggle::make('auto_pilot_enabled')
+                            ->label('Aktifkan Auto-Pilot Pembaruan Konten')
+                            ->default(true)
+                            ->helperText('Jika aktif, sistem terjadwal akan otomatis menyegarkan konten website Anda secara berkala.')
+                            ->reactive()
+                            ->columnSpanFull(),
+
+                        Select::make('auto_pilot_frequency')
+                            ->label('Frekuensi Pembaruan')
+                            ->options([
+                                'daily' => 'Setiap Hari (Sangat Direkomendasikan untuk Google Rank #1)',
+                                'every_2_days' => 'Setiap 2 Hari Sekali',
+                                'twice_a_week' => '2 Kali Seminggu (Senin & Kamis)',
+                                'weekly' => '1 Kali Seminggu',
+                            ])
+                            ->default('daily')
+                            ->required()
+                            ->visible(fn ($get) => (bool) $get('auto_pilot_enabled'))
+                            ->columnSpan(1),
+
+                        \Filament\Forms\Components\Toggle::make('auto_pilot_sync_official')
+                            ->label('Sinkronkan Berita Resmi Hyundai.com')
+                            ->default(true)
+                            ->helperText('Otomatis menarik siaran pers & foto terbaru')
+                            ->visible(fn ($get) => (bool) $get('auto_pilot_enabled'))
+                            ->columnSpan(1),
+
+                        \Filament\Forms\Components\Toggle::make('auto_pilot_generate_ai')
+                            ->label('Buat Artikel SEO Lokal Surabaya (AI)')
+                            ->default(true)
+                            ->helperText('AI Gemini otomatis menyusun komparasi & promo lokal')
+                            ->visible(fn ($get) => (bool) $get('auto_pilot_enabled'))
+                            ->columnSpan(1),
+
+                        \Filament\Forms\Components\Placeholder::make('auto_pilot_status')
+                            ->label('Status Terakhir Auto-Pilot')
+                            ->content(function () {
+                                $last = Setting::get('auto_pilot_last_run_at');
+                                if (!$last) return 'Belum pernah berjalan. Tekan tombol "⚡ Jalankan Auto-Pilot Sekarang" di kanan atas halaman untuk uji coba.';
+                                $time = \Carbon\Carbon::parse($last)->translatedFormat('d F Y, H:i') . ' WIB (' . \Carbon\Carbon::parse($last)->diffForHumans() . ')';
+                                return "Terakhir berhasil berjalan: {$time}";
+                            })
+                            ->columnSpanFull(),
+                    ])->columns(3),
             ])
             ->statePath('data');
     }
@@ -291,12 +373,14 @@ class SystemSettings extends Page
         if (auth()->user()?->role === 'sales') {
             // Khusus client/sales, simpan field AI dan Marketing
             $allowedKeys = [
+                'site_name', 'site_logo', 'navbar_show_verified_badge',
                 'ai_provider', 'ai_model', 'ai_api_key', 'ai_system_prompt',
                 'google_ads_id', 'google_tag_manager_id', 'meta_pixel_id',
                 'google_site_verification', 'meta_title', 'meta_description',
                 'meta_keywords', 'dealer_address', 'dealer_maps_url', 'geo_coordinates', 'lead_modal_enabled',
                 'telegram_notifications_enabled', 'telegram_bot_token', 'telegram_chat_id',
-                'featured_test_drive_car_ids', 'ev_calculator_models'
+                'featured_test_drive_car_ids', 'ev_calculator_models',
+                'auto_pilot_enabled', 'auto_pilot_frequency', 'auto_pilot_sync_official', 'auto_pilot_generate_ai'
             ];
             foreach ($allowedKeys as $key) {
                 if (array_key_exists($key, $data)) {

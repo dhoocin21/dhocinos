@@ -22,7 +22,8 @@
     <!-- Critical Anti-FOUC & Asset Priority -->
     <style>
         [x-cloak] { display: none !important; }
-        header img, nav img { max-height: 35px !important; width: auto !important; }
+        header img, nav img { max-height: 35px !important; height: 30px !important; width: auto !important; }
+        header svg, nav svg { max-width: 28px !important; max-height: 28px !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -115,6 +116,13 @@
         "@type": "Brand",
         "name": "Hyundai"
       },
+      "aggregateRating": {
+        "@@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "184",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
       "vehicleModelDate": "2026",
       "offers": {
         "@type": "Offer",
@@ -187,18 +195,10 @@
         }
     </style>
     @livewireStyles
-    @if($googleAdsId = config('services.google.ads_id'))
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $googleAdsId }}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '{{ $googleAdsId }}');
-        </script>
-    @endif
+    @include('partials.tracking-scripts')
 </head>
 <body class="bg-white dark:bg-[#070d19] text-gray-900 dark:text-slate-100 antialiased transition-colors duration-300">
+    @include('partials.tracking-body')
     
     <x-navbar />
 

@@ -12,6 +12,8 @@ Route::get('/', [LandingPageController::class, 'index']);
 Route::get('/test-drive', [LandingPageController::class, 'testDrive'])->name('testdrive.index');
 Route::get('/simulasi-kredit', [LandingPageController::class, 'creditSimulation'])->name('credit.simulation');
 Route::get('/promo', [LandingPageController::class, 'promoIndex'])->name('promo.index');
+Route::get('/tukar-tambah', [LandingPageController::class, 'tradeInPage'])->name('tradein.index');
+Route::get('/bengkel-service', [LandingPageController::class, 'servicePage'])->name('service.index');
 Route::get('/news', [LandingPageController::class, 'postsIndex'])->name('posts.index');
 Route::get('/news/{post:slug}', [LandingPageController::class, 'postsShow'])->name('posts.show');
 Route::get('/admin/otp', OtpChallenge::class)->name('filament.admin.auth.otp');

@@ -28,6 +28,18 @@
         <priority>0.95</priority>
     </url>
     <url>
+        <loc>{{ url('/tukar-tambah') }}</loc>
+        <lastmod>{{ date('Y-m-d') }}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>{{ url('/bengkel-service') }}</loc>
+        <lastmod>{{ date('Y-m-d') }}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
         <loc>{{ url('/pricelist') }}</loc>
         <lastmod>{{ date('Y-m-d') }}</lastmod>
         <changefreq>weekly</changefreq>

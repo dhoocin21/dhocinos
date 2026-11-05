@@ -598,5 +598,168 @@ Format:
             ]],
         ];
     }
+
+    /**
+     * Generate an SEO-optimized automotive article targeting Surabaya & East Java search traffic.
+     */
+    public function generateSeoArticle(string $topic, ?string $carModel = null, ?string $targetAudience = null, ?string $keywords = null): array
+    {
+        $provider = Setting::get('ai_provider') ?: env('AI_DEFAULT_PROVIDER', 'gemini');
+        $apiKey = $this->resolveApiKey($provider);
+        $model = Setting::get('ai_model') ?: ($provider === 'gemini' ? 'gemini-1.5-flash' : 'openrouter/free');
+
+        $carText = $carModel ? "Fokus Unit Mobil: {$carModel}" : "Fokus Unit: Seluruh Lini Hyundai Terbaru (Stargazer, Creta, Ioniq 5, Santa Fe, Kona Electric)";
+        $audienceText = $targetAudience ? "Target Pembaca: {$targetAudience}" : "Target Pembaca: Keluarga, profesional muda, dan pebisnis di Surabaya & sekitarnya";
+        $keywordText = $keywords ? "Keyword Wajib Disertakan: {$keywords}" : "Keyword Wajib: Dealer Hyundai Surabaya, Promo Hyundai Surabaya 2026, Kredit Mobil Hyundai Murah, Hyundai HR Muhammad, Test Drive Surabaya";
+
+        $prompt = "Anda adalah Senior Content Strategist & Automotive SEO Specialist terkemuka untuk Dealer Resmi Hyundai Gowa HR Muhammad Surabaya.
+Tugas Anda adalah menulis artikel otomotif yang sangat berbobot, ramah SEO Google, informatif, dan persuasif dengan topik:
+'{$topic}'
+
+PARAMETER KONTEN:
+- {$carText}
+- {$audienceText}
+- {$keywordText}
+- Lokasi dealer: Hyundai Gowa HR Muhammad, Jl. HR Muhammad No. 46, Surabaya Barat.
+- Kontak Sales Consultant: Mas Nico (0813-3013-5013).
+
+PETUNJUK PENULISAN SEO KELAS SATU:
+1. Format output berupa HTML semantik yang siap dipajang di website (gunakan <h2>, <h3>, <p>, <ul>, <li>, <strong>, <blockquote>). Jangan sertakan tag <html>, <body>, atau <!DOCTYPE>.
+2. Judul artikel harus click-worthy, memikat pembaca lokal Surabaya, mengandung unsur tahun (2026), dan memiliki relevansi tinggi.
+3. Panjang artikel minimal 600 - 900 kata. Ulas spesifikasi teknis, kelebihan kabin, efisiensi bahan bakar / baterai, teknologi keselamatan Hyundai SmartSense, kenyamanan jalanan kota Surabaya hingga tol luar kota (Gresik, Malang, Sidoarjo).
+4. Sisipkan Call to Action (CTA) di bagian akhir dengan tombol atau link kontak konsultasi promo WhatsApp Mas Nico (0813-3013-5013) serta ajakan Test Drive langsung ke rumah / kantor pemesan di area Surabaya.
+5. Sediakan ringkasan / meta description (maksimal 160 karakter) yang menarik bagi cuplikan Google Search (SERP).
+
+FORMAT BALASAN (WAJIB JSON MURNI TANPA MARKDOWN):
+{
+  \"title\": \"Judul Artikel Menarik SEO (Maks 70 Karakter)\",
+  \"category\": \"News\",
+  \"excerpt\": \"Ringkasan meta description maksimal 160 karakter untuk Google SERP snippet...\",
+  \"content\": \"<h2>...</h2><p>...</p><h3>...</h3><ul><li>...</li></ul>...\"
+}";
+
+        if (!empty($apiKey) && $provider !== 'disabled') {
+            try {
+                $rawText = '';
+                if ($provider === 'gemini') {
+                    $modelName = $model ?: 'gemini-1.5-flash';
+                    $response = Http::timeout(30)->post("https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$apiKey}", [
+                        'contents' => [
+                            ['parts' => [['text' => $prompt]]]
+                        ],
+                        'generationConfig' => [
+                            'temperature' => 0.7,
+                            'maxOutputTokens' => 3000,
+                        ]
+                    ]);
+
+                    if ($response->successful()) {
+                        $rawText = $response->json('candidates.0.content.parts.0.text') ?? '';
+                    } else {
+                        Log::error("AiService generateSeoArticle Gemini error: " . $response->body());
+                    }
+                } elseif ($provider === 'openrouter') {
+                    $openrouterModel = str_contains($model, '/') ? $model : 'google/gemini-flash-1.5';
+                    $response = Http::withHeaders([
+                        'Authorization' => "Bearer {$apiKey}",
+                        'Content-Type' => 'application/json',
+                        'HTTP-Referer' => url('/'),
+                        'X-Title' => 'Hyundai Showroom Article AI',
+                    ])->timeout(30)->post('https://openrouter.ai/api/v1/chat/completions', [
+                        'model' => $openrouterModel,
+                        'messages' => [
+                            ['role' => 'user', 'content' => $prompt]
+                        ],
+                        'temperature' => 0.7,
+                        'max_tokens' => 3000,
+                    ]);
+
+                    if ($response->successful()) {
+                        $rawText = $response->json('choices.0.message.content') ?? '';
+                    } else {
+                        Log::error("AiService generateSeoArticle OpenRouter error: " . $response->body());
+                    }
+                }
+
+                if (!empty($rawText)) {
+                    $cleaned = trim($rawText);
+                    if (preg_match('/\{[\s\S]*\}/', $cleaned, $matches)) {
+                        $cleaned = $matches[0];
+                    }
+                    $decoded = json_decode($cleaned, true);
+                    if (is_array($decoded) && !empty($decoded['title']) && !empty($decoded['content'])) {
+                        return [
+                            'title' => (string) $decoded['title'],
+                            'category' => (string) ($decoded['category'] ?? 'News'),
+                            'excerpt' => (string) ($decoded['excerpt'] ?? substr(strip_tags($decoded['content']), 0, 160)),
+                            'content' => (string) $decoded['content'],
+                        ];
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('AiService generateSeoArticle Exception: ' . $e->getMessage());
+            }
+        }
+
+        // High-quality smart local fallback template if API Key is not set or network fails
+        return $this->smartLocalArticleFallback($topic, $carModel, $keywords);
+    }
+
+    /**
+     * Fallback high quality SEO article generator when AI service is offline.
+     */
+    private function smartLocalArticleFallback(string $topic, ?string $carModel, ?string $keywords): array
+    {
+        $unit = $carModel ?: 'Hyundai Stargazer & Creta';
+        $title = "Panduan Lengkap {$topic} - Promo & OTR Surabaya 2026";
+        $excerpt = "Informasi resmi {$topic} di Surabaya. Dapatkan promo DP minim, bunga 0%, dan layanan test drive gratis langsung ke rumah dari Hyundai Gowa HR Muhammad.";
+
+        $content = <<<HTML
+<h2>Mengenal Keunggulan {$unit} untuk Wilayah Surabaya dan Sekitarnya</h2>
+<p>Kebutuhan mobilitas perkotaan di Surabaya, Sidoarjo, dan Gresik menuntut kendaraan yang tidak hanya irit dan bertenaga, tetapi juga memberikan kenyamanan kabin paripurna di tengah dinamika lalu lintas kota. Melalui <strong>{$unit}</strong>, Hyundai Motors Indonesia menghadirkan standar baru dalam kenyamanan berkendara, ketangguhan mesin Smartstream, dan kecerdasan fitur keselamatan terintegrasi.</p>
+
+<h3>1. Desain Futuristik dan Karakter Berkendara Khas Jawa Timur</h3>
+<p>Kondisi jalanan Surabaya yang beragam—mulai dari jalur padat Mayjen Sungkono, kelancaran Tol Satelit, hingga rute luar kota menuju Malang—dapat dilibas dengan tenang berkat suspensi yang telah dikalibrasi khusus untuk kontur jalan Indonesia. Tampilan eksterior yang futuristis dengan lampu khas <em>Horizon DRL</em> menjadikan {$unit} pusat perhatian di setiap sudut jalan.</p>
+
+<h3>2. Teknologi Hyundai SmartSense & Konektivitas Bluelink</h3>
+<p>Keselamatan keluarga Anda selalu menjadi prioritas utama. Dilengkapi paket keselamatan aktif <strong>Hyundai SmartSense</strong>:</p>
+<ul>
+    <li><strong>Forward Collision-Avoidance Assist (FCA):</strong> Mencegah potensi tabrakan depan dengan deteksi pejalan kaki dan kendaraan lain.</li>
+    <li><strong>Blind-Spot Collision-Avoidance Assist (BCA):</strong> Memberikan ketenangan saat berpindah lajur di jalan protokol Surabaya.</li>
+    <li><strong>Lane Keeping & Following Assist (LKA/LFA):</strong> Menjaga posisi mobil tetap presisi di tengah lajur berkendara.</li>
+    <li><strong>Hyundai Bluelink:</strong> Kendalikan pendingin kabin (AC), starter mesin, dan lacak posisi mobil hanya dari smartphone Anda.</li>
+</ul>
+
+<h3>3. Simulasi Kredit Ringan & Promo Eksklusif Surabaya 2026</h3>
+<p>Dapatkan berbagai keuntungan finansial eksklusif untuk setiap pemesanan unit di bulan ini:</p>
+<ul>
+    <li>Paket Kredit DP Ringan mulai dari 15% atau cicilan terjangkau mulai 3 jutaan/bulan.</li>
+    <li>Program Bunga 0% tenor hingga 2 tahun melalui rekanan leasing resmi terpercaya.</li>
+    <li>Gratis Biaya Jasa Servis & Suku Cadang resmi hingga 3-4 tahun / 60.000 KM.</li>
+    <li>Garansi Mesin 4 Tahun / 100.000 KM & Garansi Baterai 8 Tahun (khusus varian EV).</li>
+    <li>Layanan Tukar Tambah (Trade-In) mobil lama segala merek dengan taksiran appraisal tertinggi.</li>
+</ul>
+
+<blockquote>
+    <p><strong>Layanan Antar Unit Test Drive Gratis:</strong> Sibuk dan tidak sempat berkunjung ke showroom? Tim Sales Consultant kami siap membawakan mobil uji coba langsung ke garasi rumah atau pelataran kantor Anda di seluruh wilayah Surabaya, Sidoarjo, dan Gresik tanpa dipungut biaya apapun!</p>
+</blockquote>
+
+<h3>Hubungi Sales Resmi Hyundai Surabaya</h3>
+<p>Jangan lewatkan penawaran spesial ini. Konsultasikan kebutuhan kendaraan idaman Anda, mintalah simulasi angsuran yang paling cocok dengan anggaran, atau jadwalkan sesi test drive eksklusif sekarang juga:</p>
+<p>
+    <strong>Nico — Official Sales Consultant Hyundai</strong><br>
+    📍 Dealer Resmi Hyundai Gowa HR Muhammad (Jl. HR Muhammad No. 46, Pradahkalikendal, Surabaya Barat)<br>
+    📞 WhatsApp / Telepon: <a href="https://wa.me/6281330135013?text=Halo%20Mas%20Nico,%20saya%20tertarik%20dengan%20promo%20{$topic}" target="_blank" rel="noopener"><strong>0813-3013-5013</strong></a>
+</p>
+HTML;
+
+        return [
+            'title' => $title,
+            'category' => 'Tips',
+            'excerpt' => $excerpt,
+            'content' => $content,
+        ];
+    }
 }
+
 

@@ -30,16 +30,18 @@
                 <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" height="30" style="max-height: 30px; height: 30px; width: auto; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @endif
             <div class="ml-2 md:ml-2.5 flex items-center gap-1.5 min-w-0">
-                <span class="font-extrabold text-xs sm:text-sm md:text-sm lg:text-[15px] tracking-wider text-[#002c5f] dark:text-white uppercase truncate max-w-[130px] sm:max-w-[200px] md:max-w-none">
-                    {{ \App\Models\Setting::get('site_name', 'Hyundai') }}
+                <span class="font-extrabold text-xs sm:text-sm md:text-sm lg:text-[15px] tracking-wider text-[#002c5f] dark:text-white uppercase truncate max-w-[150px] sm:max-w-[240px] md:max-w-none">
+                    {{ \App\Models\Setting::get('site_name', 'Hyundai Gowa HR Muhammad') }}
                 </span>
+                @if(\App\Models\Setting::get('navbar_show_verified_badge', true))
                 <!-- Verified Badge -->
-                <span class="inline-flex items-center justify-center shrink-0" title="Dealer Resmi Terverifikasi">
-                    <svg class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover:scale-110 drop-shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <span class="inline-flex items-center justify-center shrink-0" style="display:inline-flex; width:16px; height:16px; min-width:16px; max-width:16px;" title="Dealer Resmi Terverifikasi">
+                    <svg width="16" height="16" style="width:16px !important; height:16px !important; min-width:16px !important; max-width:16px !important;" class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover:scale-110 drop-shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" fill="#0072d8"/>
                         <path d="M15.61 9.314a.75.75 0 00-1.22-.872l-3.236 4.53-1.624-1.624a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" fill="#ffffff"/>
                     </svg>
                 </span>
+                @endif
             </div>
         </div>
 
@@ -133,7 +135,7 @@
                     
                     <a href="{{ route('testdrive.index') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
                         <div class="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            <svg width="16" height="16" style="width:16px; height:16px;" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-1.5 flex-wrap">
@@ -146,7 +148,7 @@
 
                     <a href="{{ route('credit.simulation') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
                         <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <svg width="16" height="16" style="width:16px; height:16px;" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div class="min-w-0">
                             <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Simulasi Kredit & DP</span>
@@ -154,13 +156,26 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/#trade-in') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                    <a href="{{ route('tradein.index') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
                         <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            <svg width="16" height="16" style="width:16px; height:16px;" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         </div>
                         <div class="min-w-0">
                             <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400">Tukar Tambah (Trade-In)</span>
                             <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Taksiran mobil lama harga tertinggi</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('service.index') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 group-hover:scale-105 transition-transform shrink-0">
+                            <svg width="16" height="16" style="width:16px; height:16px;" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400">Bengkel & Service</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-cyan-300 font-bold">Resmi</span>
+                            </div>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Perawatan berkala & diagnosa EV</p>
                         </div>
                     </a>
                 </div>
@@ -185,7 +200,7 @@
                     
                     <a href="{{ url('/#virtual-360') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
                         <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 group-hover:scale-105 transition-transform shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+                            <svg width="16" height="16" style="width:16px; height:16px;" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
                         </div>
                         <div class="min-w-0">
                             <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400">360° Studio Visual</span>
@@ -208,7 +223,7 @@
 
                     <a href="{{ url('/#comparator') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
                         <div class="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            <svg width="16" height="16" style="width:16px; height:16px;" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         </div>
                         <div class="min-w-0">
                             <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">Komparasi Mobil</span>
@@ -271,7 +286,7 @@
                     class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-black transition-all cursor-pointer"
                     :class="!isDark ? 'bg-white text-[#002c5f] shadow-sm' : 'text-slate-400 hover:text-slate-200'"
                     title="Beralih ke Versi Clean (Terang)">
-                    <svg class="w-3.5 h-3.5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="14" height="14" style="width:14px; height:14px;" class="w-3.5 h-3.5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
                     </svg>
                     <span class="hidden sm:inline">Clean</span>
@@ -281,7 +296,7 @@
                     class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-black transition-all cursor-pointer"
                     :class="isDark ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black shadow-sm' : 'text-slate-500 hover:text-slate-800'"
                     title="Beralih ke Versi Dark (Gelap)">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="14" height="14" style="width:14px; height:14px;" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
                     </svg>
                     <span class="hidden sm:inline">Dark</span>
@@ -380,7 +395,14 @@
                       <span class="flex items-center gap-1.5"><span class="text-cyan-500">⚡</span> Simulasi Hemat EV</span>
                       <span class="text-[9px] bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 border border-cyan-300/30 px-2 py-0.5 rounded-full font-black uppercase">Hemat s/d 83%</span>
                   </a>
-                  <a href="{{ url('/#trade-in') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">Tukar Tambah</a>
+                  <a href="{{ route('tradein.index') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 flex items-center justify-between {{ request()->routeIs('tradein.index') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">
+                      <span>🔄 Tukar Tambah (Trade-In)</span>
+                      <span class="text-[9px] bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300/30 px-2 py-0.5 rounded-full font-black uppercase">Harga Terbaik</span>
+                  </a>
+                  <a href="{{ route('service.index') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 flex items-center justify-between {{ request()->routeIs('service.index') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">
+                      <span>🔧 Bengkel & Service Resmi</span>
+                      <span class="text-[9px] bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-cyan-300 px-2 py-0.5 rounded-full font-black uppercase">Booking</span>
+                  </a>
                   <a href="{{ url('/#comparator') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">Komparasi Mobil</a>
                   <a href="{{ route('promo.index') }}" @click="mobileOpen = false" class="text-amber-600 dark:text-amber-400 font-bold hover:text-amber-700 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 flex items-center justify-between">
                       <span>🏷️ Promo Diskon 2026</span>

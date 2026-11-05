@@ -25,54 +25,75 @@ class PostResource extends Resource
 
     public static function canCreate(): bool
     {
-        // Berita sepenuhnya ditarik otomatis dari hyundai.com
-        return false;
+        return true;
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Rincian Berita Resmi Hyundai')
-                    ->description('Data ini ditarik otomatis langsung dari hyundai.com/id/en/hyundai-story/news')
+                Forms\Components\Section::make('Rincian Berita & Artikel SEO Showroom')
+                    ->description('Kelola artikel berita resmi atau publikasikan konten SEO lokal Surabaya untuk mendongkrak peringkat Google.')
                     ->schema([
                         Forms\Components\TextInput::make('title')
-                            ->label('Judul Berita Resmi')
+                            ->label('Judul Berita / Artikel')
                             ->required()
-                            ->columnSpanFull(),
-
-                        Forms\Components\TextInput::make('source_url')
-                            ->label('Tautan Sumber Asli (Hyundai Indonesia)')
-                            ->url()
-                            ->readOnly()
-                            ->suffixIcon('heroicon-m-arrow-top-right-on-square')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('slug', Str::slug($state));
+                                }
+                            })
                             ->columnSpan(2),
 
-                        Forms\Components\TextInput::make('seq')
-                            ->label('ID Artikel Hyundai (Seq)')
-                            ->readOnly()
+                        Forms\Components\TextInput::make('slug')
+                            ->label('URL Slug SEO')
+                            ->required()
+                            ->unique(Post::class, 'slug', ignoreRecord: true)
                             ->columnSpan(1),
 
                         Forms\Components\Select::make('category')
                             ->label('Kategori')
                             ->options([
-                                'News' => 'News',
-                                'Event' => 'Event',
-                                'Promo' => 'Promo',
-                                'Tips' => 'Tips',
+                                'News' => 'News (Berita Resmi)',
+                                'Tips' => 'Tips & Komparasi',
+                                'Promo' => 'Promo & Penawaran',
+                                'Event' => 'Event & Pameran',
                             ])
+                            ->default('News')
                             ->required(),
+
+                        Forms\Components\TextInput::make('source_name')
+                            ->label('Nama Sumber / Penulis')
+                            ->default('Hyundai Showroom Surabaya')
+                            ->columnSpan(1),
+
+                        Forms\Components\TextInput::make('source_url')
+                            ->label('Tautan Sumber Asli (Opsional)')
+                            ->url()
+                            ->suffixIcon('heroicon-m-arrow-top-right-on-square')
+                            ->columnSpan(1),
+
+                        Forms\Components\FileUpload::make('image')
+                            ->label('Foto Sampul Artikel')
+                            ->image()
+                            ->directory('posts')
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('16:9')
+                            ->columnSpan(1),
+
+                        Forms\Components\DateTimePicker::make('published_at')
+                            ->label('Tanggal Publikasi')
+                            ->default(now())
+                            ->columnSpan(1),
 
                         Forms\Components\Toggle::make('is_published')
                             ->label('Tampilkan di Website Showroom')
-                            ->default(true),
-
-                        Forms\Components\DateTimePicker::make('published_at')
-                            ->label('Tanggal Rilis Resmi')
-                            ->default(now()),
+                            ->default(true)
+                            ->columnSpan(1),
 
                         Forms\Components\RichEditor::make('content')
-                            ->label('Isi Berita & Format Pratinjau')
+                            ->label('Isi Konten Artikel (Lengkap & Terstruktur)')
                             ->required()
                             ->columnSpanFull(),
                     ])->columns(3),
@@ -189,6 +210,7 @@ class PostResource extends Resource
     {
         return [
             'index' => Pages\ListPosts::route('/'),
+            'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
     }

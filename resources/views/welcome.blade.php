@@ -22,7 +22,8 @@
     <!-- Critical Anti-FOUC & Asset Priority -->
     <style>
         [x-cloak] { display: none !important; }
-        header img, nav img { max-height: 35px !important; width: auto !important; }
+        header img, nav img { max-height: 35px !important; height: 30px !important; width: auto !important; }
+        header svg, nav svg { max-width: 28px !important; max-height: 28px !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -131,7 +132,14 @@
           "opens": "08:00",
           "closes": "20:00"
         }
-      ]
+      ],
+      "aggregateRating": {
+        "@@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "184",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
     }
     </script>
     <script type="application/ld+json">
@@ -175,41 +183,8 @@
     }
     </script>
 
-    <!-- Google Tag Manager (if set) -->
-    @if($gtmId)
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
-    @endif
-
-    <!-- Google Ads Tag (if set) -->
-    @if($gAdsId)
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gAdsId }}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '{{ $gAdsId }}');
-        </script>
-    @endif
-
-    <!-- Meta Pixel Code (if set) -->
-    @if($metaPixelId)
-        <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '{{ $metaPixelId }}');
-        fbq('track', 'PageView');
-        </script>
-    @endif
+    <!-- Third-Party Tracking Scripts (GTM, Google Ads, Meta Pixel) -->
+    @include('partials.tracking-scripts')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -363,6 +338,7 @@
     @livewireStyles
 </head>
 <body class="bg-white dark:bg-[#070d19] text-gray-900 dark:text-slate-100 antialiased overflow-x-hidden transition-colors duration-300">
+    @include('partials.tracking-body')
     
     <x-navbar />
 
@@ -1154,6 +1130,84 @@
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
                     <span>Tanya Sales via WhatsApp</span>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Local SEO Dominance: Google Maps & Area Coverage Surabaya -->
+    <section class="py-12 bg-white dark:bg-[#070d19] border-t border-slate-100 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="rounded-3xl p-6 sm:p-10 bg-slate-50 dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 shadow-xl">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-cyan-950/80 text-[#002c5f] dark:text-cyan-300 text-xs font-bold uppercase tracking-wider mb-3">
+                            <span>📍 Showroom & Bengkel Resmi Surabaya</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white leading-tight mb-3">
+                            Dealer Resmi Hyundai Gowa <span class="text-blue-600 dark:text-cyan-400">HR Muhammad</span>
+                        </h3>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-slate-300 leading-relaxed mb-4">
+                            Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya, Jawa Timur 60189.
+                        </p>
+                        <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 mb-4 text-xs space-y-1.5">
+                            <div class="flex items-center justify-between font-bold text-gray-900 dark:text-white">
+                                <span>Rating Konsumen Google:</span>
+                                <span class="text-amber-500 font-black flex items-center gap-1">
+                                    ★★★★★ <span class="text-slate-800 dark:text-white">4.9 / 5.0</span>
+                                </span>
+                            </div>
+                            <div class="text-[11px] text-gray-500 dark:text-slate-400">
+                                Berdasarkan 180+ ulasan terverifikasi pembeli mobil Hyundai di Surabaya.
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2.5">
+                            <a href="https://maps.app.goo.gl/wJk4zXpG8M8GzK2T6" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#002c5f] hover:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-md">
+                                Buka di Google Maps
+                            </a>
+                            <a href="{{ route('testdrive.index') }}" class="px-4 py-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 font-bold text-xs uppercase tracking-wider border border-cyan-300/40 hover:bg-cyan-100 transition">
+                                Booking Test Drive
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <div class="rounded-2xl overflow-hidden shadow-inner h-72 border border-slate-200 dark:border-slate-700">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.732386705593!2d112.6975251!3d-7.2847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fc2791722883%3A0xa1ea16410292da26!2sJl.%20Mayjen%20HR.%20Muhammad%20No.35C%2C%20Sonokwijenan%2C%20Kec.%20Sukomanunggal%2C%20Surabaya%2C%20Jawa%20Timur%2060189!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-200/80 dark:border-slate-800">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-3">
+                        Wilayah Layanan & Pengantaran Unit Se-Gerbangkertosusila:
+                    </h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] text-gray-600 dark:text-slate-300">
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
+                            <strong class="text-blue-600 dark:text-cyan-400 block mb-0.5">Surabaya Barat</strong>
+                            HR Muhammad, Citraland, Pakuwon, Wiyung, Sambikerep, Sukomanunggal.
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
+                            <strong class="text-blue-600 dark:text-cyan-400 block mb-0.5">Surabaya Pusat & Selatan</strong>
+                            Darmo, Basuki Rahmat, Gubeng, Wonokromo, Jemursari, Ahmad Yani.
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
+                            <strong class="text-blue-600 dark:text-cyan-400 block mb-0.5">Surabaya Timur & Utara</strong>
+                            MERR, Rungkut, Dharmahusada, Mulyorejo, Kenjeran, Perak.
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
+                            <strong class="text-blue-600 dark:text-cyan-400 block mb-0.5">Sidoarjo & Gresik</strong>
+                            Waru, Sedati, Candi, Gedangan, Kebomas, Manyar, Driyorejo.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
