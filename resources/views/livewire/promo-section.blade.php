@@ -21,7 +21,7 @@
                         <p class="text-lg text-blue-100/70 mb-10 font-light italic">"{{ $promo->hook }}"</p>
                         
                         <div x-data="{
-                            expiry: new Date('{{ $promo->end_date->format('Y-m-d H:i:s') }}').getTime(),
+                            expiry: {{ $promo->end_date->timestamp * 1000 }},
                             days: '00', hours: '00', minutes: '00', seconds: '00',
                             update() {
                                 let now = new Date().getTime();
