@@ -71,6 +71,29 @@ class EvSavingsCalculator extends Component
         ],
     ];
 
+    public function mount(): void
+    {
+        $savedModels = \App\Models\Setting::getJson('ev_calculator_models', []);
+        if (!empty($savedModels) && is_array($savedModels)) {
+            $formatted = [];
+            foreach ($savedModels as $idx => $item) {
+                if (empty($item['name'])) continue;
+                $key = \Illuminate\Support\Str::slug($item['name']);
+                $formatted[$key] = [
+                    'name' => $item['name'],
+                    'tagline' => $item['tagline'] ?? '',
+                    'efficiency' => (float) ($item['efficiency'] ?? 6.5),
+                    'range' => $item['range'] ?? 'Up to 500 KM',
+                    'badge' => $item['badge'] ?? '',
+                ];
+            }
+            if (!empty($formatted)) {
+                $this->evModels = $formatted;
+                $this->selectedModel = array_key_first($formatted);
+            }
+        }
+    }
+
     public function render()
     {
         $monthlyKm = $this->dailyDistance * 30;

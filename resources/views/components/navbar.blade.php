@@ -25,9 +25,9 @@
         <!-- Logo -->
         <div class="flex items-center cursor-pointer select-none group shrink-0 mr-3 lg:mr-6" onclick="window.location='{{ url('/') }}'">
             @if($logo = \App\Models\Setting::get('site_logo'))
-                <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" height="30" style="max-height: 30px; height: 30px; width: auto; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @else
-                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" height="30" style="max-height: 30px; height: 30px; width: auto; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @endif
             <div class="ml-2 md:ml-2.5 flex items-center gap-1.5 min-w-0">
                 <span class="font-extrabold text-xs sm:text-sm md:text-sm lg:text-[15px] tracking-wider text-[#002c5f] dark:text-white uppercase truncate max-w-[130px] sm:max-w-[200px] md:max-w-none">
@@ -54,13 +54,13 @@
             ];
         @endphp
 
-        <!-- Desktop Navigation Menu -->
-        <div class="hidden md:flex items-center gap-6 lg:gap-7 text-xs lg:text-[13px] font-bold uppercase tracking-wider lg:tracking-widest text-slate-700 dark:text-slate-200">
+        <!-- Desktop Navigation Menu (Organized & Luxury Grouping) -->
+        <div class="hidden md:flex items-center gap-4 lg:gap-6 text-xs lg:text-[13px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">
             <a href="{{ url('/#home') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors">Home</a>
             
-            <!-- Dynamic Mega Menu (positioned relative to navbar) -->
+            <!-- 1. Dynamic Models Mega Menu -->
             <div class="py-2" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                <button @click="open = !open" class="flex items-center gap-1 hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors focus:outline-none uppercase tracking-widest text-sm font-semibold">
+                <button @click="open = !open" class="flex items-center gap-1 hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors focus:outline-none uppercase tracking-wider font-semibold">
                     <span>Models</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="transition-transform duration-300" :class="open ? 'rotate-180 text-[#002c5f] dark:text-cyan-400' : ''"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
@@ -68,12 +68,12 @@
                 <!-- Mega Menu Content Panel -->
                 <div x-show="open" 
                      x-cloak
-                     x-transition:enter="transition ease-out duration-350"
-                     x-transition:enter-start="opacity-0 translate-y-4"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-3"
                      x-transition:enter-end="opacity-100 translate-y-0"
-                     x-transition:leave="transition ease-in duration-250"
+                     x-transition:leave="transition ease-in duration-200"
                      x-transition:leave-start="opacity-100 translate-y-0"
-                     x-transition:leave-end="opacity-0 translate-y-4"
+                     x-transition:leave-end="opacity-0 translate-y-3"
                      class="absolute left-0 right-0 top-full w-full pt-4 z-50">
                      
                      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,18 +103,163 @@
                 </div>
             </div>
 
-            <a href="{{ url('/#virtual-360') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors flex items-center gap-1">
-                <span>360° Studio</span>
+            <!-- 2. Pricelist -->
+            <a href="{{ route('pricelist') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('pricelist') ? 'text-[#002c5f] dark:text-cyan-400 font-black' : '' }}">
+                Pricelist
             </a>
-            <a href="{{ url('/#ev-savings') }}" class="hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors flex items-center gap-1 font-bold text-cyan-600 dark:text-cyan-400">
-                <span>⚡</span>
-                <span>Hemat EV</span>
+
+            <!-- 3. Promo (With Glow Badge) -->
+            <a href="{{ route('promo.index') }}" class="hover:text-amber-500 dark:hover:text-amber-400 transition-colors flex items-center gap-1.5 {{ request()->routeIs('promo.index') ? 'text-amber-500 font-black' : '' }}">
+                <span>Promo</span>
+                <span class="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-amber-500 text-slate-950 shadow-xs">2026</span>
             </a>
-            <a href="{{ url('/#trade-in') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors">Tukar Tambah</a>
-            <a href="{{ url('/#comparator') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors">Komparasi</a>
-            <a href="{{ route('pricelist') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('pricelist') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">Pricelist</a>
-            <a href="{{ url('/#faq') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors">FAQ</a>
-            <a href="{{ url('/#consultant') }}" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors">Consultant</a>
+
+            <!-- 4. Layanan Dropdown (Test Drive, Simulasi Kredit, Tukar Tambah) -->
+            <div class="relative py-2" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <button @click="open = !open" class="flex items-center gap-1 hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors focus:outline-none uppercase tracking-wider font-semibold {{ request()->routeIs('testdrive.*') || request()->routeIs('credit.*') ? 'text-[#002c5f] dark:text-cyan-400 font-black' : '' }}">
+                    <span>Layanan</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="transition-transform duration-300" :class="open ? 'rotate-180 text-[#002c5f] dark:text-cyan-400' : ''"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+
+                <div x-show="open" 
+                     x-cloak
+                     x-transition:enter="transition ease-out duration-250"
+                     x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                     class="absolute top-full left-1/2 -translate-x-1/2 w-80 bg-white dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 rounded-2xl shadow-2xl p-2.5 z-50 normal-case tracking-normal">
+                    
+                    <a href="{{ route('testdrive.index') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400">Test Drive Mobil</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 font-bold">Gratis</span>
+                            </div>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Diantar ke rumah atau kantor Anda</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('credit.simulation') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Simulasi Kredit & DP</span>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Hitung cicilan bulanan & paket bunga 0%</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url('/#trade-in') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400">Tukar Tambah (Trade-In)</span>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Taksiran mobil lama harga tertinggi</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 5. Fitur Interaktif Dropdown (360 Studio, Hemat EV, Komparasi) -->
+            <div class="relative py-2" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <button @click="open = !open" class="flex items-center gap-1 hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors focus:outline-none uppercase tracking-wider font-semibold">
+                    <span>Fitur</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="transition-transform duration-300" :class="open ? 'rotate-180 text-[#002c5f] dark:text-cyan-400' : ''"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+
+                <div x-show="open" 
+                     x-cloak
+                     x-transition:enter="transition ease-out duration-250"
+                     x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                     class="absolute top-full left-1/2 -translate-x-1/2 w-80 bg-white dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 rounded-2xl shadow-2xl p-2.5 z-50 normal-case tracking-normal">
+                    
+                    <a href="{{ url('/#virtual-360') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400">360° Studio Visual</span>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Jelajahi interior & eksterior 3D</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url('/#ev-savings') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform shrink-0">
+                            <span class="text-sm">⚡</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400">Kalkulator EV</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 font-bold">Hemat 83%</span>
+                            </div>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Bandingkan biaya bensin vs listrik</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url('/#comparator') }}" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <div class="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">Komparasi Mobil</span>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 font-normal leading-tight">Adu fitur & spek 2 mobil Hyundai</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 6. Info & Bantuan Dropdown (FAQ, Consultant, News) -->
+            <div class="relative py-2" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <button @click="open = !open" class="flex items-center gap-1 hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors focus:outline-none uppercase tracking-wider font-semibold">
+                    <span>Info</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="transition-transform duration-300" :class="open ? 'rotate-180 text-[#002c5f] dark:text-cyan-400' : ''"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+
+                <div x-show="open" 
+                     x-cloak
+                     x-transition:enter="transition ease-out duration-250"
+                     x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                     class="absolute top-full right-0 w-72 bg-white dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 rounded-2xl shadow-2xl p-2.5 z-50 normal-case tracking-normal">
+                    
+                    <a href="{{ url('/#faq') }}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <span class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs shrink-0 group-hover:scale-105 transition-transform">❓</span>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400">Tanya Jawab (FAQ)</div>
+                            <div class="text-[11px] text-gray-500 dark:text-slate-400 font-normal leading-tight">Pertanyaan umum seputar unit & EV</div>
+                        </div>
+                    </a>
+
+                    <a href="{{ url('/#consultant') }}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <span class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs shrink-0 group-hover:scale-105 transition-transform">👤</span>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400">Profil Sales Resmi</div>
+                            <div class="text-[11px] text-gray-500 dark:text-slate-400 font-normal leading-tight">Konsultan Hyundai HR Muhammad</div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('posts.index') }}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 transition group">
+                        <span class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs shrink-0 group-hover:scale-105 transition-transform">📰</span>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400">Berita & Tips</div>
+                            <div class="text-[11px] text-gray-500 dark:text-slate-400 font-normal leading-tight">Artikel otomotif terupdate</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Action Buttons & Dark Mode Toggle -->
@@ -237,7 +382,16 @@
                   </a>
                   <a href="{{ url('/#trade-in') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">Tukar Tambah</a>
                   <a href="{{ url('/#comparator') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">Komparasi Mobil</a>
-                  <a href="{{ route('pricelist') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 {{ request()->routeIs('pricelist') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">Pricelist</a>
+                  <a href="{{ route('promo.index') }}" @click="mobileOpen = false" class="text-amber-600 dark:text-amber-400 font-bold hover:text-amber-700 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 flex items-center justify-between">
+                      <span>🏷️ Promo Diskon 2026</span>
+                      <span class="text-[9px] bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300/30 px-2 py-0.5 rounded-full font-black uppercase">Spesial</span>
+                  </a>
+                  <a href="{{ route('testdrive.index') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 flex items-center justify-between {{ request()->routeIs('testdrive.index') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">
+                      <span>🚗 Test Drive Mobil</span>
+                      <span class="text-[9px] bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full font-black uppercase">Gratis</span>
+                  </a>
+                  <a href="{{ route('credit.simulation') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 {{ request()->routeIs('credit.simulation') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">Simulasi Kredit & DP</a>
+                  <a href="{{ route('pricelist') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 {{ request()->routeIs('pricelist') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">Pricelist OTR</a>
                   <a href="{{ url('/#faq') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">FAQ Mobil Listrik</a>
                   <a href="{{ url('/#gallery') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50">Gallery</a>
                   <a href="{{ route('posts.index') }}" @click="mobileOpen = false" class="hover:text-[#002c5f] dark:hover:text-cyan-400 transition-colors py-2 border-b border-gray-50 dark:border-slate-800/50 {{ request()->routeIs('posts.*') ? 'text-[#002c5f] dark:text-cyan-400 font-bold' : '' }}">News</a>

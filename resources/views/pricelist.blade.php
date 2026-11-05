@@ -20,6 +20,13 @@
         }
     </script>
 
+    <!-- Critical Anti-FOUC & Asset Priority -->
+    <style>
+        [x-cloak] { display: none !important; }
+        header img, nav img { max-height: 35px !important; width: auto !important; }
+    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <!-- Favicon -->
     @if($logo = \App\Models\Setting::get('site_logo'))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $logo) }}">
@@ -93,7 +100,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     
     <style>
@@ -457,9 +463,11 @@
                 </span>
             </div>
             <p class="text-blue-200 dark:text-slate-400 text-[10px] mb-8 tracking-[0.2em] uppercase font-bold">&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'Hyundai Showroom') }}. Semua Hak Dilindungi.</p>
-            <div class="flex justify-center gap-8">
+            <div class="flex flex-wrap justify-center gap-6">
                 <a href="/" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">Home</a>
-                <a href="/#virtual-360" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">360° Studio</a>
+                <a href="{{ route('promo.index') }}" class="text-xs font-bold text-amber-300 hover:text-white transition-colors">Promo 2026</a>
+                <a href="{{ route('testdrive.index') }}" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">Test Drive</a>
+                <a href="{{ route('credit.simulation') }}" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">Simulasi Kredit</a>
                 <a href="{{ route('pricelist') }}" class="text-xs font-bold text-white transition-colors underline underline-offset-8 decoration-2">Pricelist</a>
                 <a href="/#consultant" class="text-xs font-bold text-blue-100 dark:text-slate-300 hover:text-white transition-colors">Consultant</a>
             </div>

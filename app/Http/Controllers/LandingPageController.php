@@ -105,6 +105,50 @@ class LandingPageController extends Controller
         return view('posts.show', compact('post', 'consultant', 'relatedPosts'));
     }
 
+    public function testDrive(Request $request)
+    {
+        $cars = Car::where('is_available', true)->get();
+
+        $featuredIds = \App\Models\Setting::getJson('featured_test_drive_car_ids', []);
+        if (!empty($featuredIds) && is_array($featuredIds)) {
+            $featuredCars = Car::whereIn('id', $featuredIds)
+                ->where('is_available', true)
+                ->get()
+                ->sortBy(function ($car) use ($featuredIds) {
+                    return array_search($car->id, $featuredIds);
+                })
+                ->values();
+            $testDriveCars = $featuredCars->isNotEmpty() ? $featuredCars : $cars->take(6);
+        } else {
+            $testDriveCars = $cars->take(6);
+        }
+
+        $selectedCarId = $request->get('car_id');
+        $selectedCar = $selectedCarId ? Car::find($selectedCarId) : null;
+        $consultant = Consultant::first();
+        return view('test-drive', compact('cars', 'testDriveCars', 'selectedCar', 'consultant'));
+    }
+
+    public function creditSimulation(Request $request)
+    {
+        $cars = Car::where('is_available', true)->get();
+        $selectedCarId = $request->get('car_id') ?: ($cars->first()?->id);
+        $selectedCar = Car::find($selectedCarId) ?: $cars->first();
+        $consultant = Consultant::first();
+        return view('simulasi-kredit', compact('cars', 'selectedCar', 'consultant'));
+    }
+
+    public function promoIndex()
+    {
+        $cars = Car::where('is_available', true)->get();
+        $consultant = Consultant::first();
+        $activeEvent = \App\Models\ShowroomEvent::where('is_active', true)
+            ->where('event_date', '>=', now()->startOfDay())
+            ->orderBy('event_date')
+            ->first();
+        return view('promo', compact('cars', 'consultant', 'activeEvent'));
+    }
+
     public function quotation(Request $request)
     {
         $carId = $request->get('car_id');

@@ -19,6 +19,13 @@
         }
     </script>
     
+    <!-- Critical Anti-FOUC & Asset Priority -->
+    <style>
+        [x-cloak] { display: none !important; }
+        header img, nav img { max-height: 35px !important; width: auto !important; }
+    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <!-- Favicon -->
     @if($logo = \App\Models\Setting::get('site_logo'))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $logo) }}">
@@ -208,9 +215,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- Tailwind CSS (Vite) -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         body { font-family: 'Outfit', sans-serif; }
@@ -1197,11 +1201,12 @@
             <div>
                 <h4 class="font-bold text-lg mb-6 uppercase tracking-widest text-blue-100">Layanan</h4>
                 <ul class="space-y-4 text-blue-200 text-sm font-medium">
-                    <li><a href="#models" class="hover:text-white transition-colors">Penjualan Unit Baru</a></li>
-                    <li><a href="#booking" class="hover:text-white transition-colors">Test Drive Gratis</a></li>
-                    <li><a href="{{ route('track.wa', ['text' => 'Halo, saya ingin tanya program Tukar Tambah']) }}" class="hover:text-white transition-colors">Tukar Tambah (Trade-in)</a></li>
-                    <li><a href="{{ route('track.wa', ['text' => 'Halo, saya ingin tanya info Bengkel']) }}" class="hover:text-white transition-colors">Bengkel & Suku Cadang</a></li>
-                    <li><a href="{{ route('track.wa', ['text' => 'Halo, saya ingin dibuatkan Simulasi Kredit']) }}" class="hover:text-white transition-colors">Simulasi Kredit</a></li>
+                    <li><a href="{{ route('promo.index') }}" class="hover:text-amber-300 font-bold transition-colors">🏷️ Promo Diskon Hyundai 2026</a></li>
+                    <li><a href="{{ route('testdrive.index') }}" class="hover:text-white transition-colors">🚗 Booking Test Drive Gratis</a></li>
+                    <li><a href="{{ route('credit.simulation') }}" class="hover:text-white transition-colors">💳 Simulasi Kredit & DP Murah</a></li>
+                    <li><a href="{{ route('pricelist') }}" class="hover:text-white transition-colors">📋 Daftar Harga OTR Surabaya</a></li>
+                    <li><a href="{{ url('/#trade-in') }}" class="hover:text-white transition-colors">🔄 Tukar Tambah (Trade-in)</a></li>
+                    <li><a href="{{ route('track.wa', ['text' => 'Halo, saya ingin tanya info Bengkel']) }}" class="hover:text-white transition-colors">🛠️ Bengkel & Suku Cadang</a></li>
                 </ul>
             </div>
             <div>
@@ -1227,6 +1232,12 @@
                 <a href="{{ route('terms') }}" class="hover:text-white underline">Syarat & Ketentuan Layanan</a>
                 <span>&bull;</span>
                 <a href="{{ route('pricelist') }}" class="hover:text-white underline">Daftar Harga OTR</a>
+                <span>&bull;</span>
+                <a href="{{ route('testdrive.index') }}" class="hover:text-white underline">Test Drive Hyundai Surabaya</a>
+                <span>&bull;</span>
+                <a href="{{ route('credit.simulation') }}" class="hover:text-white underline">Simulasi Kredit</a>
+                <span>&bull;</span>
+                <a href="{{ route('promo.index') }}" class="hover:text-white underline">Promo Diskon 2026</a>
                 <span>&bull;</span>
                 <a href="{{ route('sitemap') }}" class="hover:text-white underline">Sitemap XML</a>
             </div>

@@ -3,10 +3,12 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Models\Car;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -46,9 +48,40 @@ class SystemSettings extends Page
             }
         }
 
+        $savedEv = Setting::getJson('ev_calculator_models', null);
+        if (empty($savedEv)) {
+            $savedEv = [
+                [
+                    'name' => 'Hyundai IONIQ 5',
+                    'badge' => 'Paling Populer',
+                    'range' => 'Up to 481 KM',
+                    'efficiency' => 6.5,
+                    'tagline' => 'The Iconic Retro-Futuristic Crossover EV',
+                ],
+                [
+                    'name' => 'All New KONA Electric',
+                    'badge' => 'Jarak Tempuh Juara',
+                    'range' => 'Up to 602 KM (Terjauh)',
+                    'efficiency' => 7.2,
+                    'tagline' => 'Smart Urban All-Electric Compact SUV',
+                ],
+                [
+                    'name' => 'Hyundai IONIQ 6',
+                    'badge' => 'Flagship Luxury',
+                    'range' => 'Up to 519 KM',
+                    'efficiency' => 7.6,
+                    'tagline' => 'Electrified Streamliner Ultra-Aerodynamic',
+                ],
+            ];
+        }
+
+        $featuredTestDriveIds = Setting::getJson('featured_test_drive_car_ids', []);
+
         $this->form->fill([
             'site_name' => Setting::get('site_name', 'Hyundai Showroom'),
             'site_logo' => Setting::get('site_logo'),
+            'featured_test_drive_car_ids' => $featuredTestDriveIds,
+            'ev_calculator_models' => $savedEv,
             'ai_provider' => Setting::get('ai_provider', 'gemini'),
             'ai_model' => Setting::get('ai_model', 'gemini-1.5-flash'),
             'ai_api_key' => $decryptedKey,
@@ -121,6 +154,56 @@ class SystemSettings extends Page
                             ->columnSpanFull()
                             ->visible(fn ($get) => $get('ai_provider') !== 'disabled'),
                     ])->columns(3),
+
+                Section::make('Tampilan Fitur Unggulan (Test Drive & Kalkulator EV)')
+                    ->description('Pilih mobil apa saja yang ingin ditampilkan di kartu "Unit Populer Test Drive" dan "Kalkulator Hemat Listrik vs Bensin".')
+                    ->schema([
+                        Select::make('featured_test_drive_car_ids')
+                            ->label('Pilihan Unit Populer Siap Test Drive')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->options(fn () => Car::where('is_available', true)->pluck('name', 'id'))
+                            ->helperText('Pilih unit mobil yang ingin ditampilkan di halaman /test-drive pada kartu "Unit Populer Siap Test Drive". Jika dikosongkan, sistem akan otomatis menampilkan 6 unit terpopuler.')
+                            ->columnSpanFull(),
+
+                        Repeater::make('ev_calculator_models')
+                            ->label('Daftar Mobil Listrik pada Kalkulator Hemat EV')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Nama Unit EV')
+                                    ->placeholder('Contoh: Hyundai IONIQ 5 / IONIQ 9')
+                                    ->required()
+                                    ->columnSpan(2),
+                                TextInput::make('badge')
+                                    ->label('Label / Badge')
+                                    ->placeholder('Contoh: Paling Populer / Flagship Luxury')
+                                    ->columnSpan(2),
+                                TextInput::make('range')
+                                    ->label('Jarak Tempuh')
+                                    ->placeholder('Contoh: Up to 500 KM')
+                                    ->required()
+                                    ->columnSpan(2),
+                                TextInput::make('efficiency')
+                                    ->label('Efisiensi (KM/kWh)')
+                                    ->numeric()
+                                    ->default(6.5)
+                                    ->helperText('1 kWh = ... km')
+                                    ->required()
+                                    ->columnSpan(1),
+                                TextInput::make('tagline')
+                                    ->label('Tagline Singkat')
+                                    ->placeholder('Contoh: The Iconic Retro-Futuristic Crossover EV')
+                                    ->columnSpan(3),
+                            ])
+                            ->columns(5)
+                            ->defaultItems(3)
+                            ->createItemButtonLabel('Tambah Mobil Listrik ke Kalkulator')
+                            ->reorderable()
+                            ->collapsible()
+                            ->columnSpanFull()
+                            ->helperText('Mobil listrik di atas akan muncul sebagai pilihan di fitur "Kalkulator Hemat Listrik vs Bensin" di halaman depan.'),
+                    ]),
 
                 Section::make('Digital Marketing, Google Ads & SEO Engine')
                     ->description('Kelola ID pelacakan iklan Google Ads, GTM, Meta Pixel, serta judul dan deskripsi SEO untuk mendatangkan banyak calon pembeli.')
@@ -212,7 +295,8 @@ class SystemSettings extends Page
                 'google_ads_id', 'google_tag_manager_id', 'meta_pixel_id',
                 'google_site_verification', 'meta_title', 'meta_description',
                 'meta_keywords', 'dealer_address', 'dealer_maps_url', 'geo_coordinates', 'lead_modal_enabled',
-                'telegram_notifications_enabled', 'telegram_bot_token', 'telegram_chat_id'
+                'telegram_notifications_enabled', 'telegram_bot_token', 'telegram_chat_id',
+                'featured_test_drive_car_ids', 'ev_calculator_models'
             ];
             foreach ($allowedKeys as $key) {
                 if (array_key_exists($key, $data)) {
@@ -224,6 +308,8 @@ class SystemSettings extends Page
                         } else {
                             $value = Crypt::encryptString($value);
                         }
+                    } elseif (is_array($value)) {
+                        $value = json_encode($value, JSON_UNESCAPED_UNICODE);
                     }
                     Setting::updateOrCreate(
                         ['key' => $key],
@@ -241,6 +327,8 @@ class SystemSettings extends Page
                     } else {
                         $value = Crypt::encryptString($value);
                     }
+                } elseif (is_array($value)) {
+                    $value = json_encode($value, JSON_UNESCAPED_UNICODE);
                 }
 
                 Setting::updateOrCreate(

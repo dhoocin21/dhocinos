@@ -62,9 +62,19 @@ class Setting extends Model
         return self::where('key', $key)->first()?->value ?? $default;
     }
 
+    public static function getJson(string $key, mixed $default = []): mixed
+    {
+        $val = self::where('key', $key)->first()?->value;
+        if (!$val) return $default;
+        if (is_array($val)) return $val;
+        $decoded = json_decode($val, true);
+        return json_last_error() === JSON_ERROR_NONE ? $decoded : $default;
+    }
+
     public static function set(string $key, mixed $value): void
     {
-        self::updateOrCreate(['key' => $key], ['value' => $value]);
+        $storedValue = is_array($value) ? json_encode($value) : $value;
+        self::updateOrCreate(['key' => $key], ['value' => $storedValue]);
     }
 }
 

@@ -19,6 +19,13 @@
         }
     </script>
     
+    <!-- Critical Anti-FOUC & Asset Priority -->
+    <style>
+        [x-cloak] { display: none !important; }
+        header img, nav img { max-height: 35px !important; width: auto !important; }
+    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <!-- Favicon -->
     @if($logo = \App\Models\Setting::get('site_logo'))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $logo) }}">
@@ -138,9 +145,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- Tailwind CSS (Vite) -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         body { font-family: 'Outfit', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
