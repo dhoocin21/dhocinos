@@ -22,8 +22,10 @@
     <!-- Critical Anti-FOUC & Asset Priority -->
     <style>
         [x-cloak] { display: none !important; }
-        header img, nav img { max-height: 35px !important; height: 30px !important; width: auto !important; }
-        header svg, nav svg { max-width: 28px !important; max-height: 28px !important; }
+        img { max-width: 100%; }
+        nav { display: flex; align-items: center; min-height: 50px; }
+        header img, nav img, .site-logo-img { max-height: 30px !important; height: 30px !important; width: auto !important; max-width: 140px !important; object-fit: contain !important; }
+        header svg, nav svg, .verified-badge-svg { max-width: 18px !important; max-height: 18px !important; width: 16px !important; height: 16px !important; display: inline-block !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -665,7 +667,7 @@
                 </div>
 
                 <!-- Right: Credit Simulation -->
-                <div class="flex flex-col w-full mt-12 md:mt-0">
+                <div id="kredit" class="flex flex-col w-full mt-12 md:mt-0 scroll-mt-28">
                     <!-- Header Locked Height -->
                     <div style="min-height: 90px;" class="mb-2">
                         <span class="text-[10px] font-black text-blue-600 dark:text-cyan-400 uppercase tracking-[0.3em] block mb-2">Financing</span>
@@ -1302,9 +1304,11 @@
     </footer>
 
     <!-- Sticky Mobile Bottom Quick Action Bar (Over 85% traffic is mobile) -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] px-3 py-2 flex items-center justify-around">
+    <div x-data="{}" 
+         style="padding-bottom: max(10px, env(safe-area-inset-bottom)); z-index: 55;" 
+         class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-[#070d19]/95 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 shadow-[0_-4px_25px_rgba(0,0,0,0.15)] px-3 pt-2 flex items-center justify-around pointer-events-auto">
         <a href="{{ route('track.wa', ['text' => 'Halo Nico (Sales Hyundai Surabaya), saya ingin info promo diskon dan simulasi cicilan terbarunya.']) }}" 
-           class="flex flex-col items-center gap-0.5 text-emerald-600 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition">
+           class="flex flex-col items-center gap-0.5 text-emerald-600 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition cursor-pointer">
             <span class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/30 animate-pulse">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
             </span>
@@ -1312,24 +1316,26 @@
         </a>
 
         <a href="tel:081330135013" 
-           class="flex flex-col items-center gap-0.5 text-gray-700 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition">
-            <span class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shadow-md">
+           class="flex flex-col items-center gap-0.5 text-gray-700 dark:text-gray-300 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-800 dark:bg-slate-700 text-white flex items-center justify-center shadow-md">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </span>
             <span>Telepon</span>
         </a>
 
-        <button @click="$dispatch('open-lead-modal')" 
+        <button @click="window.dispatchEvent(new CustomEvent('open-lead-modal'))" 
+                onclick="window.dispatchEvent(new CustomEvent('open-lead-modal'))"
                 type="button" 
-                class="flex flex-col items-center gap-0.5 text-blue-600 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition">
-            <span class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-600/30">
+                class="flex flex-col items-center gap-0.5 text-blue-600 dark:text-cyan-400 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-blue-600 dark:bg-cyan-500 text-white flex items-center justify-center shadow-md shadow-blue-600/30">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
             </span>
             <span>Klaim Promo</span>
         </button>
 
         <a href="#kredit" 
-           class="flex flex-col items-center gap-0.5 text-gray-700 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition">
+           onclick="document.getElementById('kredit')?.scrollIntoView({behavior: 'smooth'});"
+           class="flex flex-col items-center gap-0.5 text-gray-700 dark:text-gray-300 font-bold text-[9px] uppercase tracking-wider py-1 px-1.5 hover:opacity-80 transition cursor-pointer">
             <span class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center shadow-md">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
             </span>
@@ -1389,6 +1395,7 @@
                 }
             }
          }"
+         @open-lead-modal.window="isOpen = true"
          x-show="isOpen"
          x-cloak
          class="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6"
@@ -1615,9 +1622,22 @@
     </div>
 
     <script>
+        // Auto-purge any stale legacy PWA caches from earlier versions
+        if ('caches' in window) {
+            caches.keys().then((keys) => {
+                keys.forEach((key) => {
+                    if (key === 'autoshow-cache-v1') {
+                        caches.delete(key);
+                        console.log('Purged legacy cache:', key);
+                    }
+                });
+            });
+        }
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    reg.update();
                     console.log('PWA ServiceWorker registered with scope: ', reg.scope);
                 }).catch((err) => {
                     console.log('PWA ServiceWorker registration failed: ', err);

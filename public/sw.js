@@ -1,7 +1,6 @@
-// Service Worker for Hyundai AutoShow Pro PWA
-const CACHE_NAME = 'autoshow-cache-v1';
-const OFFLINE_URLS = [
-  '/',
+// Service Worker for Hyundai AutoShow Pro PWA (Network-First Strategy for HTML)
+const CACHE_NAME = 'autoshow-pwa-v2';
+const STATIC_ASSETS = [
   '/manifest.json',
   '/assets/images/hyundai_logo.png'
 ];
@@ -9,18 +8,20 @@ const OFFLINE_URLS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(OFFLINE_URLS);
+      return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
 });
 
+// Clear ALL old caches on activation to immediately eliminate stale HTML/CSS
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((name) => {
           if (name !== CACHE_NAME) {
+            console.log('Purging legacy cache:', name);
             return caches.delete(name);
           }
         })
@@ -33,24 +34,41 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return cache but update in background (stale-while-revalidate)
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse.clone()));
-          }
-        }).catch(() => {});
-        return cachedResponse;
-      }
+  // 1. Navigation requests (HTML pages): ALWAYS NETWORK FIRST!
+  // Never serve stale HTML that references deleted CSS hash bundles
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          return networkResponse;
+        })
+        .catch(() => {
+          // Fallback to cache only when completely offline
+          return caches.match(event.request) || caches.match('/');
+        })
+    );
+    return;
+  }
 
-      return fetch(event.request).catch(() => {
-        // Fallback for navigation requests
-        if (event.request.mode === 'navigate') {
-          return caches.match('/');
-        }
-      });
-    })
+  // 2. Static image/font assets: Cache-first with network fallback
+  if (event.request.destination === 'image' || event.request.destination === 'font') {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((res) => {
+          if (res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return res;
+        }).catch(() => null);
+      })
+    );
+    return;
+  }
+
+  // 3. For CSS and JS chunks: Network first to avoid stale Vite hashes
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });

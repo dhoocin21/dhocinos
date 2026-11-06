@@ -26,26 +26,7 @@ class AiService
         $model = Setting::get('ai_model') ?: env('AI_DEFAULT_MODEL', 'openrouter/free');
         
         // 1. Resolve API Key (Database or Env fallback)
-        $encryptedKey = Setting::get('ai_api_key');
-        $apiKey = null;
-
-        if ($encryptedKey) {
-            try {
-                $apiKey = Crypt::decryptString($encryptedKey);
-            } catch (\Exception $e) {
-                Log::warning('AiService: Failed to decrypt API Key from database settings: ' . $e->getMessage());
-            }
-        }
-
-        if (empty($apiKey)) {
-            if ($provider === 'openrouter') {
-                $apiKey = env('OPENROUTER_API_KEY');
-            } elseif ($provider === 'deepseek') {
-                $apiKey = env('DEEPSEEK_API_KEY');
-            } elseif ($provider === 'gemini') {
-                $apiKey = env('GEMINI_API_KEY');
-            }
-        }
+        $apiKey = $this->resolveApiKey($provider);
 
         if (empty($apiKey)) {
             Log::info("AiService: API Key is not configured for provider [{$provider}]. Falling back to static insights.");
@@ -274,32 +255,62 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
         try {
             if ($provider === 'gemini') {
                 $modelName = $model ?: 'gemini-1.5-flash';
-                $contents = [];
 
-                // Add system instruction as first user/model context or system_instruction
+                // Format multiturn messages ensuring STRICT ALTERNATION: user -> model -> user -> model -> user
+                // 1. Strip redundant user message if history already contains the current message at the end
+                $historyClean = $history;
+                if (!empty($historyClean)) {
+                    $lastItem = end($historyClean);
+                    if (($lastItem['role'] ?? '') === 'user' && trim($lastItem['text'] ?? '') === trim($message)) {
+                        array_pop($historyClean);
+                    }
+                }
+
+                $recentHistory = array_slice($historyClean, -8);
+                $sanitizedTurns = [];
+
+                foreach ($recentHistory as $h) {
+                    $role = (in_array(($h['role'] ?? ''), ['user', 'customer'])) ? 'user' : 'model';
+                    $text = trim($h['text'] ?? '');
+                    if ($text === '') continue;
+
+                    // Ensure strict alternation (merge consecutive turns with same role)
+                    if (!empty($sanitizedTurns) && end($sanitizedTurns)['role'] === $role) {
+                        $lastIdx = count($sanitizedTurns) - 1;
+                        $sanitizedTurns[$lastIdx]['parts'][0]['text'] .= "\n" . $text;
+                    } else {
+                        $sanitizedTurns[] = [
+                            'role' => $role,
+                            'parts' => [['text' => $text]]
+                        ];
+                    }
+                }
+
+                // Gemini multiturn rule: first turn MUST be 'user'
+                while (!empty($sanitizedTurns) && $sanitizedTurns[0]['role'] !== 'user') {
+                    array_shift($sanitizedTurns);
+                }
+
+                // Append the latest user prompt
+                if (!empty($sanitizedTurns) && end($sanitizedTurns)['role'] === 'user') {
+                    $lastIdx = count($sanitizedTurns) - 1;
+                    $sanitizedTurns[$lastIdx]['parts'][0]['text'] = $message;
+                } else {
+                    $sanitizedTurns[] = [
+                        'role' => 'user',
+                        'parts' => [['text' => $message]]
+                    ];
+                }
+
                 $geminiPayload = [
                     'system_instruction' => [
                         'parts' => [['text' => $fullSystemInstruction]]
                     ],
-                    'contents' => [],
+                    'contents' => $sanitizedTurns,
                     'generationConfig' => [
                         'temperature' => 0.7,
                         'maxOutputTokens' => 600,
                     ]
-                ];
-
-                // Append recent history (up to last 6 messages)
-                $recentHistory = array_slice($history, -6);
-                foreach ($recentHistory as $h) {
-                    $role = ($h['role'] ?? 'user') === 'user' ? 'user' : 'model';
-                    $geminiPayload['contents'][] = [
-                        'role' => $role,
-                        'parts' => [['text' => $h['text'] ?? '']]
-                    ];
-                }
-                $geminiPayload['contents'][] = [
-                    'role' => 'user',
-                    'parts' => [['text' => $message]]
                 ];
 
                 $response = Http::timeout(12)->post("https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$apiKey}", $geminiPayload);
@@ -310,7 +321,7 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
                         return trim($text);
                     }
                 } else {
-                    Log::error("AiService Customer Chat Gemini error: " . $response->body());
+                    Log::error("AiService Customer Chat Gemini error ({$response->status()}): " . $response->body());
                 }
 
             } elseif ($provider === 'openrouter') {
@@ -318,11 +329,23 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
                     ['role' => 'system', 'content' => $fullSystemInstruction]
                 ];
 
-                $recentHistory = array_slice($history, -6);
+                $historyClean = $history;
+                if (!empty($historyClean)) {
+                    $lastItem = end($historyClean);
+                    if (($lastItem['role'] ?? '') === 'user' && trim($lastItem['text'] ?? '') === trim($message)) {
+                        array_pop($historyClean);
+                    }
+                }
+
+                $recentHistory = array_slice($historyClean, -8);
                 foreach ($recentHistory as $h) {
+                    $role = (in_array(($h['role'] ?? ''), ['user', 'customer'])) ? 'user' : 'assistant';
+                    $text = trim($h['text'] ?? '');
+                    if ($text === '') continue;
+
                     $messages[] = [
-                        'role' => ($h['role'] ?? 'user') === 'user' ? 'user' : 'assistant',
-                        'content' => $h['text'] ?? ''
+                        'role' => $role,
+                        'content' => $text
                     ];
                 }
                 $messages[] = ['role' => 'user', 'content' => $message];
@@ -360,14 +383,23 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
     /**
      * Resolve API key from database or environment.
      */
-    private function resolveApiKey(string $provider): ?string
+    public function resolveApiKey(string $provider): ?string
     {
         $encryptedKey = Setting::get('ai_api_key');
-        if ($encryptedKey) {
+        if (!empty($encryptedKey)) {
             try {
                 $decrypted = Crypt::decryptString($encryptedKey);
-                if (!empty($decrypted)) return $decrypted;
-            } catch (\Exception $e) {}
+                if (!empty($decrypted)) {
+                    return trim($decrypted);
+                }
+            } catch (\Exception $e) {
+                // Key might be plain text or encrypted with different APP_KEY
+            }
+
+            // Fallback for plain-text keys (Gemini AIza..., OpenAI sk-..., or raw token)
+            if (str_starts_with($encryptedKey, 'AIza') || str_starts_with($encryptedKey, 'sk-') || strlen($encryptedKey) >= 15) {
+                return trim($encryptedKey);
+            }
         }
 
         if ($provider === 'openrouter') return env('OPENROUTER_API_KEY');
@@ -384,35 +416,79 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
     {
         $msg = strtolower($message);
 
+        // 1. Budget / Rekomendasi Mobil Berdasarkan Harga
+        if (str_contains($msg, 'budget') || str_contains($msg, 'rekomendasi') || str_contains($msg, 'kisaran') || str_contains($msg, 'dana') || str_contains($msg, 'harga')) {
+            if (str_contains($msg, '300') || str_contains($msg, 'tiga ratus')) {
+                return "Untuk budget **300 jutaan**, rekomendasi terbaik kami adalah:\n\n" .
+                    "1. **Hyundai Creta** (Mulai Rp 299jt - 312jt-an OTR Surabaya): Compact SUV modern paling stylish dengan fitur Panoramic Sunroof, audio BOSE, dan Hyundai Bluelink.\n" .
+                    "2. **Hyundai Stargazer** (Mulai Rp 245jt - 262jt-an OTR Surabaya): MPV keluarga paling nyaman di kelasnya dengan Captain Seat, kabin senyap, dan bagasi luas.\n\n" .
+                    "Sisa budget Anda bahkan masih sangat cukup untuk upgrade tipe tertinggi atau DP ringan! Ingin saya hitungkan simulasi cicilannya atau jadwalkan test drive gratis ke rumah Anda?";
+            }
+
+            if (str_contains($msg, '200') || str_contains($msg, 'dua ratus')) {
+                return "Untuk budget **200 jutaan**, pilihan paling pas dan bernilai tinggi adalah **Hyundai Stargazer (Cartenz / Prime)** dengan harga mulai Rp 245 jutaan OTR Surabaya! Mobil keluarga super nyaman dengan mesin responsif 1.5L Smartstream dan fitur keselamatan canggih. Ingin saya kirimkan brosur dan rincian promonya?";
+            }
+
+            if (str_contains($msg, '400') || str_contains($msg, '500') || str_contains($msg, 'empat ratus') || str_contains($msg, 'lima ratus')) {
+                return "Untuk budget **400 - 500 jutaan**, pilihan terbaik meliputi:\n\n" .
+                    "1. **Hyundai Creta N Line / Prime** (Mulai Rp 330jt - 410jt-an): Varian terlengkap dengan fitur keselamatan aktif Hyundai SmartSense.\n" .
+                    "2. **All New KONA Electric** (Mulai Rp 570 jutaan): SUV Listrik pintar dengan jarak tempuh terjauh di kelasnya hingga 602 KM sekali cas!\n\n" .
+                    "Tersedia promo DP ringan dan bunga 0%. Mau konsultasi unit ready stock?";
+            }
+
+            if (str_contains($msg, '700') || str_contains($msg, '800') || str_contains($msg, '900') || str_contains($msg, '1 m') || str_contains($msg, 'miliar') || str_contains($msg, 'milyar')) {
+                return "Untuk segmen luxury premium budget **700 juta ke atas**, kami menyediakan lini Flagship terbaik:\n\n" .
+                    "1. **All New Santa Fe Hybrid (HEV)** (Mulai Rp 740 jutaan): SUV gagah bertenaga Turbo Hybrid hemat BBM.\n" .
+                    "2. **New Palisade HEV / Signature** (Mulai Rp 952 jutaan - Rp 1.1 Miliar): Kemewahan SUV kasta tertinggi kelas eksekutif.\n" .
+                    "3. **IONIQ 5 & IONIQ 6**: Mobil listrik futuristik kelas dunia dengan fast-charging tercepat.\n\n" .
+                    "Mas Nico (0813-3013-5013) siap membawakan unit VIP test drive langsung ke alamat Anda.";
+            }
+        }
+
+        // 2. Kredit / Cicilan / DP
         if (str_contains($msg, 'kredit') || str_contains($msg, 'cicil') || str_contains($msg, 'angsuran') || str_contains($msg, 'dp')) {
-            return "Halo! Untuk simulasi kredit Hyundai (DP mulai 15%-20%, bunga kompetitif & tenor hingga 6 tahun), Anda dapat langsung menggunakan fitur **Simulasi Kredit Cerdas** di website kami atau konsultasi WhatsApp langsung dengan Mas Nico (0813-3013-5013) untuk promo bunga 0%!";
+            return "Halo! Untuk simulasi kredit Hyundai (DP mulai 15%-20%, promo bunga 0% s/d 2 tahun, dan tenor panjang hingga 6 tahun), Anda dapat langsung menggunakan fitur **Simulasi Kredit** di website kami atau WhatsApp langsung Mas Nico di **0813-3013-5013** untuk hitungan paket kredit resmi termurah!";
         }
 
-        if (str_contains($msg, 'test drive') || str_contains($msg, 'coba') || str_contains($msg, 'booking')) {
-            return "Kabar baik! Unit test drive seperti Stargazer, Creta, Ioniq 5, dan Santa Fe tersedia di dealer kami (Hyundai HR Muhammad Surabaya) atau unit bisa kami bawakan langsung ke rumah/kantor Anda. Silakan isi form **Booking Test Drive** di website ini atau hubungi 0813-3013-5013.";
+        // 3. Promo / Diskon / Bonus
+        if (str_contains($msg, 'promo') || str_contains($msg, 'diskon') || str_contains($msg, 'cashback') || str_contains($msg, 'bonus')) {
+            return "Promo Spesial Hyundai Surabaya bulan ini:\n" .
+                "• Diskon & Subsidi OTR puluhan juta rupiah\n" .
+                "• Gratis Servis Berkala & Jasa s/d 4-5 tahun\n" .
+                "• Gratis Kaca Film Smith resmi bergaransi\n" .
+                "• Garansi Baterai EV 8 Tahun / 160.000 KM\n" .
+                "• Program Tukar Tambah dengan appraisal tertinggi\n\n" .
+                "Klik tombol **Klaim Promo** di bawah atau hubungi WhatsApp 0813-3013-5013 untuk mendapatkan penawaran spesial hari ini!";
         }
 
+        // 4. Test Drive
+        if (str_contains($msg, 'test drive') || str_contains($msg, 'coba') || str_contains($msg, 'booking') || str_contains($msg, 'jadwal')) {
+            return "Kabar baik! Unit test drive seperti Stargazer, Creta, Ioniq 5, dan Santa Fe tersedia di dealer kami (Hyundai HR Muhammad Surabaya) atau unit bisa kami antar langsung ke rumah/kantor Anda secara GRATIS. Silakan klik menu **Test Drive** di website ini atau hubungi Mas Nico di 0813-3013-5013.";
+        }
+
+        // 5. Tukar Tambah
         if (str_contains($msg, 'tukar') || str_contains($msg, 'trade in') || str_contains($msg, 'jual mobil')) {
-            return "Kami melayani program **Tukar Tambah (Trade-In)** semua merek mobil dengan taksiran harga tertinggi! Nilai mobil lama Anda bisa langsung memotong DP mobil Hyundai baru. Gunakan fitur kalkulator Trade-In kami di bawah atau kirim foto STNK & kondisi mobil ke WA Mas Nico.";
+            return "Kami melayani program **Tukar Tambah (Trade-In)** semua merek mobil dengan taksiran harga pasar tertinggi! Nilai mobil lama Anda bisa langsung dipotongkan ke DP unit Hyundai baru. Gunakan kalkulator Trade-In di website atau kirim foto STNK & kondisi mobil ke WA Mas Nico (0813-3013-5013).";
         }
 
+        // 6. Model spesifik
         if (str_contains($msg, 'stargazer')) {
             return "Hyundai Stargazer adalah MPV keluarga ternyaman di kelasnya dengan Captain Seat, mesin Smartstream 1.5L responsif, dan fitur Hyundai SmartSense. Harga OTR Surabaya mulai dari Rp 245.800.000 (Stargazer Cartenz) & Rp 262.950.000. Ingin saya jadwalkan test drive?";
         }
 
         if (str_contains($msg, 'creta')) {
-            return "Hyundai Creta hadir dengan desain futuristik, Panoramic Sunroof, BOSE Premium Sound System, dan teknologi Bluelink. Tersedia varian Active, Trend, Style, Prime, hingga N Line & Alpha. Harga mulai Rp 312.650.000. Tersedia unit ready stock siap kirim!";
+            return "Hyundai Creta hadir dengan desain futuristik, Panoramic Sunroof, BOSE Premium Sound System, dan teknologi Bluelink. Tersedia varian Active, Trend, Style, Prime, hingga N Line & Alpha. Harga OTR Surabaya mulai Rp 299jt - Rp 312.650.000. Tersedia unit ready stock siap kirim!";
         }
 
-        if (str_contains($msg, 'ioniq') || str_contains($msg, 'listrik') || str_contains($msg, 'ev')) {
-            return "Untuk lini kendaraan listrik (EV) Hyundai unggulan kami tersedia **IONIQ 5** (mulai Rp 813.500.000), **Kona Electric** (mulai Rp 570.250.000), dan **IONIQ 9**. Dilengkapi garansi baterai 8 tahun / 160.000 km dan gratis wall charger di rumah Anda!";
+        if (str_contains($msg, 'ioniq') || str_contains($msg, 'listrik') || str_contains($msg, 'ev') || str_contains($msg, 'kona')) {
+            return "Untuk lini kendaraan listrik (EV) Hyundai unggulan kami tersedia **IONIQ 5** (mulai Rp 813.500.000), **All New KONA Electric** (mulai Rp 570.250.000), dan **IONIQ 6**. Dilengkapi garansi baterai 8 tahun / 160.000 km dan gratis instalasi wall charger di rumah Anda!";
         }
 
         if (str_contains($msg, 'palisade') || str_contains($msg, 'santa fe')) {
             return "Untuk SUV Premium Flagship, kami memiliki **New Santa Fe HEV** (Hybrid mulai Rp 740.500.000) dan **Palisade HEV** (mulai Rp 952.800.000 - Rp 1.136.600.000) dengan kemewahan kabin kelas eksekutif dan tenaga hybrid bertenaga.";
         }
 
-        return "Halo! Selamat datang di Hyundai Showroom. Saya asisten cerdas virtual siap membantu Anda mengenai spesifikasi mobil Hyundai, promo diskon OTR Surabaya, simulasi kredit DP ringan, maupun jadwal test drive. Ada tipe unit Hyundai yang sedang Anda minati?";
+        return "Halo! Selamat datang di Hyundai HR Muhammad Surabaya. Saya Sales Consultant AI siap membantu Anda mengenai rekomendasi mobil Hyundai sesuai budget, spesifikasi lengkap, simulasi kredit DP ringan, maupun jadwal test drive gratis ke rumah Anda. Ada tipe mobil yang sedang Anda cari?";
     }
 
     /**

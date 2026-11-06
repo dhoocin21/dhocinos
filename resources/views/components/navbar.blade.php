@@ -25,9 +25,9 @@
         <!-- Logo -->
         <div class="flex items-center cursor-pointer select-none group shrink-0 mr-3 lg:mr-6" onclick="window.location='{{ url('/') }}'">
             @if($logo = \App\Models\Setting::get('site_logo'))
-                <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" height="30" style="max-height: 30px; height: 30px; width: auto; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" width="60" height="30" style="max-height: 30px !important; height: 30px !important; width: auto !important; max-width: 140px !important; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @else
-                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" height="30" style="max-height: 30px; height: 30px; width: auto; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" width="53" height="30" style="max-height: 30px !important; height: 30px !important; width: 53px !important; max-width: 53px !important; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @endif
             <div class="ml-2 md:ml-2.5 flex items-center gap-1.5 min-w-0">
                 <span class="font-extrabold text-xs sm:text-sm md:text-sm lg:text-[15px] tracking-wider text-[#002c5f] dark:text-white uppercase truncate max-w-[150px] sm:max-w-[240px] md:max-w-none">
