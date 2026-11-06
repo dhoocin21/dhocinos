@@ -580,8 +580,34 @@
     </div>
 </section>
 
-<!-- Include Google Model-Viewer Web Component Script -->
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<!-- Include Google Model-Viewer Web Component Script (Lazy Loaded on Scroll) -->
+<script>
+    (function() {
+        function loadModelViewer() {
+            if (window.customElements && window.customElements.get('model-viewer')) return;
+            const s = document.createElement('script');
+            s.type = 'module';
+            s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+            document.head.appendChild(s);
+        }
+
+        if ('IntersectionObserver' in window) {
+            document.addEventListener('DOMContentLoaded', function() {
+                const target = document.getElementById('virtual-360') || document.getElementById('ioniqModel');
+                if (!target) return;
+                const obs = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadModelViewer();
+                        obs.disconnect();
+                    }
+                }, { rootMargin: '300px' });
+                obs.observe(target);
+            });
+        } else {
+            window.addEventListener('load', loadModelViewer);
+        }
+    })();
+</script>
 
 <script>
     function setViewerAngle(orbit) {

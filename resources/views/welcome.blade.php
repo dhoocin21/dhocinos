@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- Dark Mode Theme Initialization (FOUC Prevention) -->
+    <!-- Dark Mode Theme & Anti-FOUC Initialization -->
     <script>
         try {
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -17,15 +17,38 @@
                 document.documentElement.classList.add('dark');
             }
         }
+
+        // Purge any lingering Service Workers or stale PWA caches immediately
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+                for (var r of regs) { r.unregister(); }
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(function(keys) {
+                keys.forEach(function(k) { caches.delete(k); });
+            });
+        }
     </script>
     
-    <!-- Critical Anti-FOUC & Asset Priority -->
+    <!-- Critical Anti-FOUC Inline Styling (Applied immediately before any external CSS loads) -->
     <style>
         [x-cloak] { display: none !important; }
-        img { max-width: 100%; }
-        nav { display: flex; align-items: center; min-height: 50px; }
-        header img, nav img, .site-logo-img { max-height: 30px !important; height: 30px !important; width: auto !important; max-width: 140px !important; object-fit: contain !important; }
-        header svg, nav svg, .verified-badge-svg { max-width: 18px !important; max-height: 18px !important; width: 16px !important; height: 16px !important; display: inline-block !important; }
+        html { background-color: #070d19; color-scheme: dark; }
+        body { background-color: #070d19; color: #f8fafc; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; }
+        .hidden { display: none !important; }
+        @media (max-width: 767px) {
+            .hidden.md\:flex, .hidden.md\:block, .hidden.md\:inline-flex { display: none !important; }
+        }
+        @media (min-width: 768px) {
+            .md\:hidden { display: none !important; }
+            .hidden.md\:flex { display: flex !important; }
+        }
+        img { max-width: 100%; height: auto; }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(7, 13, 25, 0.95); min-height: 54px; display: flex; align-items: center; border-bottom: 1px solid rgba(30, 41, 59, 0.8); }
+        nav a, nav button { color: inherit; text-decoration: none; border: none; background: transparent; }
+        header img, nav img, .site-logo-img { max-height: 30px !important; height: 30px !important; width: 53px !important; max-width: 53px !important; object-fit: contain !important; }
+        header svg, nav svg, .verified-badge-svg { max-width: 16px !important; max-height: 16px !important; width: 16px !important; height: 16px !important; display: inline-block !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -1010,6 +1033,7 @@
                     }
                 @endphp
                 <iframe class="w-full h-full" 
+                        loading="lazy"
                         src="https://www.youtube.com/embed/{{ $videoId }}" 
                         title="{{ $video->title ?? 'Hyundai Video' }}" 
                         frameborder="0" 
@@ -1622,26 +1646,17 @@
     </div>
 
     <script>
-        // Auto-purge any stale legacy PWA caches from earlier versions
-        if ('caches' in window) {
-            caches.keys().then((keys) => {
-                keys.forEach((key) => {
-                    if (key === 'autoshow-cache-v1') {
-                        caches.delete(key);
-                        console.log('Purged legacy cache:', key);
-                    }
-                });
+        // Completely unregister any existing service workers and clear caches
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for (var r of registrations) {
+                    r.unregister();
+                }
             });
         }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then((reg) => {
-                    reg.update();
-                    console.log('PWA ServiceWorker registered with scope: ', reg.scope);
-                }).catch((err) => {
-                    console.log('PWA ServiceWorker registration failed: ', err);
-                });
+        if ('caches' in window) {
+            caches.keys().then(function(keys) {
+                keys.forEach(function(k) { caches.delete(k); });
             });
         }
 

@@ -1,3 +1,9 @@
+<style>
+    nav.site-navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; min-height: 54px; }
+    nav.site-navbar a, nav.site-navbar button { color: inherit; text-decoration: none; }
+    nav.site-navbar .site-logo-img { max-height: 30px !important; height: 30px !important; width: auto !important; max-width: 140px !important; object-fit: contain !important; }
+    nav.site-navbar .verified-badge-svg { width: 16px !important; height: 16px !important; max-width: 16px !important; max-height: 16px !important; display: inline-block !important; }
+</style>
 <nav x-data="{ 
         mobileOpen: false, 
         isDark: document.documentElement.classList.contains('dark'),
@@ -20,14 +26,14 @@
             }
         }
      }" 
-     class="fixed top-0 w-full z-50 bg-white/95 dark:bg-[#070d19]/95 backdrop-blur-xl border-b border-gray-100 dark:border-slate-800/80 py-3.5 transition-all duration-300">
+     class="site-navbar fixed top-0 w-full z-50 bg-white/95 dark:bg-[#070d19]/95 backdrop-blur-xl border-b border-gray-100 dark:border-slate-800/80 py-3.5 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4 lg:gap-8">
         <!-- Logo -->
         <div class="flex items-center cursor-pointer select-none group shrink-0 mr-3 lg:mr-6" onclick="window.location='{{ url('/') }}'">
             @if($logo = \App\Models\Setting::get('site_logo'))
-                <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" width="60" height="30" style="max-height: 30px !important; height: 30px !important; width: auto !important; max-width: 140px !important; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" width="60" height="30" style="max-height: 30px !important; height: 30px !important; width: auto !important; max-width: 140px !important; object-fit: contain;" class="site-logo-img h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @else
-                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" width="53" height="30" style="max-height: 30px !important; height: 30px !important; width: 53px !important; max-width: 53px !important; object-fit: contain;" class="h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" width="53" height="30" style="max-height: 30px !important; height: 30px !important; width: 53px !important; max-width: 53px !important; object-fit: contain;" class="site-logo-img h-6 md:h-7.5 w-auto object-contain transition-transform group-hover:scale-105">
             @endif
             <div class="ml-2 md:ml-2.5 flex items-center gap-1.5 min-w-0">
                 <span class="font-extrabold text-xs sm:text-sm md:text-sm lg:text-[15px] tracking-wider text-[#002c5f] dark:text-white uppercase truncate max-w-[150px] sm:max-w-[240px] md:max-w-none">
@@ -36,7 +42,7 @@
                 @if(\App\Models\Setting::get('navbar_show_verified_badge', true))
                 <!-- Verified Badge -->
                 <span class="inline-flex items-center justify-center shrink-0" style="display:inline-flex; width:16px; height:16px; min-width:16px; max-width:16px;" title="Dealer Resmi Terverifikasi">
-                    <svg width="16" height="16" style="width:16px !important; height:16px !important; min-width:16px !important; max-width:16px !important;" class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover:scale-110 drop-shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="16" height="16" style="width:16px !important; height:16px !important; min-width:16px !important; max-width:16px !important;" class="verified-badge-svg w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover:scale-110 drop-shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" fill="#0072d8"/>
                         <path d="M15.61 9.314a.75.75 0 00-1.22-.872l-3.236 4.53-1.624-1.624a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" fill="#ffffff"/>
                     </svg>
