@@ -439,7 +439,7 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
             if (str_contains($msg, '700') || str_contains($msg, '800') || str_contains($msg, '900') || str_contains($msg, '1 m') || str_contains($msg, 'miliar') || str_contains($msg, 'milyar')) {
                 return "Untuk segmen luxury premium budget **700 juta ke atas**, kami menyediakan lini Flagship terbaik:\n\n" .
                     "1. **All New Santa Fe Hybrid (HEV)** (Mulai Rp 740 jutaan): SUV gagah bertenaga Turbo Hybrid hemat BBM.\n" .
-                    "2. **New Palisade HEV / Signature** (Mulai Rp 952 jutaan - Rp 1.1 Miliar): Kemewahan SUV kasta tertinggi kelas eksekutif.\n" .
+                    "2. **The all-new Palisade Hybrid** (Mulai Rp 1.136.600.000): Kemewahan SUV kasta tertinggi kelas eksekutif dengan mesin Turbo Hybrid & Dynamic Body Care massage.\n" .
                     "3. **IONIQ 5 & IONIQ 6**: Mobil listrik futuristik kelas dunia dengan fast-charging tercepat.\n\n" .
                     "Mas Nico (0813-3013-5013) siap membawakan unit VIP test drive langsung ke alamat Anda.";
             }
@@ -485,7 +485,7 @@ Format keluaran Anda harus valid JSON yang dapat langsung diparsing oleh PHP jso
         }
 
         if (str_contains($msg, 'palisade') || str_contains($msg, 'santa fe')) {
-            return "Untuk SUV Premium Flagship, kami memiliki **New Santa Fe HEV** (Hybrid mulai Rp 740.500.000) dan **Palisade HEV** (mulai Rp 952.800.000 - Rp 1.136.600.000) dengan kemewahan kabin kelas eksekutif dan tenaga hybrid bertenaga.";
+            return "Untuk SUV Premium Flagship, kami memiliki **New Santa Fe HEV** (Hybrid mulai Rp 740.500.000) dan **The all-new PALISADE Hybrid** (mulai Rp 1.136.600.000) dengan kemewahan kabin kelas eksekutif, Dynamic Body Care massage, dan tenaga Smartstream G2.5T Turbo Hybrid.";
         }
 
         return "Halo! Selamat datang di Hyundai HR Muhammad Surabaya. Saya Sales Consultant AI siap membantu Anda mengenai rekomendasi mobil Hyundai sesuai budget, spesifikasi lengkap, simulasi kredit DP ringan, maupun jadwal test drive gratis ke rumah Anda. Ada tipe mobil yang sedang Anda cari?";
@@ -638,7 +638,7 @@ Format:
                 ['name' => 'Signature XRT', 'price' => 1127600000],
                 ['name' => 'Signature 4WD XRT', 'price' => 1268500000],
             ]],
-            ['name' => 'PALISADE HEV', 'category' => 'HEV', 'price' => 1136600000, 'variants' => [
+            ['name' => 'The all-new PALISADE Hybrid', 'category' => 'HEV', 'price' => 1136600000, 'variants' => [
                 ['name' => 'Signature', 'price' => 1136600000],
                 ['name' => 'Calligraphy', 'price' => 1309400000],
                 ['name' => 'Calligraphy AWD', 'price' => 1396500000],

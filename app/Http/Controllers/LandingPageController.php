@@ -44,6 +44,10 @@ class LandingPageController extends Controller
             return redirect()->route('car.show', ['slug' => 'stargazer-cartenz-x'], 301);
         }
 
+        if ($slug === 'palisade-hev') {
+            return redirect()->route('car.show', ['slug' => 'all-new-palisade-hybrid'], 301);
+        }
+
         $car = Car::where('slug', $slug)->firstOrFail();
         $consultant = Consultant::first();
         return view('car-detail', compact('car', 'consultant'));
@@ -59,6 +63,7 @@ class LandingPageController extends Controller
             'the-new-creta',
             'creta-n-line',
             'palisade',
+            'all-new-palisade-hybrid',
             'palisade-hev',
             'santa-fe',
             'staria',

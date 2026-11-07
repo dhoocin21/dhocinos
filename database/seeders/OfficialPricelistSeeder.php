@@ -100,17 +100,14 @@ class OfficialPricelistSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'PALISADE HEV',
-                'slug' => 'palisade-hev',
+                'name' => 'The all-new PALISADE Hybrid',
+                'slug' => 'all-new-palisade-hybrid',
                 'category' => 'HEV',
                 'price' => 1136600000,
                 'variants' => [
-                    ['name' => 'Signature', 'price' => 1136600000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo'],
-                    ['name' => 'Calligraphy', 'price' => 1309400000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo'],
-                    ['name' => 'Calligraphy AWD', 'price' => 1396500000, 'transmission' => 'AWD', 'engine' => 'Hybrid Turbo'],
-                    ['name' => 'New MY 27 Signature', 'price' => 1138700000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo (MY27)'],
-                    ['name' => 'New MY 27 Calligraphy', 'price' => 1325700000, 'transmission' => 'Automatic', 'engine' => 'Hybrid Turbo (MY27)'],
-                    ['name' => 'New MY 27 Calligraphy AWD', 'price' => 1412700000, 'transmission' => 'HTRAC AWD', 'engine' => 'Hybrid Turbo (MY27)'],
+                    ['name' => 'Signature', 'price' => 1136600000, 'transmission' => 'Automatic Hybrid 6-Speed', 'engine' => 'Smartstream G2.5T Turbo Hybrid (262 PS)'],
+                    ['name' => 'Calligraphy', 'price' => 1309400000, 'transmission' => 'Automatic Hybrid 6-Speed', 'engine' => 'Smartstream G2.5T Turbo Hybrid (262 PS)'],
+                    ['name' => 'Calligraphy AWD', 'price' => 1396500000, 'transmission' => 'HTRAC AWD Hybrid 6-Speed', 'engine' => 'Smartstream G2.5T Turbo Hybrid AWD (262 PS)'],
                 ],
             ],
             [

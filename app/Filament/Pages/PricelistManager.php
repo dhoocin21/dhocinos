@@ -135,7 +135,7 @@ class PricelistManager extends Page
                 ['name' => 'Signature XRT', 'price' => 1127600000],
                 ['name' => 'Signature 4WD XRT', 'price' => 1268500000],
             ]],
-            ['name' => 'PALISADE HEV', 'category' => 'HEV', 'price' => 1136600000, 'variants' => [
+            ['name' => 'The all-new PALISADE Hybrid', 'category' => 'HEV', 'price' => 1136600000, 'variants' => [
                 ['name' => 'Signature', 'price' => 1136600000],
                 ['name' => 'Calligraphy', 'price' => 1309400000],
                 ['name' => 'Calligraphy AWD', 'price' => 1396500000],
@@ -287,10 +287,12 @@ class PricelistManager extends Page
         }
 
         // 5. Distinct Palisade series matching
-        if (stripos($name, 'Palisade HEV') !== false || stripos($name, 'Palisade Hybrid') !== false) {
+        if (stripos($name, 'Palisade HEV') !== false || stripos($name, 'Palisade Hybrid') !== false || stripos($name, 'all-new-palisade-hybrid') !== false) {
             return Car::where('name', 'LIKE', '%PALISADE HEV%')
                 ->orWhere('name', 'LIKE', '%PALISADE Hybrid%')
+                ->orWhere('name', 'LIKE', '%The all-new PALISADE%')
                 ->orWhere('slug', 'LIKE', '%palisade-hev%')
+                ->orWhere('slug', 'LIKE', '%all-new-palisade-hybrid%')
                 ->first();
         }
 

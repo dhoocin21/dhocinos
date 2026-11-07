@@ -13,7 +13,8 @@
         'staria' => 'https://www.hyundai.com/id/en/find-a-car/the-new-staria/highlights',
         'santa-fe' => 'https://www.hyundai.com/id/en/find-a-car/all-new-santa-fe/highlights',
         'palisade' => 'https://www.hyundai.com/id/en/find-a-car/the-new-palisade/highlights',
-        'palisade-hev' => 'https://www.hyundai.com/id/en/find-a-car/the-new-palisade/highlights',
+        'palisade-hev' => 'https://www.hyundai.com/id/id/find-a-car/all-new-palisade-hybrid/highlights',
+        'all-new-palisade-hybrid' => 'https://www.hyundai.com/id/id/find-a-car/all-new-palisade-hybrid/highlights',
         'kona-electric' => 'https://www.hyundai.com/id/en/find-a-car/all-new-kona-electric/highlights',
         'ioniq-9' => 'https://www.hyundai.com/id/en',
     ];
@@ -34,11 +35,18 @@
             'wheelbase' => '2.900 mm',
         ],
         'palisade-hev' => [
-            'length' => '4.995 mm',
-            'width' => '1.975 mm',
-            'height' => '1.750 mm',
+            'length' => '5.060 mm',
+            'width' => '1.980 mm',
+            'height' => '1.805 mm',
             'ground_clearance' => '203 mm',
-            'wheelbase' => '2.900 mm',
+            'wheelbase' => '2.970 mm',
+        ],
+        'all-new-palisade-hybrid' => [
+            'length' => '5.060 mm',
+            'width' => '1.980 mm',
+            'height' => '1.805 mm',
+            'ground_clearance' => '203 mm',
+            'wheelbase' => '2.970 mm',
         ],
         'creta' => [
             'length' => '4.315 mm',

@@ -234,58 +234,71 @@ class ProjectSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'PALISADE HEV',
-                'slug' => 'palisade-hev',
+                'name' => 'The all-new PALISADE Hybrid',
+                'slug' => 'all-new-palisade-hybrid',
                 'category' => 'HEV',
                 'price' => 1136600000,
-                'description' => 'Kemewahan paripurna Flagship Hybrid SUV yang memadukan keperkasaan performa turbo hybrid dengan efisiensi tinggi.',
-                'features' => ['Hybrid Turbo Powertrain', 'HTRAC AWD', 'Nappa Leather Calligraphy', 'Dual Curved Display'],
-                'image' => 'cars/all-new-palisade-hybrid.png',
-                'hero_image' => 'cars/hero/palisade_official_hero.jpg',
-                'images' => ['cars/hero/palisade_official_hero.jpg'],
+                'description' => '<p><strong>Premium has its shape. Premium has its comfort.</strong></p><p>Kabin luas yang menenangkan, fitur canggih yang memanjakan. <strong>The all-new PALISADE Hybrid</strong> menyuguhkan kenyamanan modern dalam setiap perjalanan, dirancang untuk mereka yang tahu arti kualitas sesungguhnya.</p><p>Ditenagai mesin <strong>Smartstream G2.5T Turbo Hybrid</strong> bertenaga kombinasi 262 PS yang responsif namun senyap dan hemat bahan bakar, disempurnakan dengan kenyamanan kursi kelas satu berfitur <em>Dynamic Body Care Electric Massage</em> dan sistem penggerak <em>HTRAC All-Wheel Drive</em>.</p>',
+                'features' => [
+                    'Smartstream G2.5T Turbo Hybrid Powertrain (262 PS & 353 Nm)',
+                    'Dynamic Body Care Electric Massage pada Kursi Baris Kedua',
+                    'Ergo-Motion Driver Seat & 1st-2nd Row Relaxation Seats',
+                    'HTRAC All-Wheel Drive All-Weather Capability (AWD)',
+                    'Fingerprint Authentication System & 100W USB-C Fast Charging',
+                    'Curved Panoramic Display 12.3-inch Infotainment & Bluelink',
+                    'Hyundai SmartSense ADAS Generasi Terbaru',
+                    'Bose Premium Surround Sound System'
+                ],
+                'image' => 'cars/the-all-new-palisade-hybrid.png',
+                'hero_image' => 'cars/hero/the_all_new_palisade_hybrid_hero.jpg',
+                'images' => [
+                    'cars/the-all-new-palisade-hybrid.png',
+                    'cars/hero/the_all_new_palisade_hybrid_hero.jpg',
+                    'cars/gallery/all_new_palisade_interior.jpg',
+                    'cars/gallery/all_new_palisade_body_care.jpg',
+                    'cars/gallery/all_new_palisade_bluelink.jpg',
+                    'cars/gallery/all_new_palisade_safety.jpg',
+                ],
                 'is_available' => true,
                 'variants' => [
                     [
                         'name' => 'Signature',
                         'price' => 1136600000,
                         'transmission' => 'Automatic Hybrid 6-Speed',
-                        'engine' => 'Hybrid Turbo (260 PS Kombinasi)',
-                        'key_features' => ['Powertrain Turbo Hybrid Bertenaga', 'Dual Sunroof & Captain Seat 2nd Row', 'Curved Glass 12.3-inch Cockpit', 'Full Hyundai SmartSense ADAS']
+                        'engine' => 'Smartstream G2.5T Turbo Hybrid (262 PS)',
+                        'key_features' => [
+                            'Smartstream 2.5T Turbo Hybrid Powertrain Bertenaga & Halus',
+                            'Ergo-Motion Driver Seat & 2nd-Row Captain Seats',
+                            'Curved Panoramic Display 12.3-inch Infotainment & ccNC',
+                            'Fingerprint Authentication & 100W USB-C Fast Charging',
+                            'Full Hyundai SmartSense ADAS & Bluelink Telematics'
+                        ]
                     ],
                     [
                         'name' => 'Calligraphy',
                         'price' => 1309400000,
                         'transmission' => 'Automatic Hybrid 6-Speed',
-                        'engine' => 'Hybrid Turbo (260 PS Kombinasi)',
-                        'key_features' => ['Nappa Leather Calligraphy', 'Bose Spatial Audio', 'Ergo Motion Seat Baris 1', 'Remote Smart Parking Assist']
+                        'engine' => 'Smartstream G2.5T Turbo Hybrid (262 PS)',
+                        'key_features' => [
+                            'Dynamic Body Care Electric Massage pada Kursi Baris Kedua',
+                            '1st & 2nd-Row Relaxation Comfort Seats ala First Class Pesawat',
+                            'Premium Nappa Leather Quilted Seats & Microfiber Headliner',
+                            'Bose Premium Surround Sound Audio System',
+                            'Velg Alloy Eksklusif 21-inci Calligraphy & Hidden DRL'
+                        ]
                     ],
                     [
                         'name' => 'Calligraphy AWD',
                         'price' => 1396500000,
-                        'transmission' => 'HTRAC AWD Hybrid 6-Speed',
-                        'engine' => 'Hybrid Turbo AWD (260 PS Kombinasi)',
-                        'key_features' => ['HTRAC All-Wheel Drive', 'E-Suspension Elektronik Cerdas', 'Nappa Leather Eksklusif Calligraphy', 'Terrain Mode Hybrid AWD']
-                    ],
-                    [
-                        'name' => 'New MY 27 Signature',
-                        'price' => 1138700000,
-                        'transmission' => 'Automatic Hybrid 6-Speed',
-                        'engine' => 'Hybrid Turbo New Generation (MY27)',
-                        'key_features' => ['Model Year 2027 Upgrade', 'Next-Gen Infotainment OS', 'Enhanced SmartSense Level 2.5', 'Digital Center Mirror']
-                    ],
-                    [
-                        'name' => 'New MY 27 Calligraphy',
-                        'price' => 1325700000,
-                        'transmission' => 'Automatic Hybrid 6-Speed',
-                        'engine' => 'Hybrid Turbo New Generation (MY27)',
-                        'key_features' => ['Model Year 2027 Calligraphy Trim', 'Ultra-luxurious Quilted Nappa', 'Dual Wireless Fast Charger', 'Highway Driving Assist 2']
-                    ],
-                    [
-                        'name' => 'New MY 27 Calligraphy AWD',
-                        'price' => 1412700000,
-                        'transmission' => 'HTRAC AWD Hybrid 6-Speed',
-                        'engine' => 'Hybrid Turbo AWD New Generation (MY27)',
-                        'key_features' => ['Top Flagship Model Year 2027', 'HTRAC AWD Intelligent Traction', 'E-Handling Vectoring Control', 'Head-Up Display 10-inch Full Color']
+                        'transmission' => 'Automatic HTRAC AWD Hybrid 6-Speed',
+                        'engine' => 'Smartstream G2.5T Turbo Hybrid AWD (262 PS)',
+                        'key_features' => [
+                            'Penggerak 4 Roda Cerdas HTRAC All-Wheel Drive',
+                            'Multi-Terrain Control (Snow, Mud, Sand Mode)',
+                            'Dynamic Body Care Massage & Relaxation Seats Lengkap',
+                            'Head-Up Display & Dual Pane Acoustic Soundproof Glass',
+                            'Kenyamanan & Kemewahan Paripurna Flagship SUV Tertinggi'
+                        ]
                     ]
                 ]
             ],
