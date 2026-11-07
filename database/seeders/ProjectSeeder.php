@@ -17,9 +17,10 @@ class ProjectSeeder extends Seeder
             $consultant = new Consultant();
         }
         $consultant->fill([
-            'name' => 'NICO',
+            'name' => 'Official Hyundai Surabaya',
             'phone' => '081330135013',
-            'email' => 'nicohardiansyah@gmail.com',
+            'email' => 'hyundaisurabaya21@gmail.com',
+            'photo' => 'consultants/nico-hardiansyah-official.jpg',
             'address' => 'Hyundai HR Muhammad, Jl. Mayjen HR. Muhammad No.35C, Sonokwijenan, Kec. Sukomanunggal, Surabaya.',
             'bio' => 'Official Sales Consultant Hyundai Gowa HR Muhammad Surabaya. Melayani pembelian tunai/kredit DP ringan & bunga 0%, test drive unit di showroom atau ke rumah/kantor, dan tukar tambah segala merk mobil.',
         ]);
