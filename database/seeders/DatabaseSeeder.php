@@ -44,5 +44,33 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\TestimonialSeeder::class,
         ]);
 
+        // Handover Gallery Photos
+        $galleries = [
+            [
+                'image' => 'gallery/handover-stargazer-family.jpg',
+                'caption' => 'Serah Terima Hyundai Stargazer Prime - Keluarga Bpk. Hendra Pratama (Surabaya)',
+                'type' => 'handover',
+            ],
+            [
+                'image' => 'gallery/handover-creta-professional.jpg',
+                'caption' => 'Serah Terima Hyundai Creta Prime - Bpk. Dimas Aditya (Surabaya Barat)',
+                'type' => 'handover',
+            ],
+            [
+                'image' => 'gallery/handover-ioniq5-executive.jpg',
+                'caption' => 'Serah Terima Hyundai IONIQ 5 Signature - Bpk. Ir. Bambang Wicaksono (Graha Family)',
+                'type' => 'handover',
+            ],
+            [
+                'image' => 'gallery/handover-santafe-couple.jpg',
+                'caption' => 'Serah Terima All-New Hyundai SANTA FE Turbo Hybrid - Bpk. dr. Kevin & Ibu (Pakuwon City)',
+                'type' => 'handover',
+            ],
+        ];
+
+        foreach ($galleries as $g) {
+            \App\Models\Gallery::firstOrCreate(['image' => $g['image']], $g);
+        }
+
     }
 }

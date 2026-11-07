@@ -47,8 +47,8 @@
         img { max-width: 100%; height: auto; }
         nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(7, 13, 25, 0.95); min-height: 54px; display: flex; align-items: center; border-bottom: 1px solid rgba(30, 41, 59, 0.8); }
         nav a, nav button { color: inherit; text-decoration: none; border: none; background: transparent; }
-        header img, nav img, .site-logo-img { max-height: 30px !important; height: 30px !important; width: 53px !important; max-width: 53px !important; object-fit: contain !important; }
-        header svg, nav svg, .verified-badge-svg { max-width: 16px !important; max-height: 16px !important; width: 16px !important; height: 16px !important; display: inline-block !important; }
+        header img, nav img, footer img, .site-logo-img, .footer-logo-img { max-height: 32px !important; height: 32px !important; width: auto !important; max-width: 65px !important; object-fit: contain !important; }
+        header svg, nav svg, footer svg, .verified-badge-svg { max-width: 18px !important; max-height: 18px !important; width: 18px !important; height: 18px !important; display: inline-block !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -255,7 +255,12 @@
         }
 
         /* High Contrast Typography in Light & Dark Mode */
-        h1, h2, h3, h4, h5, h6 {
+        h1:not([class*="text-white"]):not([class*="text-blue-"]):not([class*="text-cyan-"]),
+        h2:not([class*="text-white"]):not([class*="text-blue-"]):not([class*="text-cyan-"]),
+        h3:not([class*="text-white"]):not([class*="text-blue-"]):not([class*="text-cyan-"]),
+        h4:not([class*="text-white"]):not([class*="text-blue-"]):not([class*="text-cyan-"]),
+        h5:not([class*="text-white"]):not([class*="text-blue-"]):not([class*="text-cyan-"]),
+        h6:not([class*="text-white"]):not([class*="text-blue-"]):not([class*="text-cyan-"]) {
             color: #0f172a;
         }
         .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
@@ -329,6 +334,62 @@
         .dark select option {
             background-color: #0c1527 !important;
             color: #ffffff !important;
+        }
+
+        /* AI Chat Lead Form High Contrast (Bulletproof in Light & Dark Mode) */
+        .ai-lead-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%) !important;
+            border: 2px solid #93c5fd !important;
+        }
+        .ai-lead-card .form-title {
+            color: #002c5f !important;
+            -webkit-text-fill-color: #002c5f !important;
+        }
+        .ai-lead-card .form-desc {
+            color: #1e293b !important;
+            -webkit-text-fill-color: #1e293b !important;
+        }
+        .ai-lead-card .form-label {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+        .ai-lead-card input {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        .ai-lead-card input::placeholder {
+            color: #64748b !important;
+            -webkit-text-fill-color: #64748b !important;
+        }
+
+        .dark .ai-lead-card {
+            background: linear-gradient(135deg, #0d1a33 0%, #081224 100%) !important;
+            border: 2px solid #1e3a8a !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+        }
+        .dark .ai-lead-card .form-title {
+            color: #38bdf8 !important;
+            -webkit-text-fill-color: #38bdf8 !important;
+        }
+        .dark .ai-lead-card .form-desc {
+            color: #e2e8f0 !important;
+            -webkit-text-fill-color: #e2e8f0 !important;
+        }
+        .dark .ai-lead-card .form-label {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+        .dark .ai-lead-card input {
+            background-color: #060c18 !important;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            border: 1px solid #1e3a8a !important;
+        }
+        .dark .ai-lead-card input::placeholder {
+            color: #94a3b8 !important;
+            -webkit-text-fill-color: #94a3b8 !important;
         }
 
         /* Dark Mode Car Models Showcase */
@@ -759,11 +820,22 @@
                             <span class="text-xs text-blue-200/80 mt-1">Dealer Resmi Hyundai Gowa HR Muhammad</span>
                         </div>
                     @endif
+                    @php
+                        $cName = $consultant->name ?? 'Official Hyundai Surabaya';
+                        $words = explode(' ', trim($cName));
+                        $lastWord = count($words) > 1 ? array_pop($words) : $cName;
+                        $firstWords = count($words) > 0 ? implode(' ', $words) : '';
+                    @endphp
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white md:hidden">
-                        <h3 class="text-2xl font-bold flex items-center gap-2">
-                            <span>{{ $consultant->name ?? 'Sales Consultant' }}</span>
-                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white shrink-0">
-                                <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <h3 class="text-2xl font-bold leading-tight">
+                            @if($firstWords)
+                                <span>{{ $firstWords }} </span>
+                            @endif
+                            <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <span>{{ $lastWord }}</span>
+                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white shrink-0">
+                                    <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                </span>
                             </span>
                         </h3>
                         <p class="text-blue-400 text-xs tracking-widest uppercase font-bold mt-1">Verified Sales Consultant</p>
@@ -774,13 +846,18 @@
                         <span class="w-2 h-2 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse"></span>
                         Sales Consultant
                     </h2>
-                    <h3 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 dark:text-white flex items-center flex-wrap gap-2.5 leading-tight">
-                        <span>{{ $consultant->name ?? 'OFFICIAL HYUNDAI SURABAYA' }}</span>
-                        <!-- Verified Blue Checkmark Badge -->
-                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white shadow-sm ring-4 ring-blue-100 dark:ring-blue-900/50 shrink-0" title="Akun Resmi Terverifikasi">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
+                    <h3 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 dark:text-white leading-tight">
+                        @if($firstWords)
+                            <span>{{ $firstWords }} </span>
+                        @endif
+                        <span class="inline-flex items-center gap-2 whitespace-nowrap">
+                            <span>{{ $lastWord }}</span>
+                            <!-- Verified Blue Checkmark Badge -->
+                            <span class="inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-600 text-white shadow-sm ring-4 ring-blue-100 dark:ring-blue-900/50 shrink-0" title="Akun Resmi Terverifikasi">
+                                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 fill-current" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </span>
                         </span>
                     </h3>
                     
@@ -930,17 +1007,18 @@
                 <div class="h-1.5 w-24 bg-[#002c5f] dark:bg-cyan-400 mx-auto rounded-full mt-4"></div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
                 @forelse($galleries as $gallery)
-                    <div class="relative group aspect-square overflow-hidden rounded-2xl bg-gray-100 dark:bg-slate-800">
-                        <img src="{{ asset('storage/'.$gallery->image) }}" alt="Handover" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                            <p class="text-white text-xs font-medium">{{ $gallery->caption }}</p>
+                    <div class="relative group aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 dark:bg-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/60 dark:border-slate-800">
+                        <img src="{{ asset('storage/'.$gallery->image) }}" alt="{{ $gallery->caption }}" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-4 transition-opacity">
+                            <span class="inline-block px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-[#002c5f] dark:bg-cyan-500 text-white rounded w-fit mb-1.5 shadow-sm">Serah Terima Resmi</span>
+                            <p class="text-white text-xs font-semibold leading-snug drop-shadow line-clamp-2">{{ $gallery->caption }}</p>
                         </div>
                     </div>
                 @empty
-                    @for($i=1; $i<=8; $i++)
-                        <div class="relative group aspect-square overflow-hidden rounded-2xl bg-gray-200 dark:bg-slate-800 animate-pulse"></div>
+                    @for($i=1; $i<=4; $i++)
+                        <div class="relative group aspect-[4/3] overflow-hidden rounded-2xl bg-gray-200 dark:bg-slate-800 animate-pulse"></div>
                     @endfor
                 @endforelse
             </div>
@@ -1242,20 +1320,22 @@
     <footer class="bg-[#002c5f] dark:bg-[#050a14] border-t border-transparent dark:border-slate-800/80 text-white py-16 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center mb-6">
+                <div class="flex items-center flex-wrap gap-2.5 mb-6">
                     @if($logo = \App\Models\Setting::get('site_logo'))
-                        <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" class="h-8 w-auto brightness-0 invert">
+                        <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('site_name') }}" class="footer-logo-img h-7 sm:h-8 max-h-8 w-auto object-contain brightness-0 invert shrink-0" style="max-height: 32px; height: 32px; width: auto; max-width: 60px; object-fit: contain;">
                     @else
-                        <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="h-8 w-auto brightness-0 invert">
+                        <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="footer-logo-img h-7 sm:h-8 max-h-8 w-auto object-contain brightness-0 invert shrink-0" style="max-height: 32px; height: 32px; width: auto; max-width: 60px; object-fit: contain;">
                     @endif
-                    <span class="ml-3 font-black text-lg tracking-wider uppercase">{{ \App\Models\Setting::get('site_name', 'Hyundai') }}</span>
-                    <!-- Verified Badge -->
-                    <span class="inline-flex items-center justify-center shrink-0 ml-2" title="Dealer Resmi Terverifikasi">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" fill="#00aad2"/>
-                            <path d="M15.61 9.314a.75.75 0 00-1.22-.872l-3.236 4.53-1.624-1.624a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" fill="#ffffff"/>
-                        </svg>
-                    </span>
+                    <div class="inline-flex items-center gap-2">
+                        <span class="font-black text-base sm:text-lg tracking-wider uppercase leading-tight">{{ \App\Models\Setting::get('site_name', 'Hyundai') }}</span>
+                        <!-- Verified Badge -->
+                        <span class="inline-flex items-center justify-center shrink-0" title="Dealer Resmi Terverifikasi">
+                            <svg class="w-4 h-4 verified-badge-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" fill="#00aad2"/>
+                                <path d="M15.61 9.314a.75.75 0 00-1.22-.872l-3.236 4.53-1.624-1.624a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" fill="#ffffff"/>
+                            </svg>
+                        </span>
+                    </div>
                 </div>
                 <p class="text-blue-200 max-w-md mb-8">
                     Dealer Resmi Hyundai melayani penjualan unit baru, layanan purna jual, dan suku cadang asli dengan standar pelayanan profesional.

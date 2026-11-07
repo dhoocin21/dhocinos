@@ -260,7 +260,7 @@
     <footer class="bg-white border-t border-gray-100 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center items-center mb-8">
-                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="h-6 w-auto opacity-50">
+                <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="footer-logo-img h-6 max-h-6 w-auto object-contain opacity-50 shrink-0" style="max-height: 24px; height: 24px; width: auto; max-width: 55px; object-fit: contain;">
                 <span class="ml-3 font-black text-sm tracking-[0.2em] text-gray-300 uppercase">Hyundai Showroom</span>
             </div>
             <p class="text-gray-400 text-[9px] font-bold uppercase tracking-[0.15em] mb-8">&copy; {{ date('Y') }} Premium Sales Portal. All Rights Reserved.</p>

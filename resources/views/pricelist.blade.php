@@ -449,9 +449,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center items-center mb-8">
                 @if($logo = \App\Models\Setting::get('site_logo'))
-                    <img src="{{ asset('storage/' . $logo) }}" alt="Hyundai" class="h-6 w-auto brightness-0 invert">
+                    <img src="{{ asset('storage/' . $logo) }}" alt="Hyundai" class="footer-logo-img h-6 max-h-6 w-auto object-contain brightness-0 invert shrink-0" style="max-height: 24px; height: 24px; width: auto; max-width: 55px; object-fit: contain;">
                 @else
-                    <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="h-6 w-auto brightness-0 invert">
+                    <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai" class="footer-logo-img h-6 max-h-6 w-auto object-contain brightness-0 invert shrink-0" style="max-height: 24px; height: 24px; width: auto; max-width: 55px; object-fit: contain;">
                 @endif
                 <span class="ml-3 font-black text-lg tracking-wider uppercase text-white">{{ \App\Models\Setting::get('site_name', 'Hyundai') }}</span>
                 <!-- Verified Badge -->

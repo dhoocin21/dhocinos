@@ -22,7 +22,7 @@
 
     <!-- Chat Modal Window -->
     @if($isOpen)
-        <div class="w-[92vw] sm:w-[410px] h-[580px] bg-white rounded-3xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-300 relative">
+        <div class="w-[92vw] sm:w-[410px] h-[580px] bg-white dark:bg-[#070e1c] rounded-3xl shadow-2xl border border-gray-200 dark:border-slate-800 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-300 relative">
             
             <!-- Header -->
             <div class="bg-gradient-to-r from-[#002c5f] to-blue-900 text-white p-4 flex items-center justify-between shadow-md shrink-0">
@@ -63,10 +63,10 @@
             </div>
 
             <!-- Messages Container -->
-            <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/50 text-xs">
+            <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/50 dark:bg-[#040812] text-xs">
                 @foreach($messages as $msg)
                     <div class="flex flex-col {{ $msg['role'] === 'user' ? 'items-end' : 'items-start' }}">
-                        <div class="max-w-[88%] p-3.5 rounded-2xl shadow-sm leading-relaxed {{ $msg['role'] === 'user' ? 'bg-[#002c5f] text-white rounded-br-sm' : 'bg-white text-gray-800 border border-gray-200/80 rounded-bl-sm' }}">
+                        <div class="max-w-[88%] p-3.5 rounded-2xl shadow-sm leading-relaxed {{ $msg['role'] === 'user' ? 'bg-[#002c5f] text-white rounded-br-sm' : 'bg-white dark:bg-[#0d1a33] text-gray-800 dark:text-slate-100 border border-gray-200/80 dark:border-slate-800 rounded-bl-sm' }}">
                             {!! nl2br(e($msg['text'])) !!}
                         </div>
                         <span class="text-[9px] text-gray-400 mt-1 px-1">{{ $msg['time'] ?? '' }}</span>
@@ -75,55 +75,55 @@
 
                 <!-- Mandatory Lead Form Inside Chat (Displayed if not yet captured) -->
                 @if(!$isLeadCaptured)
-                    <div class="bg-gradient-to-br from-blue-50/90 to-indigo-50/90 border-2 border-blue-200/80 rounded-2xl p-4 shadow-md space-y-3 mt-2 animate-in fade-in duration-300">
-                        <div class="flex items-center justify-between pb-2 border-b border-blue-100">
+                    <div class="ai-lead-card bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-[#0d1a33] dark:to-[#081224] border-2 border-blue-200 dark:border-blue-800/80 rounded-2xl p-4 shadow-md space-y-3 mt-2 animate-in fade-in duration-300">
+                        <div class="flex items-center justify-between pb-2 border-b border-blue-100 dark:border-blue-900/50">
                             <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                                <h5 class="text-[11px] font-black uppercase tracking-wider text-[#002c5f]">Formulir Konsultasi Resmi</h5>
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse"></span>
+                                <h5 class="form-title text-[11px] font-black uppercase tracking-wider text-[#002c5f] dark:text-cyan-300">Formulir Konsultasi Resmi</h5>
                             </div>
-                            <span class="text-[9px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200">Wajib Diisi</span>
+                            <span class="text-[9px] font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-700/60 shadow-sm">Wajib Diisi</span>
                         </div>
                         
-                        <p class="text-[11px] text-gray-600 leading-snug">
+                        <p class="form-desc text-[11px] text-slate-700 dark:text-slate-200 leading-snug font-medium">
                             Masukkan data singkat Anda sebelum AI memberikan rekomendasi harga OTR dan promo diskon:
                         </p>
 
                         <form wire:submit.prevent="submitLead" class="space-y-2.5">
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                                <label class="form-label block text-[10px] font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-wider mb-1">
                                     Nomor Telepon / WhatsApp <span class="text-red-500 font-black">*Wajib</span>
                                 </label>
                                 <input 
                                     type="tel" 
                                     wire:model="leadPhone" 
                                     placeholder="Contoh: 081234567890" 
-                                    class="w-full text-xs px-3 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#002c5f] focus:outline-none font-semibold text-gray-900"
+                                    class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#070e1c] focus:ring-2 focus:ring-[#002c5f] dark:focus:ring-cyan-400 focus:outline-none font-bold text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 shadow-sm transition"
                                     required
                                 >
                             </div>
 
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                                    <label class="form-label block text-[10px] font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-wider mb-1">
                                         Nama Lengkap <span class="text-red-500 font-black">*</span>
                                     </label>
                                     <input 
                                         type="text" 
                                         wire:model="leadName" 
                                         placeholder="Nama Anda" 
-                                        class="w-full text-xs px-3 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#002c5f] focus:outline-none text-gray-900"
+                                        class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#070e1c] focus:ring-2 focus:ring-[#002c5f] dark:focus:ring-cyan-400 focus:outline-none font-medium text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 shadow-sm transition"
                                         required
                                     >
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                                    <label class="form-label block text-[10px] font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-wider mb-1">
                                         Domisili / Kota <span class="text-red-500 font-black">*</span>
                                     </label>
                                     <input 
                                         type="text" 
                                         wire:model="leadCity" 
                                         placeholder="Contoh: Surabaya" 
-                                        class="w-full text-xs px-3 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-[#002c5f] focus:outline-none text-gray-900"
+                                        class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#070e1c] focus:ring-2 focus:ring-[#002c5f] dark:focus:ring-cyan-400 focus:outline-none font-medium text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 shadow-sm transition"
                                         required
                                     >
                                 </div>
@@ -132,11 +132,11 @@
                             <button 
                                 type="submit" 
                                 wire:loading.attr="disabled"
-                                class="w-full py-2.5 bg-[#002c5f] hover:bg-blue-800 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2"
+                                class="w-full py-2.5 bg-[#002c5f] hover:bg-blue-800 dark:bg-cyan-500 dark:hover:bg-cyan-400 dark:text-slate-950 text-white font-black rounded-xl text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2 cursor-pointer mt-1"
                             >
                                 <span wire:loading.remove>Kirim & Mulai Tanya AI</span>
                                 <span wire:loading class="flex items-center gap-1.5">
-                                    <svg class="animate-spin h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    <svg class="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                     Memproses Data...
                                 </span>
                             </button>
@@ -155,32 +155,32 @@
 
             <!-- Quick Questions Pills (Visible when lead captured) -->
             @if($isLeadCaptured)
-                <div class="px-3 py-2 bg-white border-t border-gray-100 overflow-x-auto flex gap-1.5 no-scrollbar shrink-0">
-                    <button type="button" wire:click="sendQuickPrompt('Rekomendasikan mobil budget 300 jutaan')" class="whitespace-nowrap text-[10px] bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100 font-semibold transition">
+                <div class="px-3 py-2 bg-white dark:bg-[#070e1c] border-t border-gray-100 dark:border-slate-800 overflow-x-auto flex gap-1.5 no-scrollbar shrink-0">
+                    <button type="button" wire:click="sendQuickPrompt('Rekomendasikan mobil budget 300 jutaan')" class="whitespace-nowrap text-[10px] bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 px-2.5 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-slate-700 font-semibold transition">
                         💡 Budget 300 Jutaan
                     </button>
-                    <button type="button" wire:click="sendQuickPrompt('Beda Stargazer dan Creta apa?')" class="whitespace-nowrap text-[10px] bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100 font-semibold transition">
+                    <button type="button" wire:click="sendQuickPrompt('Beda Stargazer dan Creta apa?')" class="whitespace-nowrap text-[10px] bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 px-2.5 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-slate-700 font-semibold transition">
                         ⚖️ Stargazer vs Creta
                     </button>
-                    <button type="button" wire:click="sendQuickPrompt('Info promo kredit Ioniq 5')" class="whitespace-nowrap text-[10px] bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100 font-semibold transition">
+                    <button type="button" wire:click="sendQuickPrompt('Info promo kredit Ioniq 5')" class="whitespace-nowrap text-[10px] bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 px-2.5 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-slate-700 font-semibold transition">
                         ⚡ Promo Ioniq 5
                     </button>
                 </div>
             @endif
 
             <!-- Input Bar -->
-            <div class="p-3 bg-white border-t border-gray-100 shrink-0">
+            <div class="p-3 bg-white dark:bg-[#070e1c] border-t border-gray-100 dark:border-slate-800 shrink-0">
                 <form wire:submit.prevent="sendMessage" class="flex items-center gap-2">
                     <input 
                         type="text" 
                         wire:model="userMessage" 
                         placeholder="{{ $isLeadCaptured ? 'Tanya info mobil, DP, atau promo...' : 'Ketik pertanyaan / no. WhatsApp Anda...' }}" 
-                        class="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#002c5f] focus:outline-none transition"
+                        class="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-[#040812] text-gray-900 dark:text-white focus:bg-white dark:focus:bg-[#0c1527] focus:ring-2 focus:ring-[#002c5f] dark:focus:ring-cyan-400 focus:outline-none transition"
                     >
                     <button 
                         type="submit" 
                         wire:loading.attr="disabled"
-                        class="p-2.5 bg-[#002c5f] hover:bg-blue-800 text-white rounded-xl shadow-md transition disabled:opacity-50"
+                        class="p-2.5 bg-[#002c5f] hover:bg-blue-800 dark:bg-cyan-500 dark:hover:bg-cyan-400 dark:text-slate-950 text-white rounded-xl shadow-md transition disabled:opacity-50"
                         title="Kirim Pesan"
                     >
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>

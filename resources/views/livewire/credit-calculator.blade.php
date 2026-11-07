@@ -54,8 +54,8 @@
     <div class="mt-8 space-y-4">
         <div class="bg-[#002c5f] dark:bg-blue-950 rounded-3xl p-6 text-center text-white shadow-xl shadow-blue-900/20 border border-blue-800/40 relative overflow-hidden">
             <div class="relative z-10">
-                <p class="text-blue-200 dark:text-cyan-300 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Estimasi Angsuran</p>
-                <h4 class="text-3xl font-black italic">Rp {{ number_format($monthlyInstallment, 0, ',', '.') }}<span class="text-xs not-italic text-blue-200 ml-1">/BLN</span></h4>
+                <p class="text-blue-200 dark:text-cyan-300 text-[10px] font-black uppercase tracking-[0.2em] mb-1" style="color: #bfdbfe !important;">Estimasi Angsuran</p>
+                <div class="text-3xl font-black italic text-white" style="color: #ffffff !important;">Rp {{ number_format($monthlyInstallment, 0, ',', '.') }}<span class="text-xs not-italic text-blue-200 ml-1" style="color: #bfdbfe !important;">/BLN</span></div>
             </div>
             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/5 rounded-full"></div>
         </div>

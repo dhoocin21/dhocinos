@@ -143,7 +143,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center items-center mb-10">
                 <img src="{{ asset('assets/images/hyundai_logo.png') }}" alt="Hyundai"
-                    class="h-8 w-auto brightness-0 invert">
+                    class="footer-logo-img h-8 max-h-8 w-auto object-contain brightness-0 invert shrink-0" style="max-height: 32px; height: 32px; width: auto; max-width: 65px; object-fit: contain;">
                 <span class="ml-3 font-black text-xl tracking-[0.2em] uppercase">Hyundai</span>
             </div>
             <p class="text-blue-200 text-xs mb-10 tracking-[0.2em] uppercase font-bold">&copy; {{ date('Y') }} Hyundai
