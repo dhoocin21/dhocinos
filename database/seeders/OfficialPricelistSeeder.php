@@ -64,7 +64,7 @@ class OfficialPricelistSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'CRETA',
+                'name' => 'The new CRETA',
                 'slug' => 'the-new-creta',
                 'category' => 'SUV',
                 'price' => 312650000,
@@ -111,7 +111,7 @@ class OfficialPricelistSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'SANTA FE HEV',
+                'name' => 'The all-new SANTA FE',
                 'slug' => 'santa-fe',
                 'category' => 'HEV',
                 'price' => 740500000,
@@ -124,7 +124,7 @@ class OfficialPricelistSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'STARIA',
+                'name' => 'The new STARIA',
                 'slug' => 'staria',
                 'category' => 'Luxury MPV',
                 'price' => 966700000,
@@ -146,7 +146,7 @@ class OfficialPricelistSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'KONA Electric',
+                'name' => 'The all-new KONA Electric',
                 'slug' => 'kona-electric',
                 'category' => 'EV',
                 'price' => 570250000,

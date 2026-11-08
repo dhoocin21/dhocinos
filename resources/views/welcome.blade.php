@@ -672,9 +672,11 @@
                         
                         <!-- Top Information: Model Name & Price (Senada seperti hyundai.com) -->
                         <div>
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-950 dark:text-white tracking-tight leading-snug">
-                                {{ $car->name }}
-                            </h3>
+                            <a href="{{ route('car.show', $car->slug) }}" class="group/title block">
+                                <h3 class="text-xl sm:text-2xl font-bold text-gray-950 dark:text-white tracking-tight leading-snug group-hover/title:text-[#002c5f] dark:group-hover/title:text-cyan-400 transition-colors">
+                                    {{ $car->name }}
+                                </h3>
+                            </a>
                             <div class="mt-2 text-sm text-gray-500 dark:text-slate-400 font-medium flex items-baseline gap-1.5">
                                 <span>From</span>
                                 <span class="text-base sm:text-lg font-bold text-gray-950 dark:text-white">
@@ -684,7 +686,7 @@
                         </div>
 
                         <!-- Center: Clean Profile Vehicle Image with Natural Shadow -->
-                        <div class="relative w-full h-36 sm:h-44 md:h-48 flex items-center justify-center my-6 overflow-visible">
+                        <a href="{{ route('car.show', $car->slug) }}" class="relative w-full h-36 sm:h-44 md:h-48 flex items-center justify-center my-6 overflow-visible cursor-pointer block">
                             @if($car->image)
                                 <img src="{{ asset('storage/'.$car->image) }}" 
                                      alt="{{ $car->name }}" 
@@ -694,12 +696,12 @@
                                     <svg class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
                                 </div>
                             @endif
-                        </div>
+                        </a>
 
                         <!-- Bottom: 2 Stacked Rectangular Outline Buttons (Official Hyundai.com Style) -->
-                        <div class="space-y-2.5 pt-2">
+                        <div class="space-y-2.5 pt-2 relative z-10">
                             <a href="{{ route('car.show', $car->slug) }}" 
-                               class="block w-full py-3 px-4 border border-gray-300 dark:border-slate-700 hover:border-gray-950 hover:bg-gray-950 dark:hover:border-cyan-400 dark:hover:bg-cyan-500/20 text-gray-700 dark:text-slate-200 hover:text-white text-xs font-semibold uppercase tracking-[0.2em] text-center transition duration-200">
+                               class="block w-full py-3 px-4 border border-gray-300 dark:border-slate-700 hover:border-gray-950 hover:bg-gray-950 dark:hover:border-cyan-400 dark:hover:bg-cyan-500/20 text-gray-700 dark:text-slate-200 hover:text-white text-xs font-semibold uppercase tracking-[0.2em] text-center transition duration-200 cursor-pointer">
                                 DETAIL
                             </a>
                             <a href="{{ route('quotation', ['car_id' => $car->id]) }}" 

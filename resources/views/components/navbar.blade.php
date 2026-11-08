@@ -27,7 +27,7 @@
         }
      }" 
      class="site-navbar fixed top-0 w-full z-50 bg-white/95 dark:bg-[#070d19]/95 backdrop-blur-xl border-b border-gray-100 dark:border-slate-800/80 py-3.5 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4 lg:gap-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-2 sm:gap-4 lg:gap-8">
         <!-- Logo -->
         <div class="flex items-center cursor-pointer select-none group shrink-0 mr-3 lg:mr-6" onclick="window.location='{{ url('/') }}'">
             @if($logo = \App\Models\Setting::get('site_logo'))
@@ -56,7 +56,8 @@
             $categoryLabels = [
                 'MPV' => 'MPV',
                 'SUV' => 'SUV',
-                'EV' => 'Electric Vehicle',
+                'HEV' => 'Hybrid (HEV)',
+                'EV' => 'Electric (EV)',
                 'Crossover' => 'Crossover',
                 'Luxury MPV' => 'Luxury MPV'
             ];
@@ -85,7 +86,7 @@
                      class="absolute left-0 right-0 top-full w-full pt-4 z-50">
                      
                      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                         <div class="bg-white dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 rounded-[2rem] shadow-2xl p-10 grid grid-cols-5 gap-8">
+                         <div class="bg-white dark:bg-[#0c1527] border border-gray-100 dark:border-slate-800 rounded-[2rem] shadow-2xl p-8 lg:p-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-8">
                              @foreach($categoryLabels as $key => $label)
                                 @php $categoryCars = $navCars->get($key); @endphp
                                 <div class="flex flex-col">

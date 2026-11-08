@@ -264,7 +264,7 @@
                       e.preventDefault();
                       const x = e.pageX - slider.offsetLeft;
                       const walk = (x - startX) * 1.5;
-                      if (Math.abs(walk) > 5) {
+                      if (Math.abs(walk) > 15) {
                           dragged = true;
                       }
                       slider.scrollLeft = scrollLeft - walk;
@@ -568,7 +568,7 @@
                     <!-- Detail Mobil -->
                     <a 
                         :href="activeCar.detail_url" 
-                        class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-800 dark:text-white font-bold transition flex items-center gap-1.5 text-xs border border-slate-200 dark:border-white/10">
+                        class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-800 dark:text-white font-bold transition flex items-center gap-1.5 text-xs border border-slate-200 dark:border-white/10 cursor-pointer relative z-20">
                         <span>Detail Spesifikasi</span>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
