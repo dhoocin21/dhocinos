@@ -798,14 +798,7 @@
             <div class="bg-white dark:bg-[#0c1527] rounded-3xl overflow-hidden shadow-xl flex flex-col md:flex-row border border-gray-100 dark:border-slate-800">
                 <div class="md:w-1/2 relative h-80 md:h-auto overflow-hidden bg-slate-900 flex items-center justify-center">
                     @php
-                        $consultantPhotoUrl = null;
-                        if (!empty($consultant->photo) && file_exists(storage_path('app/public/' . $consultant->photo))) {
-                            $consultantPhotoUrl = asset('storage/' . $consultant->photo);
-                        } elseif (file_exists(storage_path('app/public/consultants/nico-hardiansyah-official.jpg'))) {
-                            $consultantPhotoUrl = asset('storage/consultants/nico-hardiansyah-official.jpg');
-                        } elseif (file_exists(storage_path('app/public/consultants/01KRWBT0RARNH4AQSBRWBMGQEB.jpg'))) {
-                            $consultantPhotoUrl = asset('storage/consultants/01KRWBT0RARNH4AQSBRWBMGQEB.jpg');
-                        }
+                        $consultantPhotoUrl = $consultant->photo_url ?? asset('consultants/nico-hardiansyah-official.jpg');
                     @endphp
                     @if($consultantPhotoUrl)
                         <img src="{{ $consultantPhotoUrl }}" 
@@ -1028,20 +1021,42 @@
                 <div class="h-1.5 w-24 bg-[#002c5f] dark:bg-cyan-400 mx-auto rounded-full mt-4"></div>
             </div>
 
+            @php
+                $displayGalleries = $galleries->isNotEmpty() ? $galleries : collect([
+                    (object)[
+                        'image' => 'gallery/handover-stargazer-family.jpg',
+                        'caption' => 'Serah Terima Hyundai Stargazer Prime - Keluarga Bpk. Hendra Pratama (Surabaya)',
+                    ],
+                    (object)[
+                        'image' => 'gallery/handover-creta-professional.jpg',
+                        'caption' => 'Serah Terima Hyundai Creta Prime - Bpk. Dimas Aditya (Surabaya Barat)',
+                    ],
+                    (object)[
+                        'image' => 'gallery/handover-ioniq5-executive.jpg',
+                        'caption' => 'Serah Terima Hyundai IONIQ 5 Signature - Bpk. Ir. Bambang Wicaksono (Graha Family)',
+                    ],
+                    (object)[
+                        'image' => 'gallery/handover-santafe-couple.jpg',
+                        'caption' => 'Serah Terima All-New Hyundai SANTA FE Turbo Hybrid - Bpk. dr. Kevin & Ibu (Pakuwon City)',
+                    ],
+                ]);
+            @endphp
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-                @forelse($galleries as $gallery)
+                @foreach($displayGalleries as $gallery)
+                    @php
+                        $imgFile = $gallery->image;
+                        $directUrl = file_exists(public_path('gallery/' . basename($imgFile)))
+                            ? asset('gallery/' . basename($imgFile))
+                            : asset('storage/' . $imgFile);
+                    @endphp
                     <div class="relative group aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 dark:bg-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/60 dark:border-slate-800">
-                        <img src="{{ asset('storage/'.$gallery->image) }}" alt="{{ $gallery->caption }}" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108">
+                        <img src="{{ $directUrl }}" alt="{{ $gallery->caption }}" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-4 transition-opacity">
                             <span class="inline-block px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-[#002c5f] dark:bg-cyan-500 text-white rounded w-fit mb-1.5 shadow-sm">Serah Terima Resmi</span>
                             <p class="text-white text-xs font-semibold leading-snug drop-shadow line-clamp-2">{{ $gallery->caption }}</p>
                         </div>
                     </div>
-                @empty
-                    @for($i=1; $i<=4; $i++)
-                        <div class="relative group aspect-[4/3] overflow-hidden rounded-2xl bg-gray-200 dark:bg-slate-800 animate-pulse"></div>
-                    @endfor
-                @endforelse
+                @endforeach
             </div>
         </div>
     </section>

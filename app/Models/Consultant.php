@@ -35,4 +35,22 @@ class Consultant extends Model
         
         return $phone;
     }
+
+    public function getPhotoUrlAttribute()
+    {
+        if (file_exists(public_path('consultants/nico-hardiansyah-official.jpg'))) {
+            return asset('consultants/nico-hardiansyah-official.jpg');
+        }
+
+        if (!empty($this->photo)) {
+            if (file_exists(public_path($this->photo))) {
+                return asset($this->photo);
+            }
+            if (file_exists(storage_path('app/public/' . $this->photo))) {
+                return asset('storage/' . $this->photo);
+            }
+        }
+
+        return asset('consultants/nico-hardiansyah-official.jpg');
+    }
 }

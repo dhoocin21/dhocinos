@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "=== Memulai Pembaruan Website Hyundai Surabaya ==="
+git checkout -- .
 git pull origin main
 
 # Pastikan folder livewire-tmp ada
