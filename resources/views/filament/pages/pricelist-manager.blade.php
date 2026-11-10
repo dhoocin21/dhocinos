@@ -1,25 +1,25 @@
 <x-filament-panels::page>
     <div class="space-y-6">
         <!-- Top Info Header Banner -->
-        <div class="relative overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 border border-blue-900/50 rounded-3xl shadow-xl text-white">
+        <div class="relative overflow-hidden p-6 sm:p-8 rounded-3xl shadow-xl" style="background: linear-gradient(135deg, #070d19 0%, #002c5f 60%, #071739 100%) !important; border: 1px solid rgba(59, 130, 246, 0.4) !important; color: #ffffff !important;">
             <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
             
             <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 <div class="flex items-start sm:items-center gap-4">
-                    <div class="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0 shadow-inner">
-                        <x-heroicon-o-cloud-arrow-up class="w-8 h-8" />
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 shadow-inner" style="background: rgba(37, 99, 235, 0.25) !important; border: 1px solid rgba(96, 165, 250, 0.5) !important; color: #60a5fa !important;">
+                        <x-heroicon-o-cloud-arrow-up class="w-8 h-8" style="color: #60a5fa !important;" />
                     </div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2 mb-1">
-                            <h2 class="text-2xl font-black tracking-tight text-white">
+                            <h2 class="text-2xl font-black tracking-tight" style="color: #ffffff !important;">
                                 Update Pricelist Otomatis
                             </h2>
-                            <span class="text-[11px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 px-3 py-0.5 rounded-full">
+                            <span class="text-[11px] font-bold uppercase tracking-wider px-3 py-0.5 rounded-full" style="background: rgba(59, 130, 246, 0.3) !important; color: #93c5fd !important; border: 1px solid rgba(96, 165, 250, 0.5) !important;">
                                 1-Click AI Sync
                             </span>
                         </div>
-                        <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">
-                            Cukup satu kali unggah brosur / flyer daftar harga terbaru, sistem AI akan membaca seluruh model mobil, harga OTR, dan tipe varian. Sistem akan menampilkan perbandingan harga untuk <strong class="text-amber-300 underline underline-offset-2">konfirmasi Anda</strong> sebelum diterapkan ke website.
+                        <p class="text-sm max-w-2xl leading-relaxed" style="color: #e2e8f0 !important;">
+                            Cukup satu kali unggah brosur / flyer daftar harga terbaru, sistem AI akan membaca seluruh model mobil, harga OTR, dan tipe varian. Sistem akan menampilkan perbandingan harga untuk <strong style="color: #fde047 !important;" class="underline underline-offset-2">konfirmasi Anda</strong> sebelum diterapkan ke website.
                         </p>
                     </div>
                 </div>
@@ -29,10 +29,11 @@
                         type="button"
                         wire:click="loadOfficialBrochureData"
                         wire:loading.attr="disabled"
-                        class="w-full sm:w-auto px-5 py-3 text-xs font-bold rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-500 transition flex items-center justify-center gap-2 shadow-sm"
+                        class="w-full sm:w-auto px-5 py-3 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-sm"
+                        style="background: #0f172a !important; color: #ffffff !important; border: 1px solid #334155 !important;"
                     >
                         <x-heroicon-m-document-text class="w-4 h-4 text-cyan-400" />
-                        <span>Muat Brosur Resmi Gowa (Nico)</span>
+                        <span style="color: #ffffff !important;">Muat Brosur Resmi Gowa (Nico)</span>
                     </button>
                 </div>
             </div>
