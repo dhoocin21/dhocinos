@@ -26,6 +26,8 @@ class ConsultantResource extends Resource
             ->schema([
                 Forms\Components\FileUpload::make('photo')
                     ->image()
+                    ->disk('public')
+                    ->visibility('public')
                     ->directory('consultants')
                     ->avatar(),
                 Forms\Components\TextInput::make('name')

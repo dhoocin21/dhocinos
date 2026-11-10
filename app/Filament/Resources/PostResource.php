@@ -77,6 +77,8 @@ class PostResource extends Resource
                         Forms\Components\FileUpload::make('image')
                             ->label('Foto Sampul Artikel')
                             ->image()
+                            ->disk('public')
+                            ->visibility('public')
                             ->directory('posts')
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('16:9')

@@ -67,6 +67,8 @@ class ShowroomEventResource extends Resource
                         Forms\Components\FileUpload::make('banner_image')
                             ->label('Banner Poster Acara')
                             ->image()
+                            ->disk('public')
+                            ->visibility('public')
                             ->directory('events')
                             ->columnSpanFull(),
 

@@ -38,6 +38,8 @@ class TestimonialResource extends Resource
                         Forms\Components\FileUpload::make('image')
                             ->label('Profile Picture')
                             ->image()
+                            ->disk('public')
+                            ->visibility('public')
                             ->directory('testimonials')
                             ->imageEditor()
                             ->circleCropper()
