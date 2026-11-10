@@ -105,7 +105,15 @@ Route::get('/deploy/init', function (\Illuminate\Http\Request $request) {
 // DIRECT STORAGE FALLBACK FOR ANDROID / TERMUX
 // ==========================================
 Route::get('/storage/{path}', function ($path) {
-    // 1. Cek di storage/app/public/
+    // 1. Cek langsung di public/{path}
+    $publicDirect = public_path($path);
+    if (file_exists($publicDirect) && !is_dir($publicDirect)) {
+        return response()->file($publicDirect, [
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
+    }
+
+    // 2. Cek di storage/app/public/
     $filePath = storage_path('app/public/' . $path);
     if (file_exists($filePath) && !is_dir($filePath)) {
         return response()->file($filePath, [
@@ -113,7 +121,7 @@ Route::get('/storage/{path}', function ($path) {
         ]);
     }
 
-    // 2. Cek di public/storage/
+    // 3. Cek di public/storage/
     $publicStorage = public_path('storage/' . $path);
     if (file_exists($publicStorage) && !is_dir($publicStorage)) {
         return response()->file($publicStorage, [
@@ -121,7 +129,7 @@ Route::get('/storage/{path}', function ($path) {
         ]);
     }
 
-    // 3. Fallback logo resmi Hyundai jika foto belum terdownload agar tidak muncul kotak silang/rusak
+    // 4. Fallback logo resmi Hyundai jika foto belum terdownload agar tidak muncul kotak silang/rusak
     $fallbackImage = public_path('assets/images/hyundai_logo.png');
     if (file_exists($fallbackImage) && preg_match('/\.(png|jpg|jpeg|webp|svg)$/i', $path)) {
         return response()->file($fallbackImage);

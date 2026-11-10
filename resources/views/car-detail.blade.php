@@ -204,12 +204,12 @@
 
     <!-- Hero Section for Product -->
     <section class="relative h-[60vh] md:h-[70vh] flex items-end overflow-hidden mt-[56px]">
-        @if($car->hero_image)
-            <img src="{{ asset('storage/' . $car->hero_image) }}" alt="{{ $car->name }}" class="absolute inset-0 w-full h-full object-cover">
+        @if($car->hero_image_url)
+            <img src="{{ $car->hero_image_url }}" alt="{{ $car->name }}" class="absolute inset-0 w-full h-full object-cover">
         @else
             <div class="absolute inset-0 bg-gradient-to-br from-[#002c5f] via-[#003d7a] to-[#001a3a]"></div>
-            @if($car->image)
-                <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->name }}" class="absolute right-0 bottom-0 h-[85%] w-auto object-contain opacity-30">
+            @if($car->image_url)
+                <img src="{{ $car->image_url }}" alt="{{ $car->name }}" class="absolute right-0 bottom-0 h-[85%] w-auto object-contain opacity-30">
             @endif
         @endif
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -227,17 +227,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
             <!-- Gallery Section -->
-            @php
-                $detailImages = (!empty($car->images) && is_array($car->images) && count($car->images) > 0)
-                    ? $car->images
-                    : array_values(array_filter([$car->hero_image, $car->image]));
-            @endphp
-            @if(count($detailImages) > 0)
+            @if(count($car->detail_images) > 0)
             <div x-data="{ 
                 activeIndex: 0,
                 images: [
-                    @foreach($detailImages as $img)
-                        '{{ asset('storage/' . $img) }}',
+                    @foreach($car->detail_images as $imgUrl)
+                        '{{ $imgUrl }}',
                     @endforeach
                 ],
                 get activeImage() { return this.images[this.activeIndex]; },
@@ -434,8 +429,8 @@
                         <!-- Soft Radiant Glow -->
                         <div class="absolute -inset-4 bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 rounded-[3rem] blur-2xl group-hover:scale-105 transition-all duration-700"></div>
                         
-                        @if($car->image)
-                            <img src="{{ asset('storage/' . $car->image) }}" 
+                        @if($car->image_url)
+                            <img src="{{ $car->image_url }}" 
                                  alt="{{ $car->name }}" 
                                  class="relative z-10 w-full h-auto object-contain transform hover:scale-105 hover:-translate-y-2 transition-all duration-700 select-none drop-shadow-[0_20px_50px_rgba(0,44,95,0.15)]">
                         @else

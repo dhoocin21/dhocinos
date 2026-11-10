@@ -687,8 +687,8 @@
 
                         <!-- Center: Clean Profile Vehicle Image with Natural Shadow -->
                         <a href="{{ route('car.show', $car->slug) }}" class="relative w-full h-36 sm:h-44 md:h-48 flex items-center justify-center my-6 overflow-visible cursor-pointer block">
-                            @if($car->image)
-                                <img src="{{ asset('storage/'.$car->image) }}" 
+                            @if($car->image_url)
+                                <img src="{{ $car->image_url }}" 
                                      alt="{{ $car->name }}" 
                                      class="w-full h-full object-contain drop-shadow-[0_16px_14px_rgba(0,0,0,0.14)] transition-transform duration-500 group-hover:scale-105">
                             @else

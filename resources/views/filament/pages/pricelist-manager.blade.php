@@ -164,7 +164,11 @@
                                     <td class="py-3.5 px-4 font-bold text-gray-900 dark:text-white">
                                         <div class="flex items-center gap-3">
                                             @if(!empty($adj['image']))
-                                                <img src="{{ asset('storage/' . $adj['image']) }}" alt="{{ $adj['name'] }}" class="w-12 h-8 object-contain rounded bg-gray-50 dark:bg-gray-800 p-0.5 border border-gray-200 dark:border-gray-700">
+                                                @php
+                                                    $adjImg = $adj['image'];
+                                                    $adjUrl = file_exists(public_path($adjImg)) ? asset($adjImg) : (file_exists(public_path('cars/' . basename($adjImg))) ? asset('cars/' . basename($adjImg)) : asset('storage/' . $adjImg));
+                                                @endphp
+                                                <img src="{{ $adjUrl }}" alt="{{ $adj['name'] }}" class="w-12 h-8 object-contain rounded bg-gray-50 dark:bg-gray-800 p-0.5 border border-gray-200 dark:border-gray-700">
                                             @else
                                                 <div class="w-12 h-8 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400">
                                                     <x-heroicon-o-truck class="w-4 h-4" />
@@ -295,7 +299,11 @@
                     <div class="p-4 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
                             @if(!empty($car['image']))
-                                <img src="{{ asset('storage/' . $car['image']) }}" alt="{{ $car['name'] }}" class="w-16 h-10 object-contain rounded bg-white dark:bg-gray-900 p-1 border border-gray-200 dark:border-gray-700">
+                                @php
+                                    $carImg = $car['image'];
+                                    $carUrl = file_exists(public_path($carImg)) ? asset($carImg) : (file_exists(public_path('cars/' . basename($carImg))) ? asset('cars/' . basename($carImg)) : asset('storage/' . $carImg));
+                                @endphp
+                                <img src="{{ $carUrl }}" alt="{{ $car['name'] }}" class="w-16 h-10 object-contain rounded bg-white dark:bg-gray-900 p-1 border border-gray-200 dark:border-gray-700">
                             @else
                                 <div class="w-16 h-10 rounded bg-white dark:bg-gray-900 flex items-center justify-center text-gray-400 border border-gray-200 dark:border-gray-700">
                                     <x-heroicon-o-truck class="w-5 h-5" />
