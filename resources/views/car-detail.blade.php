@@ -227,11 +227,14 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
             <!-- Gallery Section -->
-            @if(count($car->detail_images) > 0)
+            @php
+                $detailImages = $car->detail_images;
+            @endphp
+            @if(count($detailImages) > 0)
             <div x-data="{ 
                 activeIndex: 0,
                 images: [
-                    @foreach($car->detail_images as $imgUrl)
+                    @foreach($detailImages as $imgUrl)
                         '{{ $imgUrl }}',
                     @endforeach
                 ],
