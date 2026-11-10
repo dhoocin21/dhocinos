@@ -25,11 +25,15 @@ class ConsultantResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('photo')
+                    ->label('Foto Profil Consultant')
                     ->image()
+                    ->imageEditor()
+                    ->circleCropper()
                     ->disk('public')
                     ->visibility('public')
                     ->directory('consultants')
-                    ->avatar(),
+                    ->imageCropAspectRatio('1:1')
+                    ->maxSize(5120),
                 Forms\Components\TextInput::make('name')
                     ->required(),
                 Forms\Components\TextInput::make('phone')
